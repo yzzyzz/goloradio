@@ -1,0 +1,39 @@
+CNR-1 中国之声,https://live-play.cctvnews.cctv.com/cctv/zgzs192.m3u8
+CNR-2 经济之声,http://ngcdn002.cnr.cn/live/jjzs/index.m3u8
+CNR-9 文艺之声,http://ngcdn010.cnr.cn/live/wyzs/index.m3u8
+500首华语经典,https://lhttp.qtfm.cn/live/5022308/64k.mp3
+AsiaFM亚洲经典台,https://lhttp.qingting.fm/live/5021912/64k.mp3
+AsiaFM高清音乐台,http://asiafm.hk:8000/asiahd
+BBC Radio 2,http://stream.live.vc.bbcmedia.co.uk/bbc_radio_two
+Billboard Radio中国 - 80/90后,https://23693.live.streamtheworld.com/80S90S_S01_SC
+CCTV-10科教伴音,https://piccpndali.v.myalicdn.com/audio/cctv10_2.m3u8
+CCTV-11戏曲伴音,https://piccpndali.v.myalicdn.com/audio/cctv11_2.m3u8
+CCTV-15音乐伴音,https://piccpndali.v.myalicdn.com/audio/cctv15_2.m3u8
+CCTV-1综合伴音,https://piccpndali.v.myalicdn.com/audio/cctv1_2.m3u8
+CCTV-2财经伴音,https://piccpndali.v.myalicdn.com/audio/cctv2_2.m3u8
+CCTV-4中文国际伴音,https://piccpndali.v.myalicdn.com/audio/cctv4_2.m3u8
+CNR-12 故事广播,http://ngcdn014.cnr.cn/live/ylgb/index.m3u8
+CNR-15 中国交通广播,http://ngcdn016.cnr.cn/live/gsgljtgb/index.m3u8?
+CNR-3 音乐之声,http://ngcdn003.cnr.cn/live/yyzs/index.m3u8
+CNR-4 经典音乐广播,http://ngcdn004.cnr.cn/live/dszs/index.m3u8
+NHK国际广播（华语时间19:30、20:30、21:30、22:30）,https://nhkwlive-radio.akamaized.net/hls/live/2032381/radio-rs1/index_03.m3u8
+NPR 24 Hour Program Stream,http://npr-ice.streamguys1.com/live.aac
+RFA Chinese,https://rfa-ingest.akamaized.net/hls/live/2040699/RFA_AUDIO_LIVE1/master.m3u8
+VOA Chinese,http://n02.radiojar.com/7thwu53r92quv?rj-ttl=5&rj-tok=AAABhvK1uQIAVN9GgiWNuEBEnA
+WUNC 91.5 NPR Newscast,http://pd.npr.org/anon.npr-mp3/npr/news/newscast.mp3
+上海戏剧曲艺广播,https://lhttp.qingting.fm/live/269/64k.mp3
+上海故事广播,http://lhttp.qingting.fm/live/268/64k.mp3
+上海经典音乐广播,http://lhttp.qingting.fm/live/267/64k.mp3
+内蒙古评书曲艺广播,http://ls.qingting.fm/live/1887.m3u8
+凤凰卫视资讯,https://playtv-live.ifeng.com/live/06OLEGEGM4G_tv1.m3u8
+北京音乐广播,https://lhttp.qtfm.cn/live/332/64k.mp3
+哈尔滨音乐广播,https://stream.hrbtv.net/yypl/playlist.m3u8
+天津相声广播,http://radio-bd.wisetv.com.cn/tjradio/XIANGSHENG.m3u8?secret=&timestamp=
+天籁之音 - 经典正流行,http://play-radio-stream3.hndt.com/now/WUBA5hW2/chunklist.m3u8
+安徽小说评书广播,https://lhttp.qtfm.cn/live/1951/64k.mp3
+怀集音乐之声,http://lhttp.qingting.fm/live/4804/64k.mp3
+河北文艺广播,https://radio.pull.hebtv.com/live/hebwy.m3u8
+河北旅游文化广播,https://radio.pull.hebtv.com/live/hebly.m3u8
+湖北经典音乐广播,https://lhttp.qtfm.cn/live/1296/64k.mp3
+监利电台Jianli National Radio,https://lhttp.qtfm.cn/live/15318507/64k.mp3
+美国中文电台-西雅图,http://kxparadio.serverroom.us:5852/stream.mp3
