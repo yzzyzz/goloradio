@@ -39,15 +39,21 @@ public class MainActivity extends AppCompatActivity {
             Button radioItem = new Button(this);
             String[] datainfo = (String[]) playList.get(i);
             //Log.i("读取的信息", "onCreate: "+ datainfo[0]);
-
-
             radioItem.setText(datainfo[0]);
+            radioItem.setTextSize(22);
+            radioItem.setHeight(25);
+            radioItem.setFocusable(true);
+            //radioItem.setFontFeatureSettings();
             //radioItem.setTextColor(R.drawable.itemcolor);
             radioItem.setOnClickListener(new PlayM3uRadio(datainfo[1] ,mediaPlayer) );
             layout.addView(radioItem);
         }
     }
     public List getUrlListFromRes(){
+
+
+
+
         List ret = new ArrayList();
 
         InputStream inputStream = getResources().openRawResource(R.raw.radio);
@@ -80,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
         public PlayM3uRadio(String url, MediaPlayer mediaPlayer) {
             this.playUrl = url;
             this.mediaPlayer=mediaPlayer;
-            Log.i("url", "PlayM3uRadio: " + this.playUrl);
+            //Log.i("url", "PlayM3uRadio: " + this.playUrl);
         }
 
         @Override
@@ -93,6 +99,9 @@ public class MainActivity extends AppCompatActivity {
                 mediaPlayer.setVolume(50, 50);
                 //mediaPlayer.setOnPreparedListener(this);
                 mediaPlayer.prepare();
+                Log.i("playing", "onClick: player addr"+System.identityHashCode(mediaPlayer));
+                System.identityHashCode(mediaPlayer);
+
                 mediaPlayer.start();
             } catch (Exception e) {
                 e.printStackTrace();
