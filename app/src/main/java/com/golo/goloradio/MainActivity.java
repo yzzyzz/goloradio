@@ -11,6 +11,8 @@ import android.widget.LinearLayout;
 
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaItem;
+import com.google.android.exoplayer2.MediaMetadata;
+import com.google.android.exoplayer2.Player;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -24,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static ExoPlayer mediaPlayer;
     public static int intPlayingId = -1;
+    public static String playingStationName;
     public static MarqueeText playingBar;
     public static List playList;
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,13 +40,24 @@ public class MainActivity extends AppCompatActivity {
         if(mediaPlayer == null){
             mediaPlayer = new ExoPlayer.Builder(this.getApplication()).build();
         }
+        playingBar =  findViewById(R.id.playing_info);
+        playingBar.setText("空");
+        mediaPlayer.addListener(new Player.Listener() {
+            public void onMediaMetadataChanged(MediaMetadata mediaMetadata){
+                if (mediaMetadata.title != null) {
+                    if(playingStationName.length()>0){
+                        playingBar.setText(playingStationName +" _ "+mediaMetadata.title);
+                    }else {
+                        playingBar.setText(mediaMetadata.title);
+                    }
+                }
+            }
+        });
 
         for(int i=0;i<playList.size();i++)
         {
             Button radioItem = new Button(this);
             String[] datainfo = (String[]) playList.get(i);
-            playingBar =  findViewById(R.id.playing_info);
-            playingBar.setText("空");
             String newName = String.format("%02d", i+1) +"."+ datainfo[0];
             radioItem.setText(newName);
             radioItem.setTextSize(23);
@@ -109,6 +123,7 @@ public class MainActivity extends AppCompatActivity {
             if (this.buttonId == intPlayingId){
                 mediaPlayer.stop();
                 intPlayingId = -1;
+                playingStationName = "";
                 return;
             }
             try {
@@ -119,6 +134,7 @@ public class MainActivity extends AppCompatActivity {
                     mediaPlayer.prepare();
                     mediaPlayer.play();
                     intPlayingId = this.buttonId;
+                    playingStationName = this.stationName;
                 }
             } catch (Exception e) {
                 e.printStackTrace();
