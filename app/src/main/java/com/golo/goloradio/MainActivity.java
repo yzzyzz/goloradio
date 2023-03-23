@@ -34,18 +34,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         // 1、获取资源列表
         playList = getUrlListFromRes();
-        // 2、生成buttom 列表
-        LinearLayout layout = findViewById(R.id.radiolist);
-        //MediaPlayer mediaPlayer = new MediaPlayer();
+        playingBar =  findViewById(R.id.playing_info);
+        playingBar.setText("无");
         if(mediaPlayer == null){
             mediaPlayer = new ExoPlayer.Builder(this.getApplication()).build();
         }
-        playingBar =  findViewById(R.id.playing_info);
-        playingBar.setText("空");
         mediaPlayer.addListener(new Player.Listener() {
             public void onMediaMetadataChanged(MediaMetadata mediaMetadata){
-                if (mediaMetadata.title != null) {
-                    if(playingStationName.length()>0){
+                if (mediaMetadata.title != null && mediaMetadata.title.length()>2) {
+                    if(playingStationName.length()>1){
                         playingBar.setText(playingStationName +" _ "+mediaMetadata.title);
                     }else {
                         playingBar.setText(mediaMetadata.title);
@@ -53,7 +50,8 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
+        // 2、生成buttom 列表
+        LinearLayout layout = findViewById(R.id.radiolist);
         for(int i=0;i<playList.size();i++)
         {
             Button radioItem = new Button(this);
@@ -121,9 +119,11 @@ public class MainActivity extends AppCompatActivity {
         // 3、当前播放其他，点一下切换选中
         public void onClick(View view) {
             if (this.buttonId == intPlayingId){
+                // 暂停播放
                 mediaPlayer.stop();
                 intPlayingId = -1;
                 playingStationName = "";
+                playingBar.setText("无");
                 return;
             }
             try {
