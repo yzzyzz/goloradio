@@ -1,28 +1,29 @@
 package com.golo.goloradio;
 
-import android.os.Environment;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
 import android.widget.LinearLayout;
+
+import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.MediaItem;
+import com.google.android.exoplayer2.source.hls.HlsMediaSource;
+import com.google.android.exoplayer2.upstream.DataSource;
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    public MediaPlayer mediaPlayer = new MediaPlayer();
-    @Override
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,7 +34,12 @@ public class MainActivity extends AppCompatActivity {
         // 3、设置点击播放
         LinearLayout layout = findViewById(R.id.radiolist);
 
-        MediaPlayer mediaPlayer = new MediaPlayer();
+        //MediaPlayer mediaPlayer = new MediaPlayer();
+
+
+
+        ExoPlayer mediaPlayer = new ExoPlayer.Builder(this.getApplication()).build();
+
         for(int i=0;i<playList.size();i++)
         {
             Button radioItem = new Button(this);
@@ -50,9 +56,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     public List getUrlListFromRes(){
-
-
-
 
         List ret = new ArrayList();
 
@@ -82,27 +85,35 @@ public class MainActivity extends AppCompatActivity {
 
     static class PlayM3uRadio implements View.OnClickListener {
         private String playUrl;
-        private MediaPlayer mediaPlayer;
-        public PlayM3uRadio(String url, MediaPlayer mediaPlayer) {
+        private ExoPlayer mediaPlayer;
+        public PlayM3uRadio(String url, ExoPlayer mediaPlayer) {
             this.playUrl = url;
             this.mediaPlayer=mediaPlayer;
-            //Log.i("url", "PlayM3uRadio: " + this.playUrl);
+            Log.i("url", "PlayM3uRadio: " + this.playUrl);
         }
 
         @Override
         public void onClick(View view) {
             try {
-                mediaPlayer.reset();
-                mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-                mediaPlayer.setDataSource(this.playUrl);
-                mediaPlayer.setLooping(true);
-                mediaPlayer.setVolume(50, 50);
-                //mediaPlayer.setOnPreparedListener(this);
-                mediaPlayer.prepare();
-                Log.i("playing", "onClick: player addr"+System.identityHashCode(mediaPlayer));
-                System.identityHashCode(mediaPlayer);
+                this.mediaPlayer.stop();
+                if(!this.mediaPlayer.isPlaying()){
 
-                mediaPlayer.start();
+                    //String type= NetworkHelper.detectContentType(station.getStreamUri()).type;
+
+                    // Create a data source factory.
+                    DataSource.Factory dataSourceFactory = new DefaultHttpDataSource.Factory();
+// Create a HLS media source pointing to a playlist uri.
+                    HlsMediaSource hlsMediaSource =
+                            new HlsMediaSource.Factory(dataSourceFactory)
+                                    .createMediaSource(MediaItem.fromUri(this.playUrl));
+// Create a player instance.
+
+
+                    this.mediaPlayer.setMediaSource(hlsMediaSource);
+                    this.mediaPlayer.prepare();
+                }
+                this.mediaPlayer.play();
+
             } catch (Exception e) {
                 e.printStackTrace();
             }

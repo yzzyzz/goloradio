@@ -1,8 +1,9 @@
-CNR-1 中国之声,https://live-play.cctvnews.cctv.com/cctv/zgzs192.m3u8
+01CNR-1 中国之声,https://live-play.cctvnews.cctv.com/cctv/zgzs192.m3u8
 CNR-2 经济之声,http://ngcdn002.cnr.cn/live/jjzs/index.m3u8
 CNR-9 文艺之声,http://ngcdn010.cnr.cn/live/wyzs/index.m3u8
 500首华语经典,https://lhttp.qtfm.cn/live/5022308/64k.mp3
-AsiaFM亚洲经典台,https://lhttp.qingting.fm/live/5021912/64k.mp3
+AsiaFM亚洲经典台【192k】,http://goldfm.cn:8000/goldfm
+AsiaFM亞洲熱歌台【192k】,http://asiafm.net:8000/asiafmhot
 AsiaFM高清音乐台,http://asiafm.hk:8000/asiahd
 BBC Radio 2,http://stream.live.vc.bbcmedia.co.uk/bbc_radio_two
 Billboard Radio中国 - 80/90后,https://23693.live.streamtheworld.com/80S90S_S01_SC
