@@ -1,13 +1,21 @@
 package com.golo.goloradio;
 
+import android.Manifest;
+import android.app.Activity;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaItem;
@@ -15,10 +23,12 @@ import com.google.android.exoplayer2.MediaMetadata;
 import com.google.android.exoplayer2.Player;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,9 +39,29 @@ public class MainActivity extends AppCompatActivity {
     public static String playingStationName;
     public static MarqueeText playingBar;
     public static List playList;
+
+
+    private static final int REQUEST_EXTERNAL_STORAGE = 1;
+    private static String[] PERMISSIONS_STORAGE = {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE };
+
+    public static void verifyStoragePermissions(Activity activity) {
+        // Check if we have write permission
+        int permission = ActivityCompat.checkSelfPermission(activity,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            // We don't have permission so prompt the user
+            ActivityCompat.requestPermissions(activity, PERMISSIONS_STORAGE,
+                    REQUEST_EXTERNAL_STORAGE);
+        }
+    }
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        // 申请权限
+        verifyStoragePermissions(this);
         // 1、获取资源列表
         playList = getUrlListFromRes();
         playingBar =  findViewById(R.id.playing_info);
@@ -75,31 +105,109 @@ public class MainActivity extends AppCompatActivity {
             layout.addView(radioItem);
         }
     }
-    public List getUrlListFromRes(){
+    private List getUrlListFromRes(){
+
+        String rootParh =  Environment.getExternalStorageDirectory().getAbsolutePath();
+        String radioFilePath=rootParh + "/data/radiolist.txt";
+        Log.e("main",radioFilePath);
+
         List ret = new ArrayList();
-        InputStream inputStream = getResources().openRawResource(R.raw.radio);
-        InputStreamReader inputStreamReader = null;
-        try {
-            inputStreamReader = new InputStreamReader(inputStream, "utf-8");
-        } catch (UnsupportedEncodingException e1) {
-            e1.printStackTrace();
-        }
-        BufferedReader reader = new BufferedReader(inputStreamReader);
-        StringBuffer sb = new StringBuffer("");
-        String line;
-        try {
-            while ((line = reader.readLine()) != null) {
-                //Log.i("line info", "getUrlListFromRes: "+line);
-                String[] split=line.split(",");
-                if(split.length == 2){
-                    ret.add(split);
+        File file = new File(radioFilePath);
+
+        if(file.exists()){
+            Log.i("file info", "find  local file:"+radioFilePath);
+            try {
+                FileInputStream fis = new FileInputStream(file);
+                InputStreamReader isr = new InputStreamReader(fis, "UTF-8");
+                BufferedReader br = new BufferedReader(isr);
+                String line = br.readLine();
+                Log.i("first line", "get 1st line: "+line);
+                // 先读一行
+                if (line.length()>4) {
+                    // if
+                    Log.i("read file", "read fir line in if: ");
+                    if (line.startsWith("http")) {
+                        // http开头代表网络文件处理
+                        try {
+                            // Create a URL for the desired page
+                            URL url = new URL(line.trim());
+                            Thread thread1 = new Thread(new Runnable(){
+                                public void run(){
+                                    try {
+                                        // Create a URL for the desired page
+                                        //First open the connection
+                                        HttpURLConnection conn=(HttpURLConnection) url.openConnection();
+                                        conn.setConnectTimeout(10000); // timing out in a minute
+                                        BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                                        String str = "";
+                                        while (( str = in.readLine()) != null) {
+                                            String[] split = str.split(",");
+                                            if (split.length == 2) {
+                                                ret.add(split);
+                                            }
+                                        }
+                                        in.close();
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            });
+                            thread1.start();
+                            thread1.join();
+                            // Read all the text returned by the server
+                            return ret;
+                        } catch (MalformedURLException e) {
+                            e.printStackTrace();
+                            //
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        Log.i("read file", "file not http info ");
+                        String[] split = line.split(",");
+                        if (split.length == 2) {
+                            ret.add(split);
+                        }
+                        while ((line = br.readLine()) != null) {
+                            split = line.split(",");
+                            if (split.length == 2) {
+                                ret.add(split);
+                            }
+                        }
+                        return ret;
+                    }
                 }
+                fis.close();
+            } catch (IOException e) {
+                // 读取文件异常
+                e.printStackTrace();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+        } else {
+            Log.i("file info", "not  local file");
+            try {
+                InputStream inputStream = getResources().openRawResource(R.raw.radio);
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "utf-8");
+                BufferedReader reader = new BufferedReader(inputStreamReader);
+                StringBuffer sb = new StringBuffer("");
+                String line;
+                try {
+                    while ((line = reader.readLine()) != null) {
+                        //Log.i("line info", "getUrlListFromRes: "+line);
+                        String[] split = line.split(",");
+                        if (split.length == 2) {
+                            ret.add(split);
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
         }
-        return  ret;
+        return ret;
     }
+
 
     static class PlayM3uRadio implements View.OnClickListener {
         private String playUrl;
@@ -130,13 +238,16 @@ public class MainActivity extends AppCompatActivity {
                 mediaPlayer.stop();
                 if(!mediaPlayer.isPlaying()){
                     mediaPlayer.setMediaItem(MediaItem.fromUri(this.playUrl));
-                    playingBar.setText(this.stationName);
+                    //playingBar.setText("正在加载...");
                     mediaPlayer.prepare();
+                    playingBar.setText(this.stationName);
                     mediaPlayer.play();
                     intPlayingId = this.buttonId;
                     playingStationName = this.stationName;
+                    //playingBar.setText(this.stationName);
                 }
             } catch (Exception e) {
+                playingBar.setText("加载失败,请重试或更换！");
                 e.printStackTrace();
             }
         }
