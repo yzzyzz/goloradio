@@ -32,6 +32,8 @@
             android:textColor="@color/black"
             android:textStyle="italic"
             android:ellipsize="marquee"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:marqueeRepeatLimit="marquee_forever"
             android:scrollHorizontally="true"
             android:singleLine="true"
