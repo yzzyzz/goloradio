@@ -6,8 +6,8 @@
     <TextView
         android:id="@+id/expandedListItem"
         android:layout_width="fill_parent"
-        android:layout_height="36dp"
-        android:textSize="24dp"
+        android:layout_height="39dp"
+        android:textSize="25dp"
         android:singleLine="true"
         android:paddingLeft="?android:attr/expandableListPreferredChildPaddingLeft"
         android:textColor="@color/black"
