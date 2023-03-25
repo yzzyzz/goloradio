@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -13,6 +14,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+//import com.google.android.exoplayer2.ext.rtmp.RtmpDataSourceFactory;
 
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -21,6 +24,7 @@ import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.MediaMetadata;
 import com.google.android.exoplayer2.Player;
+import com.google.android.exoplayer2.source.MediaSource;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -38,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     public static int intPlayingId = -1;
     public static String playingStationName;
     public static MarqueeText playingBar;
+    public static TextView playStateBar;
     public static List playList;
 
 
@@ -66,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
         playList = getUrlListFromRes();
         playingBar =  findViewById(R.id.playing_info);
         playingBar.setText("无");
+        playStateBar = findViewById(R.id.playing_state);
         if(mediaPlayer == null){
             mediaPlayer = new ExoPlayer.Builder(this.getApplication()).build();
         }
@@ -79,8 +85,23 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             }
+
+            public void onPlaybackStateChanged( int playbackState) {
+                switch(playbackState){
+                    case Player.STATE_BUFFERING:
+                        playStateBar.setText("正在缓存 - ");
+                        break;
+                    case Player.STATE_IDLE:
+                        playStateBar.setText("停止播放 - ");
+                        break;
+                    default:
+                        playStateBar.setText("正在播放 - ");
+                        break;
+                }
+            }
         });
-        // 2、生成buttom 列表
+
+            // 2、生成buttom 列表
         LinearLayout layout = findViewById(R.id.radiolist);
         for(int i=0;i<playList.size();i++)
         {
@@ -231,20 +252,28 @@ public class MainActivity extends AppCompatActivity {
                 mediaPlayer.stop();
                 intPlayingId = -1;
                 playingStationName = "";
-                playingBar.setText("无");
+                //playingBar.setText("无");
                 return;
             }
             try {
                 mediaPlayer.stop();
                 if(!mediaPlayer.isPlaying()){
+
+/*
+
+                    RtmpDataSourceFactory rtmpDataSourceFactory = new RtmpDataSourceFactory();
+// This is the MediaSource representing the media to be played.
+                    MediaSource videoSource = new ExtractorMediaSource.Factory(rtmpDataSourceFactory)
+                            .createMediaSource(Uri.parse("rtmp://stream1.livestreamingservices.com:1935/tvmlive/tvmlive"));
+
+*/
                     mediaPlayer.setMediaItem(MediaItem.fromUri(this.playUrl));
-                    //playingBar.setText("正在加载...");
                     mediaPlayer.prepare();
-                    playingBar.setText(this.stationName);
-                    mediaPlayer.play();
+                    mediaPlayer.setPlayWhenReady(true);
+                    //mediaPlayer.play();
                     intPlayingId = this.buttonId;
                     playingStationName = this.stationName;
-                    //playingBar.setText(this.stationName);
+                    playingBar.setText(this.stationName);
                 }
             } catch (Exception e) {
                 playingBar.setText("加载失败,请重试或更换！");
