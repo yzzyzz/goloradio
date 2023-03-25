@@ -21,7 +21,6 @@
             android:gravity="left"
             android:text="正在播放 - "
             android:textStyle="bold"
-
             android:textColor="@color/black"
             android:textSize="24dp" />
 
@@ -33,8 +32,6 @@
             android:textColor="@color/black"
             android:textStyle="italic"
             android:ellipsize="marquee"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
             android:marqueeRepeatLimit="marquee_forever"
             android:scrollHorizontally="true"
             android:singleLine="true"
@@ -43,19 +40,25 @@
     </LinearLayout>
 
 
-
-
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         >
 
         <LinearLayout
             android:id="@+id/radiolist"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:padding="0dp"
             android:orientation="vertical" >
+            <ExpandableListView
+                android:id="@+id/expandableListView"
+                android:layout_height="260dp"
+                android:layout_width="match_parent"
+                android:indicatorLeft="?android:attr/expandableListPreferredItemIndicatorLeft"
+                android:drawSelectorOnTop="false"
+                android:listSelector="@android:color/darker_gray"
+                android:dividerHeight="0.5dp" />
         </LinearLayout>
 
     </ScrollView>

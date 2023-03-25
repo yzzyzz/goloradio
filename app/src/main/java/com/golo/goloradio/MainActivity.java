@@ -3,8 +3,6 @@ package com.golo.goloradio;
 import android.Manifest;
 import android.app.Activity;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -12,10 +10,7 @@ import androidx.core.app.ActivityCompat;
 import android.os.Environment;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-//import com.google.android.exoplayer2.ext.rtmp.RtmpDataSourceFactory;
 
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -24,7 +19,6 @@ import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.MediaMetadata;
 import com.google.android.exoplayer2.Player;
-import com.google.android.exoplayer2.source.MediaSource;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -34,7 +28,13 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+
+import android.widget.ExpandableListAdapter;
+import android.widget.ExpandableListView;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -45,6 +45,12 @@ public class MainActivity extends AppCompatActivity {
     public static TextView playStateBar;
     public static List playList;
 
+
+
+    ExpandableListView expandableListView;
+    ExpandableListAdapter expandableListAdapter;
+    List<String> expandableListTitle;
+    HashMap<String, List<RadioItem>> expandableListDetail;
 
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private static String[] PERMISSIONS_STORAGE = {
@@ -67,14 +73,92 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         // 申请权限
         verifyStoragePermissions(this);
-        // 1、获取资源列表
-        playList = getUrlListFromRes();
+
         playingBar =  findViewById(R.id.playing_info);
         playingBar.setText("无");
         playStateBar = findViewById(R.id.playing_state);
         if(mediaPlayer == null){
             mediaPlayer = new ExoPlayer.Builder(this.getApplication()).build();
         }
+
+
+        // 1、获取资源列表
+        playList = getUrlListFromRes();
+
+        ExpandableListDataPump expStationList = new ExpandableListDataPump();
+
+        for(int i=0;i<playList.size();i++) {
+            String[] datainfo = (String[]) playList.get(i);
+            String groupName = "未分类";
+            if(datainfo.length>=3){
+                groupName = datainfo[2];
+            }
+            expStationList.addStationItem(this,datainfo[0],datainfo[1],groupName,i);
+        }
+
+        expandableListView = (ExpandableListView) findViewById(R.id.expandableListView);
+        expandableListDetail = expStationList.getAllStationMap();
+        expandableListView.setItemsCanFocus(true);
+
+
+        List<String> allListTitle = new ArrayList<String>(expandableListDetail.keySet());
+
+        // 排个序列
+        List<String> expandableListTitle = new LinkedList<String>(){{
+            add("我的最爱");
+            add("音乐电台");
+            add("综合资讯");
+            add("文艺曲艺");
+            add("电视伴音");
+        }};
+
+        for(int i = 0;i< allListTitle.size();i++){
+            if(!expandableListTitle.contains(allListTitle.get(i)) ){
+                expandableListTitle.add(allListTitle.get(i));
+            }
+        }
+
+        expandableListAdapter = new CustomExpandableListAdapter(this, expandableListTitle, expandableListDetail);
+        expandableListView.setAdapter(expandableListAdapter);
+        expandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+
+            public boolean onChildClick(ExpandableListView parent, View v,
+                                        int groupPosition, int childPosition, long id) {
+                int intToPlayId = expandableListDetail.get(
+                        expandableListTitle.get(groupPosition)).get(
+                        childPosition).id;
+
+                if(intToPlayId == intPlayingId){
+                    // 暂停播放
+                    mediaPlayer.stop();
+                    intPlayingId = -1;
+                    playingStationName = "";
+                    return true;
+                }
+
+                try {
+                    mediaPlayer.stop();
+                    if(!mediaPlayer.isPlaying()){
+                        mediaPlayer.setMediaItem(MediaItem.fromUri(expandableListDetail.get(
+                                expandableListTitle.get(groupPosition)).get(
+                                childPosition).url));
+                        mediaPlayer.prepare();
+                        mediaPlayer.setPlayWhenReady(true);
+                        intPlayingId =  intToPlayId;
+                        playingStationName = expandableListDetail.get(
+                                expandableListTitle.get(groupPosition)).get(
+                                childPosition).name;
+                        playingBar.setText(playingStationName);
+                    }
+                } catch (Exception e) {
+                    playingBar.setText("加载失败,请重试或更换！");
+                    e.printStackTrace();
+                }
+                return false;
+            }
+        });
+
         mediaPlayer.addListener(new Player.Listener() {
             public void onMediaMetadataChanged(MediaMetadata mediaMetadata){
                 if (mediaMetadata.title != null && mediaMetadata.title.length()>2) {
@@ -89,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
             public void onPlaybackStateChanged( int playbackState) {
                 switch(playbackState){
                     case Player.STATE_BUFFERING:
-                        playStateBar.setText("正在缓存 - ");
+                        playStateBar.setText("正在加载 - ");
                         break;
                     case Player.STATE_IDLE:
                         playStateBar.setText("停止播放 - ");
@@ -100,31 +184,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
-            // 2、生成buttom 列表
-        LinearLayout layout = findViewById(R.id.radiolist);
-        for(int i=0;i<playList.size();i++)
-        {
-            Button radioItem = new Button(this);
-            String[] datainfo = (String[]) playList.get(i);
-            String newName = String.format("%02d", i+1) +"."+ datainfo[0];
-            radioItem.setText(newName);
-            radioItem.setTextSize(23);
-            radioItem.setHeight(25);
-            radioItem.setFocusable(true);
-            radioItem.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                public void onFocusChange(View v, boolean hasFocus) {
-                    if (hasFocus) {
-                        radioItem.setTextColor(Color.RED);
-                    }else {
-                        radioItem.setTextColor(Color.BLACK);
-                    }
-                }
-            });
-            // 3、设置点击播放
-            radioItem.setOnClickListener(new PlayM3uRadio(i) );
-            layout.addView(radioItem);
-        }
     }
     private List getUrlListFromRes(){
 
@@ -134,7 +193,6 @@ public class MainActivity extends AppCompatActivity {
 
         List ret = new ArrayList();
         File file = new File(radioFilePath);
-
         if(file.exists()){
             Log.i("file info", "find  local file:"+radioFilePath);
             try {
@@ -163,7 +221,7 @@ public class MainActivity extends AppCompatActivity {
                                         String str = "";
                                         while (( str = in.readLine()) != null) {
                                             String[] split = str.split(",");
-                                            if (split.length == 2) {
+                                            if (  split.length == 3 || split.length == 2) {
                                                 ret.add(split);
                                             }
                                         }
@@ -175,11 +233,9 @@ public class MainActivity extends AppCompatActivity {
                             });
                             thread1.start();
                             thread1.join();
-                            // Read all the text returned by the server
                             return ret;
                         } catch (MalformedURLException e) {
                             e.printStackTrace();
-                            //
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -227,59 +283,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         return ret;
-    }
-
-
-    static class PlayM3uRadio implements View.OnClickListener {
-        private String playUrl;
-        private int buttonId;
-        private String stationName;
-        public PlayM3uRadio(int  bId) {
-            String[] datainfo = (String[]) playList.get(bId);
-            this.stationName = datainfo[0];
-            this.playUrl = datainfo[1];
-            this.buttonId = bId;
-            //Log.i("url", "PlayM3uRadio: " + this.playUrl);
-        }
-        @Override
-        // 3种情况
-        // 1、正在播放当前，点一下要暂停
-        // 2、当前没有播放，点一下播放当前
-        // 3、当前播放其他，点一下切换选中
-        public void onClick(View view) {
-            if (this.buttonId == intPlayingId){
-                // 暂停播放
-                mediaPlayer.stop();
-                intPlayingId = -1;
-                playingStationName = "";
-                //playingBar.setText("无");
-                return;
-            }
-            try {
-                mediaPlayer.stop();
-                if(!mediaPlayer.isPlaying()){
-
-/*
-
-                    RtmpDataSourceFactory rtmpDataSourceFactory = new RtmpDataSourceFactory();
-// This is the MediaSource representing the media to be played.
-                    MediaSource videoSource = new ExtractorMediaSource.Factory(rtmpDataSourceFactory)
-                            .createMediaSource(Uri.parse("rtmp://stream1.livestreamingservices.com:1935/tvmlive/tvmlive"));
-
-*/
-                    mediaPlayer.setMediaItem(MediaItem.fromUri(this.playUrl));
-                    mediaPlayer.prepare();
-                    mediaPlayer.setPlayWhenReady(true);
-                    //mediaPlayer.play();
-                    intPlayingId = this.buttonId;
-                    playingStationName = this.stationName;
-                    playingBar.setText(this.stationName);
-                }
-            } catch (Exception e) {
-                playingBar.setText("加载失败,请重试或更换！");
-                e.printStackTrace();
-            }
-        }
     }
 }
 
