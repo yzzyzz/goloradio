@@ -5,13 +5,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+
+
+    android:showDividers="end"
+    android:divider="@color/red"
+
+
     tools:context=".MainActivity" >
 
 
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="40dp"
+        android:layout_height="39dp"
         android:orientation="horizontal"
+
         >
 
         <TextView
@@ -40,9 +47,17 @@
     </LinearLayout>
 
 
+
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:src="@android:color/black" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+
         >
 
         <LinearLayout
@@ -55,8 +70,9 @@
                 android:id="@+id/expandableListView"
                 android:layout_height="260dp"
                 android:layout_width="match_parent"
-                android:indicatorLeft="?android:attr/expandableListPreferredItemIndicatorLeft"
+                android:indicatorRight="37dp"
                 android:drawSelectorOnTop="false"
+                android:groupIndicator="@drawable/setting_selector"
                 android:listSelector="@android:color/darker_gray"
                 android:dividerHeight="0.5dp" />
         </LinearLayout>

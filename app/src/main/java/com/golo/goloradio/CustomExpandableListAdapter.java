@@ -78,6 +78,7 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
     @Override
     public View getGroupView(int listPosition, boolean isExpanded,
                              View convertView, ViewGroup parent) {
+        // 子节点个数
         String listTitle = (String) getGroup(listPosition) + "(" +getChildrenCount(listPosition)+")";
         if (convertView == null) {
             LayoutInflater layoutInflater = (LayoutInflater) this.context.
@@ -88,9 +89,6 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
                 .findViewById(R.id.listTitle);
         listTitleTextView.setTypeface(null, Typeface.BOLD);
         listTitleTextView.setText(listTitle);
-        if(listPosition == 0){
-            listTitleTextView.setTextColor(Color.RED);
-        }
         return convertView;
     }
 
