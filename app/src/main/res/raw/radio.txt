@@ -1,46 +1,155 @@
-CNR-1 中国之声,http://ngcdn001.cnr.cn/live/zgzs/index.m3u8
-CNR-2 经济之声,http://ngcdn002.cnr.cn/live/jjzs/index.m3u8
-CRI环球资讯广播,https://sk.cri.cn/905.m3u8
-CRI轻松调频,http://sk.cri.cn/915.m3u8
-CNR-15 中国交通广播,http://ngcdn016.cnr.cn/live/gsgljtgb/index.m3u8
-CNR-3 音乐之声,http://ngcdn003.cnr.cn/live/yyzs/index.m3u8
-CNR-4 经典音乐广播,http://ngcdn004.cnr.cn/live/dszs/index.m3u8
-CRI怀旧,http://lhttp.qingting.fm/live/680/64k.mp3
-CRI-hitFM,http://sk.cri.cn/887.m3u8
-AsiaFM亚洲经典台,http://goldfm.cn:8000/goldfm
-AsiaFM亞洲熱歌台,http://asiafm.net:8000/asiafmhot
-AsiaFM高清音乐台,http://asiafm.hk:8000/asiahd
-500首华语经典,https://lhttp.qtfm.cn/live/5022308/64k.mp3
-清晨音乐台,https://lhttp.qingting.fm/live/4915/64k.mp3
-CNR-12 故事广播,http://ngcdn014.cnr.cn/live/ylgb/index.m3u8
-CNR-9 文艺之声,http://ngcdn010.cnr.cn/live/wyzs/index.m3u8
-CNR阅读之声,http://ngcdn014.cnr.cn/live/ylgb/index.m3u8
-BBC Radio 2,http://stream.live.vc.bbcmedia.co.uk/bbc_radio_two
-Billboard Radio中国 - 80/90后,https://23693.live.streamtheworld.com/80S90S_S01_SC
-CCTV-10科教伴音,https://piccpndali.v.myalicdn.com/audio/cctv10_2.m3u8
-CCTV-11戏曲伴音,https://piccpndali.v.myalicdn.com/audio/cctv11_2.m3u8
-CCTV-15音乐伴音,https://piccpndali.v.myalicdn.com/audio/cctv15_2.m3u8
-CCTV-1综合伴音,https://piccpndali.v.myalicdn.com/audio/cctv1_2.m3u8
-CCTV-2财经伴音,https://piccpndali.v.myalicdn.com/audio/cctv2_2.m3u8
-CCTV-4中文国际伴音,https://piccpndali.v.myalicdn.com/audio/cctv4_2.m3u8
-NHK国际广播（华语时间19:30、20:30、21:30、22:30）,https://nhkwlive-radio.akamaized.net/hls/live/2032381/radio-rs1/index_03.m3u8
-NPR 24 Hour Program Stream,http://npr-ice.streamguys1.com/live.aac
-RFA Chinese,https://rfa-ingest.akamaized.net/hls/live/2040699/RFA_AUDIO_LIVE1/master.m3u8
-VOA Chinese,http://n02.radiojar.com/7thwu53r92quv?rj-ttl=5&rj-tok=AAABhvK1uQIAVN9GgiWNuEBEnA
-WUNC 91.5 NPR Newscast,http://pd.npr.org/anon.npr-mp3/npr/news/newscast.mp3
-上海戏剧曲艺广播,https://lhttp.qingting.fm/live/269/64k.mp3
-上海故事广播,http://lhttp.qingting.fm/live/268/64k.mp3
-上海经典音乐广播,http://lhttp.qingting.fm/live/267/64k.mp3
-内蒙古评书曲艺广播,http://ls.qingting.fm/live/1887.m3u8
-凤凰卫视资讯,https://playtv-live.ifeng.com/live/06OLEGEGM4G_tv1.m3u8
-北京音乐广播,https://lhttp.qtfm.cn/live/332/64k.mp3
-哈尔滨音乐广播,https://stream.hrbtv.net/yypl/playlist.m3u8
-天津相声广播,http://radio-bd.wisetv.com.cn/tjradio/XIANGSHENG.m3u8?secret=&timestamp=
-天籁之音 - 经典正流行,http://play-radio-stream3.hndt.com/now/WUBA5hW2/chunklist.m3u8
-安徽小说评书广播,https://lhttp.qtfm.cn/live/1951/64k.mp3
-怀集音乐之声,http://lhttp.qingting.fm/live/4804/64k.mp3
-河北文艺广播,https://radio.pull.hebtv.com/live/hebwy.m3u8
-河北旅游文化广播,https://radio.pull.hebtv.com/live/hebly.m3u8
-湖北经典音乐广播,https://lhttp.qtfm.cn/live/1296/64k.mp3
-监利电台Jianli National Radio,https://lhttp.qtfm.cn/live/15318507/64k.mp3
-美国中文电台-西雅图,http://kxparadio.serverroom.us:5852/stream.mp3
+CNR中国之声,http://ngcdn001.cnr.cn/live/zgzs/index.m3u8,中央电台
+CNR经济之声,http://ngcdn002.cnr.cn/live/jjzs/index.m3u8,中央电台
+CNR文艺之声,http://audiows010.cnr.cn/live/wyzs192/playlist.m3u8,中央电台
+CNR阅读之声,http://ngcdn014.cnr.cn/live/ylgb/index.m3u8,中央电台
+CNR台海之声,http://ngcdn005.cnr.cn/live/zhzs/index.m3u8,中央电台
+CNR乡村之声,http://ngcdn017.cnr.cn/live/xczs/index.m3u8,中央电台
+CNR老年之声,http://ngcdn011.cnr.cn/live/lnzs/index.m3u8,中央电台
+CNR民族之声,http://ngcdn009.cnr.cn/live/mzzs/index.m3u8,中央电台
+CNR香港之声,http://ngcdn008.cnr.cn/live/xgzs/index.m3u8,中央电台
+CNR大湾区之声,http://ngcdn007.cnr.cn/live/hxzs/index.m3u8,中央电台
+CNR神州之声,http://ngcdn006.cnr.cn/live/szzs/index.m3u8,中央电台
+CNR中国交通广播,http://ngcdn016.cnr.cn/live/gsgljtgb/index.m3u8,中央电台
+CNR音乐之声,http://ngcdn003.cnr.cn/live/yyzs/index.m3u8,中央电台
+CNR经典音乐广播,http://ngcdn004.cnr.cn/live/dszs/index.m3u8,中央电台
+CRI华语环球广播,http://sk.cri.cn/hyhq.m3u8,中央电台
+CRI英语环球广播 China Plus Radio ,http://sk.cri.cn/am846.m3u8,中央电台
+CRI外语教学广播 China Plus Radio ,http://sk.cri.cn/am1008.m3u8,中央电台
+CRI南海之声,http://sk.cri.cn/nhzs.m3u8,中央电台
+CRI轻松调频,http://sk.cri.cn/915.m3u8,中央电台
+CRI粤语国际,http://sk.cri.cn/hxfh.m3u8,中央电台
+世界华声,http://sk.cri.cn/hxfh.m3u8,中央电台
+CNR-1 中国之声,http://ngcdn001.cnr.cn/live/zgzs/index.m3u8,我的最爱
+CNR-2 经济之声,http://ngcdn002.cnr.cn/live/jjzs/index.m3u8,我的最爱
+CRI环球资讯广播,https://sk.cri.cn/905.m3u8,我的最爱
+CRI轻松调频,http://sk.cri.cn/915.m3u8,我的最爱
+CNR-15 中国交通广播,http://ngcdn016.cnr.cn/live/gsgljtgb/index.m3u8,我的最爱
+CNR-3 音乐之声,http://ngcdn003.cnr.cn/live/yyzs/index.m3u8,我的最爱
+CNR-4 经典音乐广播,http://ngcdn004.cnr.cn/live/dszs/index.m3u8,我的最爱
+CRI怀旧,http://lhttp.qingting.fm/live/680/64k.mp3,我的最爱
+CRI-hitFM,http://sk.cri.cn/887.m3u8,我的最爱
+AsiaFM亚洲经典台,http://goldfm.cn:8000/goldfm,我的最爱
+AsiaFM亞洲熱歌台,http://asiafm.net:8000/asiafmhot,我的最爱
+AsiaFM高清音乐台,http://asiafm.hk:8000/asiahd,我的最爱
+500首华语经典,https://lhttp.qtfm.cn/live/5022308/64k.mp3,我的最爱
+清晨音乐台,https://lhttp.qingting.fm/live/4915/64k.mp3,我的最爱
+CNR-12 故事广播,http://ngcdn014.cnr.cn/live/ylgb/index.m3u8,我的最爱
+CNR-9 文艺之声,http://ngcdn010.cnr.cn/live/wyzs/index.m3u8,我的最爱
+北京交通广播,https://brtv-radiolive.rbc.cn/alive/fm1039.m3u8,我的最爱
+CNR阅读之声,http://ngcdn014.cnr.cn/live/ylgb/index.m3u8,我的最爱
+BBC Radio 2,http://stream.live.vc.bbcmedia.co.uk/bbc_radio_two,我的最爱
+Billboard Radio中国 - 80/90后,https://23693.live.streamtheworld.com/80S90S_S01_SC,我的最爱
+CCTV-10科教伴音,https://piccpndali.v.myalicdn.com/audio/cctv10_2.m3u8,我的最爱
+CCTV-15音乐伴音,https://piccpndali.v.myalicdn.com/audio/cctv15_2.m3u8,我的最爱
+CCTV-1综合伴音,https://piccpndali.v.myalicdn.com/audio/cctv1_2.m3u8,我的最爱
+CCTV-2财经伴音,https://piccpndali.v.myalicdn.com/audio/cctv2_2.m3u8,我的最爱
+CCTV-4中文国际伴音,https://piccpndali.v.myalicdn.com/audio/cctv4_2.m3u8,我的最爱
+NHK国际广播（华语时间19:30、20:30、21:30、22:30）,https://nhkwlive-radio.akamaized.net/hls/live/2032381/radio-rs1/index_03.m3u8,我的最爱
+NPR 24 Hour Program Stream,http://npr-ice.streamguys1.com/live.aac,我的最爱
+VOA Chinese,http://n02.radiojar.com/7thwu53r92quv?rj-ttl=5&rj-tok=AAABhvK1uQIAVN9GgiWNuEBEnA,我的最爱
+WUNC 91.5 NPR Newscast,http://pd.npr.org/anon.npr-mp3/npr/news/newscast.mp3,我的最爱
+上海戏剧曲艺广播,https://lhttp.qingting.fm/live/269/64k.mp3,我的最爱
+上海故事广播,http://lhttp.qingting.fm/live/268/64k.mp3,我的最爱
+上海经典音乐广播,http://lhttp.qingting.fm/live/267/64k.mp3,我的最爱
+内蒙古评书曲艺广播,http://ls.qingting.fm/live/1887.m3u8,我的最爱
+凤凰卫视资讯,https://playtv-live.ifeng.com/live/06OLEGEGM4G_tv1.m3u8,我的最爱
+北京音乐广播,https://lhttp.qtfm.cn/live/332/64k.mp3,我的最爱
+哈尔滨音乐广播,https://stream.hrbtv.net/yypl/playlist.m3u8,我的最爱
+天津相声广播,http://radio-bd.wisetv.com.cn/tjradio/XIANGSHENG.m3u8?secret=&timestamp=,我的最爱
+天籁之音 - 经典正流行,http://play-radio-stream3.hndt.com/now/WUBA5hW2/chunklist.m3u8,我的最爱
+安徽小说评书广播,https://lhttp.qtfm.cn/live/1951/64k.mp3,我的最爱
+怀集音乐之声,http://lhttp.qingting.fm/live/4804/64k.mp3,我的最爱
+河北文艺广播,https://radio.pull.hebtv.com/live/hebwy.m3u8,我的最爱
+河北旅游文化广播,https://radio.pull.hebtv.com/live/hebly.m3u8,我的最爱
+湖北经典音乐广播,https://lhttp.qtfm.cn/live/1296/64k.mp3,我的最爱
+监利电台Jianli National Radio,https://lhttp.qtfm.cn/live/15318507/64k.mp3,我的最爱
+美国中文电台-西雅图,http://kxparadio.serverroom.us:5852/stream.mp3,我的最爱
+CNR文艺之声,http://audiows010.cnr.cn/live/wyzs192/playlist.m3u8,文化曲艺
+江苏文艺广播,https://satellitepull.cnr.cn/live/wx32jswygb/playlist.m3u8,文化曲艺
+河北文艺广播,https://satellitepull.cnr.cn/live/wxhebwygb/playlist.m3u8,文化曲艺
+山东文艺广播,http://live-hls.ihzlh.linker.cc/ihzlh/sd_ts03_975.m3u8,文化曲艺
+重庆文艺广播,https://satellitepull.cnr.cn/live/wxcqwygb/playlist.m3u8,文化曲艺
+四川文艺广播,https://satellitepull.cnr.cn/live/wxscwygb/playlist.m3u8,文化曲艺
+成都交通文艺广播,http://149.129.100.78/cdgb.php?id=433-22,文化曲艺
+湖南文艺广播·摩登音乐台,https://satellitepull.cnr.cn/live/wx32hunwygb/playlist.m3u8,文化曲艺
+成都文化休闲广播·radio946,http://149.129.100.78/cdgb.php?id=433-20,文化曲艺
+河南戏曲广播,https://stream.hndt.com/live/yule/playlist.m3u8,文化曲艺
+苏州戏曲广播,http://audio-live.radio.cn/live/szxq1/playlist.m3u8,文化曲艺
+安徽戏曲广播·动听995,https://satellitepull.cnr.cn/live/wxahxqgb/playlist.m3u8,文化曲艺
+陕西戏曲广播,https://satellitepull.cnr.cn/live/wxsxxxqgb/playlist.m3u8,文化曲艺
+CCTV-11 戏曲,https://piccpndaili.v.myalicdn.com/audio/cctv11_2.m3u8,文化曲艺
+大象资讯台,https://stream.hndt.com/live/nongcun/playlist.m3u8,综合资讯
+CRI环球资讯广播,https://satellitepull.cnr.cn/live/wxhqzx01/playlist.m3u8,综合资讯
+湖北资讯广播,https://satellitepull.cnr.cn/live/wx32hubzxgb/playlist.m3u8,综合资讯
+浙江民生资讯广播,https://satellitepull.cnr.cn/live/wxzjmsgb/playlist.m3u8,综合资讯
+天津静海区综合广播·交通广播网,http://starfish.bj.aliyun.001.qingting.fm:8000/jingdianFM1008,综合资讯
+湖南综合广播,https://satellitepull.cnr.cn/live/wx32hunxwgb/playlist.m3u8,综合资讯
+江苏新闻综合广播,https://satellitepull.cnr.cn/live/wx32jsxwzhgb/playlist.m3u8,综合资讯
+苏州综合广播,http://audio-live.radio.cn/live/szxwzh1/playlist.m3u8,综合资讯
+河北综合广播,https://satellitepull.cnr.cn/live/wxhebzhgb/playlist.m3u8,综合资讯
+江西综合新闻广播,https://satellitepull.cnr.cn/live/wx32jiangxxwgb/playlist.m3u8,综合资讯
+山东综合广播,http://live-hls.ihzlh.linker.cc/ihzlh/sd_ts01_95.m3u8,综合资讯
+宁波新闻综合广播,http://ihzlh.linker.cc/ihzlh/zjnb_ts04_920.m3u8,综合资讯
+惠州综合广播,http://stream.hztvmg.com/gbtest2/sd/live.m3u8,综合资讯
+四川综合广播四川之声,https://satellitepull.cnr.cn/live/wxsczhgb/playlist.m3u8,综合资讯
+贵州综合广播,https://satellitepull.cnr.cn/live/wx32gzwxwzhgb/playlist.m3u8,综合资讯
+吉林新闻综合广播,https://satellitepull.cnr.cn/live/wxjlxwzhgb/playlist.m3u8,综合资讯
+雅安综合广播,https://m3u8channel.wuxianyaan.com/cms/audios/nmip-media/audiolive/audio10/playlist.m3u8,综合资讯
+徐州新闻综合广播,http://stream1.huaihai.tv/aac_gbfm93/playlist.m3u8,综合资讯
+内蒙古蒙语新闻综合广播,https://satellitepull.cnr.cn/live/wx32nmgmygb/playlist.m3u8,综合资讯
+甘肃新闻综合广播,https://satellitepull.cnr.cn/live/wxgsxwzhgb/playlist.m3u8,综合资讯
+广西综合广播,https://satellitepull.cnr.cn/live/wx32gxrmgb/playlist.m3u8,综合资讯
+青海新闻综合广播,https://satellitepull.cnr.cn/live/wx32qhwxzhgb/playlist.m3u8,综合资讯
+宜昌新闻综合广播,http://playfmaliyun.3xgd.com/fm/xwt.m3u8,综合资讯
+CCTV-1 综合,https://piccpndaili.v.myalicdn.com/audio/cctv1_2.m3u8,综合资讯
+AsiaFM亚洲经典台,http://goldfm.cn:8000/goldfm,音乐电台
+AsiaFM亞洲熱歌台,http://asiafm.net:8000/asiafmhot,音乐电台
+AsiaFM高清音乐台,http://asiafm.hk:8000/asiahd,音乐电台
+古典音乐台,http://play.redefine.ltd/Stream2/FM1058-2.m3u8,音乐电台
+河南音乐广播,https://stream.hndt.com/live/yinyue/playlist.m3u8,音乐电台
+A-line Radio 网路音乐台,http://radio.apple-line.com:987/radio-data/alinePlayer.php,音乐电台
+中广音乐网,http://stream.rcs.revma.com/ks4vsmg3qtzuv,音乐电台
+RTI音乐,https://www.soundvideostar.com/live/_definst_/rti4/playlist.m3u8,音乐电台
+台湾古典音乐台,http://59.120.88.155:8000/live.mp3,音乐电台
+CNR音乐之声,http://ngcdn003.cnr.cn/live/yyzs/index.m3u8,音乐电台
+CNR经典音乐广播,http://ngcdn004.cnr.cn/live/dszs/index.m3u8,音乐电台
+陕西音乐广播,https://satellitepull.cnr.cn/live/wxsxxyygb/playlist.m3u8,音乐电台
+苏州都市音乐广播,http://audio-live.radio.cn/live/szyy1/playlist.m3u8,音乐电台
+山东音乐广播,https://satellitepull.cnr.cn/live/wxsdyygb/playlist.m3u8,音乐电台
+山东经典音乐广播,https://satellitepull.cnr.cn/live/wxsdshxxgb/playlist.m3u8,音乐电台
+安徽音乐广播,https://satellitepull.cnr.cn/live/wxahyygb/playlist.m3u8,音乐电台
+宁波音乐广播,http://ihzlh.linker.cc/ihzlh/zjnb_ts02_986.m3u8,音乐电台
+湖南音乐之声·芒果音乐台,http://a.live.hnradio.com/yypd/radio120k_yypd.m3u8?auth_key=1588751172-0-0-d97b858279c1c86650172b9913ea4af2,音乐电台
+湖南文艺广播·摩登音乐台,https://satellitepull.cnr.cn/live/wx32hunwygb/playlist.m3u8,音乐电台
+惠州音乐广播,http://stream.hztvmg.com/test17/playlist.m3u8,音乐电台
+宜昌音乐生活广播,http://playfmaliyun.3xgd.com/fm/qct.m3u8,音乐电台
+山西音乐广播,https://radiolive.sxrtv.com/live/yinyue/playlist.m3u8,音乐电台
+内蒙古音乐之声,https://satellitepull.cnr.cn/live/wx32nmgyygb/playlist.m3u8,音乐电台
+湖北经典音乐广播,https://satellitepull.cnr.cn/live/wx32hubyygb/playlist.m3u8,音乐电台
+广西音乐广播,https://satellitepull.cnr.cn/live/wx32gxwygb/playlist.m3u8,音乐电台
+云南音乐广播,https://satellitepull.cnr.cn/live/wxynyygb/playlist.m3u8,音乐电台
+四川岷江音乐,https://satellitepull.cnr.cn/live/wxscmjyyt/playlist.m3u8,音乐电台
+厦门音乐广播,http://live1.kxm.xmtv.cn/aac_xmyy/playlist.m3u8,音乐电台
+楚天音乐广播,https://satellitepull.cnr.cn/live/wx32hubctyygb/playlist.m3u8,音乐电台
+江苏音乐广播,https://satellitepull.cnr.cn/live/wx32jsyygb/playlist.m3u8,音乐电台
+江苏经典流行音乐广播,https://satellitepull.cnr.cn/live/wx32jsjdlxyy/playlist.m3u8,音乐电台
+浙江音乐调频·动听968,https://satellitepull.cnr.cn/live/wxzj968/playlist.m3u8,音乐电台
+河北音乐广播,https://satellitepull.cnr.cn/live/wxhebyygb/playlist.m3u8,音乐电台
+广东音乐之声,https://satellitepull.cnr.cn/live/wxgdyyzs/playlist.m3u8,音乐电台
+海南音乐广播,https://satellitepull.cnr.cn/live/wxhainyygb/playlist.m3u8,音乐电台
+贵州音乐广播,https://satellitepull.cnr.cn/live/wx32gzyygb/playlist.m3u8,音乐电台
+宁夏音乐广播,https://satellitepull.cnr.cn/live/wxnxyygb/playlist.m3u8,音乐电台
+重庆音乐广播,https://satellitepull.cnr.cn/live/wxcqyygb/playlist.m3u8,音乐电台
+江西音乐广播,https://satellitepull.cnr.cn/live/wx32jiangxyygb/playlist.m3u8,音乐电台
+黑龙江音乐广播,https://satellitepull.cnr.cn/live/wx32hljyygb/playlist.m3u8,音乐电台
+福建汽车音乐广播,https://satellitepull.cnr.cn/live/wx32fjdnyygb/playlist.m3u8,音乐电台
+哈尔滨古典音乐广播,http://pull.hrbtv.net/tv/12.m3u8,音乐电台
+福州音乐广播,http://live.zohi.tv/audio/s10001-FM893/index.m3u8,音乐电台
+WHIZ Radio 海口音乐广播,http://starfish.sz.aliyun.005.qingting.fm:8000/haikouSIMULRADIO,音乐电台
+青岛摩登音乐调频,http://video11.qtv.com.cn/zhibo886/manifest.m3u8,音乐电台
+辽宁经典音乐广播,https://satellitepull.cnr.cn/live/wxlnwygb/playlist.m3u8,音乐电台
+青海交通音乐广播,https://satellitepull.cnr.cn/live/wx32qhjtyygb/playlist.m3u8,音乐电台
+北京音乐广播,http://audiolive2.rbc.cn:1935/live/fm974/96K/tzwj_video.m3u8,音乐电台
+武汉音乐广播,http://stream.appwuhan.com/yypdzb/sd/live.m3u8,音乐电台
+长沙音乐广播,http://222.186.61.82/zhcs_radio/jjgb886__redirect__20573.m3u8,音乐电台
+CCTV-15 音乐,https://piccpndaili.v.myalicdn.com/audio/cctv15_2.m3u8,音乐电台

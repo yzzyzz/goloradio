@@ -34,6 +34,7 @@ import java.util.List;
 
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
+import android.widget.Toast;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -45,12 +46,13 @@ public class MainActivity extends AppCompatActivity {
     public static TextView playStateBar;
     public static List playList;
 
+    public static String[] reqCate = {"我的最爱","音乐电台","综合资讯","文化曲艺"};
 
 
     ExpandableListView expandableListView;
     ExpandableListAdapter expandableListAdapter;
     List<String> expandableListTitle;
-    HashMap<String, List<RadioItem>> expandableListDetail;
+    public static HashMap<String, List<RadioItem>> expandableListDetail;
 
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private static String[] PERMISSIONS_STORAGE = {
@@ -104,13 +106,14 @@ public class MainActivity extends AppCompatActivity {
         List<String> allListTitle = new ArrayList<String>(expandableListDetail.keySet());
 
         // 排个序列
-        List<String> expandableListTitle = new LinkedList<String>(){{
-            add("我的最爱");
-            add("音乐电台");
-            add("综合资讯");
-            add("文艺曲艺");
-            add("电视伴音");
-        }};
+        List<String> expandableListTitle = new LinkedList<String>();
+        for(int i =0;i<reqCate.length;i++){
+            expandableListTitle.add(reqCate[i]);
+            if(!allListTitle.contains(reqCate[i])){
+                Toast.makeText(getApplicationContext(),("!数据文件缺乏必须的分类:"+reqCate[i]), Toast.LENGTH_LONG).show();
+                return ;
+            }
+        }
 
         for(int i = 0;i< allListTitle.size();i++){
             if(!expandableListTitle.contains(allListTitle.get(i)) ){
@@ -158,7 +161,6 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
-
         mediaPlayer.addListener(new Player.Listener() {
             public void onMediaMetadataChanged(MediaMetadata mediaMetadata){
                 if (mediaMetadata.title != null && mediaMetadata.title.length()>2) {
@@ -188,7 +190,7 @@ public class MainActivity extends AppCompatActivity {
     private List getUrlListFromRes(){
 
         String rootParh =  Environment.getExternalStorageDirectory().getAbsolutePath();
-        String radioFilePath=rootParh + "/data/radiolist.txt";
+        String radioFilePath=rootParh + "/data/radiolist.csv";
         Log.e("main",radioFilePath);
 
         List ret = new ArrayList();
@@ -221,7 +223,7 @@ public class MainActivity extends AppCompatActivity {
                                         String str = "";
                                         while (( str = in.readLine()) != null) {
                                             String[] split = str.split(",");
-                                            if (  split.length == 3 || split.length == 2) {
+                                            if (  split.length >= 2) {
                                                 ret.add(split);
                                             }
                                         }
@@ -242,12 +244,12 @@ public class MainActivity extends AppCompatActivity {
                     } else {
                         Log.i("read file", "file not http info ");
                         String[] split = line.split(",");
-                        if (split.length == 2) {
+                        if (split.length >= 2) {
                             ret.add(split);
                         }
                         while ((line = br.readLine()) != null) {
                             split = line.split(",");
-                            if (split.length == 2) {
+                            if (split.length >= 2) {
                                 ret.add(split);
                             }
                         }
@@ -271,7 +273,7 @@ public class MainActivity extends AppCompatActivity {
                     while ((line = reader.readLine()) != null) {
                         //Log.i("line info", "getUrlListFromRes: "+line);
                         String[] split = line.split(",");
-                        if (split.length == 2) {
+                        if (split.length >= 2) {
                             ret.add(split);
                         }
                     }
