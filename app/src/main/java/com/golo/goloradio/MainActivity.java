@@ -77,12 +77,18 @@ public class MainActivity extends AppCompatActivity {
         verifyStoragePermissions(this);
 
         playingBar =  findViewById(R.id.playing_info);
-        playingBar.setText("无");
         playStateBar = findViewById(R.id.playing_state);
         if(mediaPlayer == null){
             mediaPlayer = new ExoPlayer.Builder(this.getApplication()).build();
-        }
+            playingBar.setText("无");
 
+        }else {
+            if(playingStationName.length()>2){
+                playingBar.setText(playingStationName);
+            }else {
+                playingBar.setText("无");
+            }
+        }
 
         // 1、获取资源列表
         playList = getUrlListFromRes();
@@ -178,7 +184,24 @@ public class MainActivity extends AppCompatActivity {
                         playStateBar.setText("正在加载 - ");
                         break;
                     case Player.STATE_IDLE:
-                        playStateBar.setText("停止播放 - ");
+                        // 尝试重新播放
+                        if(intPlayingId>0) {
+                            for (int i = 0; i <= 2; i++) {
+                                try {
+                                    mediaPlayer.play();
+                                    // 不重试成功
+                                    playStateBar.setText("正在播放 - ");
+                                    break;
+                                } catch (Exception ex) {
+                                    // 处理异常
+                                    if (i == 3) {
+                                        Toast.makeText(getApplicationContext(),("播放失败:请重试或移除该源！"), Toast.LENGTH_LONG).show();
+                                    }
+                                }
+                            }
+                        }else {
+                            playStateBar.setText("停止播放 - ");
+                        }
                         break;
                     default:
                         playStateBar.setText("正在播放 - ");
@@ -192,7 +215,6 @@ public class MainActivity extends AppCompatActivity {
         String rootParh =  Environment.getExternalStorageDirectory().getAbsolutePath();
         String radioFilePath=rootParh + "/data/radiolist.csv";
         Log.e("main",radioFilePath);
-
         List ret = new ArrayList();
         File file = new File(radioFilePath);
         if(file.exists()){
