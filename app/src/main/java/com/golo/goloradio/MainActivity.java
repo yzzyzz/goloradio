@@ -140,8 +140,8 @@ public class MainActivity extends AppCompatActivity {
 
                 if(intToPlayId == intPlayingId){
                     // 暂停播放
-                    mediaPlayer.stop();
                     intPlayingId = -1;
+                    mediaPlayer.stop();
                     playingStationName = "";
                     return true;
                 }
