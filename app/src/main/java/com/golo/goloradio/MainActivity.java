@@ -185,23 +185,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case Player.STATE_IDLE:
                         // 尝试重新播放
-                        if(intPlayingId>0) {
-                            for (int i = 0; i <= 2; i++) {
-                                try {
-                                    mediaPlayer.play();
-                                    // 不重试成功
-                                    playStateBar.setText("正在播放 - ");
-                                    break;
-                                } catch (Exception ex) {
-                                    // 处理异常
-                                    if (i == 3) {
-                                        Toast.makeText(getApplicationContext(),("播放失败:请重试或移除该源！"), Toast.LENGTH_LONG).show();
-                                    }
-                                }
-                            }
-                        }else {
-                            playStateBar.setText("停止播放 - ");
-                        }
+                        playStateBar.setText("停止播放 - ");
                         break;
                     default:
                         playStateBar.setText("正在播放 - ");

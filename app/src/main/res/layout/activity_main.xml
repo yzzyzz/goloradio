@@ -38,6 +38,7 @@
             android:text="无"
             android:textColor="@color/black"
             android:textStyle="italic"
+            android:focusable="false"
             android:ellipsize="marquee"
             android:marqueeRepeatLimit="marquee_forever"
             android:scrollHorizontally="true"
