@@ -2,12 +2,15 @@ package com.golo.goloradio;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.os.Environment;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -57,17 +60,20 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private static String[] PERMISSIONS_STORAGE = {
             Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE };
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.MANAGE_EXTERNAL_STORAGE
+    };
 
     public static void verifyStoragePermissions(Activity activity) {
         // Check if we have write permission
         int permission = ActivityCompat.checkSelfPermission(activity,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                Manifest.permission.MANAGE_EXTERNAL_STORAGE);
         if (permission != PackageManager.PERMISSION_GRANTED) {
             // We don't have permission so prompt the user
             ActivityCompat.requestPermissions(activity, PERMISSIONS_STORAGE,
                     REQUEST_EXTERNAL_STORAGE);
         }
+
     }
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +81,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         // 申请权限
         verifyStoragePermissions(this);
+
+        if (Build.VERSION.SDK_INT >= 30){
+            if (!Environment.isExternalStorageManager()){
+                Intent getpermission = new Intent();
+                getpermission.setAction(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
+                startActivity(getpermission);
+            }
+        }
+
+
 
         playingBar =  findViewById(R.id.playing_info);
         playStateBar = findViewById(R.id.playing_state);
@@ -91,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // 1、获取资源列表
-        playList = getUrlListFromweb();
+        playList = getUrlListFromRes();
 
         ExpandableListDataPump expStationList = new ExpandableListDataPump();
 
@@ -195,7 +211,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private List getUrlListFromweb(){
+    private List getUrlListFromWeb(){
         List ret = new ArrayList();
 
         try {
