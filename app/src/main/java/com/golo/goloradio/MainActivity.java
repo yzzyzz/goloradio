@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // 1、获取资源列表
-        playList = getUrlListFromRes();
+        playList = getUrlListFromweb();
 
         ExpandableListDataPump expStationList = new ExpandableListDataPump();
 
@@ -194,6 +194,45 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+    private List getUrlListFromweb(){
+        List ret = new ArrayList();
+
+        try {
+            String line= "http://gz.999887.xyz/radio.php";
+            // Create a URL for the desired page
+            URL url = new URL(line.trim());
+            Thread thread1 = new Thread(new Runnable(){
+                public void run(){
+                    try {
+                        // Create a URL for the desired page
+                        //First open the connection
+                        HttpURLConnection conn=(HttpURLConnection) url.openConnection();
+                        conn.setConnectTimeout(10000); // timing out in a minute
+                        BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                        String str = "";
+                        while (( str = in.readLine()) != null) {
+                            String[] split = str.split(",");
+                            if (  split.length >= 2) {
+                                ret.add(split);
+                            }
+                        }
+                        in.close();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            thread1.start();
+            thread1.join();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ret;
+    }
+
     private List getUrlListFromRes(){
 
         String rootParh =  Environment.getExternalStorageDirectory().getAbsolutePath();

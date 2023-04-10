@@ -10,10 +10,9 @@
         android:textSize="27dp"
         android:singleLine="true"
         android:paddingLeft="?android:attr/expandableListPreferredChildPaddingLeft"
-        android:textColor="@color/black"
-
         android:ellipsize="marquee"
         android:scrollHorizontally="true"
         android:marqueeRepeatLimit="marquee_forever"
+        android:textColor="@color/black"
         />
 </LinearLayout>
