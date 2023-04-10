@@ -39,6 +39,8 @@ import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.Toast;
 
+import org.greenrobot.eventbus.EventBus;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -90,8 +92,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-
-
         playingBar =  findViewById(R.id.playing_info);
         playStateBar = findViewById(R.id.playing_state);
         if(mediaPlayer == null){
@@ -99,10 +99,11 @@ public class MainActivity extends AppCompatActivity {
             playingBar.setText("无");
 
         }else {
-            if(playingStationName.length()>2){
+            if(playingStationName!=null && playingStationName.length()>2){
                 playingBar.setText(playingStationName);
             }else {
                 playingBar.setText("无");
+                playingStationName = "";
             }
         }
 
@@ -175,6 +176,7 @@ public class MainActivity extends AppCompatActivity {
                                 expandableListTitle.get(groupPosition)).get(
                                 childPosition).name;
                         playingBar.setText(playingStationName);
+
                     }
                 } catch (Exception e) {
                     playingBar.setText("加载失败,请重试或更换！");
@@ -188,6 +190,33 @@ public class MainActivity extends AppCompatActivity {
                 if (mediaMetadata.title != null && mediaMetadata.title.length()>2) {
                     if(playingStationName.length()>1){
                         playingBar.setText(playingStationName +" _ "+mediaMetadata.title);
+
+
+                        //点击回调有什么意图呢？可以创建一个意图
+                        Bundle bundle = new Bundle();
+                        Intent intent = new Intent();
+
+                        //bundle.putString("artist", mediaMetadata.artist.toString());
+                        bundle.putString("title", mediaMetadata.title.toString());
+                        bundle.putString("stationName", playingStationName);
+                        intent.putExtra("data", bundle);
+                        //设置跳转到MianActivity2
+                        intent.setClass(MainActivity.this,musicpic.class);//特殊的写法
+                        //intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                        //intent.setClassName("com.golo.goloradio", "musicpic");
+                        startActivity(intent);
+                        /*
+                        if (getPackageManager().resolveActivity(intent, 0) == null) {
+                            // 说明系统中不存在这个activity
+
+                        }else {
+                        }
+                        *
+                         */
+                        //执行意图
+
+                        EventBus.getDefault().post(new MetaMessage(mediaMetadata.title.toString()));
+
                     }else {
                         playingBar.setText(mediaMetadata.title);
                     }
@@ -209,44 +238,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-    }
-
-    private List getUrlListFromWeb(){
-        List ret = new ArrayList();
-
-        try {
-            String line= "http://gz.999887.xyz/radio.php";
-            // Create a URL for the desired page
-            URL url = new URL(line.trim());
-            Thread thread1 = new Thread(new Runnable(){
-                public void run(){
-                    try {
-                        // Create a URL for the desired page
-                        //First open the connection
-                        HttpURLConnection conn=(HttpURLConnection) url.openConnection();
-                        conn.setConnectTimeout(10000); // timing out in a minute
-                        BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                        String str = "";
-                        while (( str = in.readLine()) != null) {
-                            String[] split = str.split(",");
-                            if (  split.length >= 2) {
-                                ret.add(split);
-                            }
-                        }
-                        in.close();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-            thread1.start();
-            thread1.join();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return ret;
     }
 
     private List getUrlListFromRes(){
