@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/darkbg"
     tools:context=".musicpic">
 
     <TextView
@@ -20,7 +21,7 @@
     <ImageView
         android:id="@+id/artist_pic"
         android:layout_width="match_parent"
-        android:layout_height="230dp"
+        android:layout_height="235dp"
         android:layout_marginLeft="35dp"
         android:layout_marginRight="35dp"
         android:scaleType="centerCrop"

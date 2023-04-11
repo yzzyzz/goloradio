@@ -100,7 +100,6 @@ public class musicpic extends AppCompatActivity {
     public static String getStringFromurl(String jsonURL){
         String ret = "";
         try {
-            Log.e("encode url", "getStringFromurl:  encode url"+ jsonURL );
             URL url = new URL(jsonURL);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
@@ -192,8 +191,11 @@ public class musicpic extends AppCompatActivity {
         } else if (keyCode == 66) {
             if(MainActivity.mediaPlayer.isPlaying()){
                 MainActivity.mediaPlayer.pause();
+                //titleNameView.setText(MainActivity.currentMusicName+" ▶ ⏸");
+                titleNameView.setText(MainActivity.currentMusicName+" ▶");
             }else {
                 MainActivity.mediaPlayer.play();
+                titleNameView.setText(MainActivity.currentMusicName);
             }
         }
         return super.onKeyDown(keyCode, event);
