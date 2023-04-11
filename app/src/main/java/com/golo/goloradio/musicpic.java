@@ -91,51 +91,20 @@ public class musicpic extends AppCompatActivity {
     }
 
     public String getPicUrlByTitle(String tt){
+        Log.e("show url", " enter getPicUrlByTitle: "+tt );
+
         // 解析名称和作者
         String returl = "";
-        String artname = "";
-        String musicName = "";
-        String[] tmpData = tt.split("-");
-        String queryUrl = "";
-        if(tmpData.length ==2){
-            artname = tmpData[0].trim();
-            musicName = tmpData[1].trim();
-            queryUrl = "https://musicbrainz.org/ws/2/recording/?&fmt=json&query=artist:"+artname+"+recording:"+musicName;//recording:"+musicName+"";
-        }else {
-            musicName = tt.trim();
-            queryUrl = "https://musicbrainz.org/ws/2/recording/?&fmt=json&query=recording:"+musicName;
-        }
+        String newtt = java.net.URLEncoder.encode(tt);
+        String queryUrl = "http://gz.999887.xyz/getmusicpic.php?title="+newtt;
         Log.e("show url", "getPicUrlByTitle: "+queryUrl );
         String res = getStringFromurl(queryUrl);
         String releaseid="";
         if(res.length()>10){
             try {
                 JSONObject jsono = new JSONObject(res);
-                JSONArray jarray = jsono.getJSONArray("recordings");
-                Log.e("get release array", "getPicUrlByTitle: "+jarray.toString() );
-                for(int i =0;i<jarray.length();i++){
-                    releaseid=jarray.getJSONObject(i).getJSONArray("releases").getJSONObject(0).getString("id");
-                    if(releaseid.length()>10){
-                        String reUrl = "http://coverartarchive.org/release/"+releaseid+"?fmt=json";
-                        Log.e("show url", "getPicUrlByTitle: "+reUrl );
-                        res = getStringFromurl(reUrl);
-                        Log.e("get data", "getStringFromurl done: "+res );
-                        if(res.length()>10){
-                            try {
-                                JSONObject jsono2 = new JSONObject(res);
-                                JSONArray jarray2 = jsono2.getJSONArray("images");
-                                returl=jarray2.getJSONObject(0).getJSONObject("thumbnails").getString("small");
-                                if(returl.length()>10){
-                                    Log.e("task", "getPicUrlByTitle: final url "+reUrl );
-                                    return returl;
-                                }
-                            }catch (Exception e){
-                                e.printStackTrace();
-                            }
-                        }
-                    }
-
-                }
+                returl = jsono.getString("picurl");
+                return returl;
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -144,22 +113,19 @@ public class musicpic extends AppCompatActivity {
         return returl;
     }
 
-
-    public String getStringFromurl(String jsonURL){
+    public static String getStringFromurl(String jsonURL){
         String ret = "";
         try {
-
+            Log.e("encode url", "getStringFromurl:  encode url"+ jsonURL );
             URL url = new URL(jsonURL);
-            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setRequestMethod("GET");
-            urlConnection.setInstanceFollowRedirects(true);
-            urlConnection.setDoOutput(false);
-            urlConnection.connect();
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
-            if (urlConnection.getResponseCode() != 200){
-                Log.e("TASK", "getStringFromurl: rescode:"+urlConnection.getResponseCode());
-            }
-            InputStream inputStream = urlConnection.getInputStream();
+            conn.setReadTimeout(10000);
+            conn.addRequestProperty("Accept-Language", "en-US,en;q=0.8");
+            conn.addRequestProperty("User-Agent", "Mozilla");
+            conn.addRequestProperty("Referer", "google.com");
+
+            InputStream inputStream = conn.getInputStream();
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
             StringBuffer stringBuffer = new StringBuffer();
 
@@ -185,6 +151,7 @@ public class musicpic extends AppCompatActivity {
     @Override
     protected void onPause() {
         downloadLock = false;
+        Log.e("onPause ", "onPause: " );
         MainActivity.isPhowPic = false;
         super.onPause();
     }
@@ -192,6 +159,7 @@ public class musicpic extends AppCompatActivity {
     protected void onResume(){
         downloadLock = false;
         MainActivity.isPhowPic = true;
+        Log.e("resume ", "onResume: " );
         if(LoadingPicName!= MainActivity.currentMusicName) {
             PicLoadTask newt = new PicLoadTask();
             newt.execute(MainActivity.currentMusicName);
