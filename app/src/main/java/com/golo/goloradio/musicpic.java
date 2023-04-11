@@ -2,33 +2,28 @@ package com.golo.goloradio;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.annotation.GlideModule;
-
 import com.bumptech.glide.module.AppGlideModule;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.UUID;
+
 
 
 
@@ -55,14 +50,6 @@ public class musicpic extends AppCompatActivity {
         titleNameView = findViewById(R.id.playerview_titlename);
         titleNameView.setText(musicTitle);
         musicArtView.setImageResource(R.drawable.coverart);
-        Log.e("onCreate", "onCreate:  before task pic" );
-
-        /*
-        if(LoadingPicName != musicTitle && !downloadLock){
-            PicLoadTask taskPic = new PicLoadTask();
-            taskPic.execute(musicTitle);
-        }
-         */
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -70,7 +57,6 @@ public class musicpic extends AppCompatActivity {
         // Do something
         titleNameView.setText(event.message);
         Log.e("get message", "onMessageEvent: "+event.message);
-
         if(LoadingPicName!= event.message) {
             LoadingPicName = event.message;
             PicLoadTask newt = new PicLoadTask();
@@ -91,8 +77,6 @@ public class musicpic extends AppCompatActivity {
     }
 
     public String getPicUrlByTitle(String tt){
-        Log.e("show url", " enter getPicUrlByTitle: "+tt );
-
         // 解析名称和作者
         String returl = "";
         String newtt = java.net.URLEncoder.encode(tt);
@@ -151,16 +135,15 @@ public class musicpic extends AppCompatActivity {
     @Override
     protected void onPause() {
         downloadLock = false;
-        Log.e("onPause ", "onPause: " );
-        MainActivity.isPhowPic = false;
         super.onPause();
     }
     @Override
     protected void onResume(){
         downloadLock = false;
         MainActivity.isPhowPic = true;
-        Log.e("resume ", "onResume: " );
-        if(LoadingPicName!= MainActivity.currentMusicName) {
+        Log.e("resume ", "onResume: 2 name  " + LoadingPicName +" current "+MainActivity.currentMusicName);
+        if(LoadingPicName != MainActivity.currentMusicName) {
+            titleNameView.setText(MainActivity.currentMusicName);
             PicLoadTask newt = new PicLoadTask();
             newt.execute(MainActivity.currentMusicName);
         }
@@ -177,33 +160,36 @@ public class musicpic extends AppCompatActivity {
             Log.i("PicUrlTask", "onPreExecute() enter");
         }
 
-        //doInBackground方法内部执行后台任务,不能在里面更新UI，否则有异常。
         @Override
         protected String doInBackground(String... params)
         {
-            Log.i("PicUrlTask", "doInBackground() enter");
+            LoadingPicName = params[0];
             if(downloadLock){
-                Log.e("PicUrlTask", "doInBackground no lock!!!!");
                 return "";
             }
             downloadLock = true;
-            Log.i("PicUrlTask", "doInBackground(String... params) enter");
-            LoadingPicName = params[0];
             return getPicUrlByTitle(params[0]);
         }
-        //onPostExecute用于doInBackground执行完后，更新界面UI。
-        //result是doInBackground返回的结果
         @Override
         protected void onPostExecute(String result)
         {
             downloadLock = false;
             Log.i("onPostExecute", "onPostExecute(Result result) called");
-            //mShowLogTextView.setText("Down load finish result="+result);
-            //mNetImageView.setImageBitmap(mDownLoadBtBitmap);
             if(result.length()>10){
                 Glide.with(musicpic.this).load(result).into(musicArtView);
+            }else {
+                musicArtView.setImageResource(R.drawable.coverart);
             }
             downloadLock = false;
         }
+    }
+
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode == 4){
+            MainActivity.isPhowPic = false;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

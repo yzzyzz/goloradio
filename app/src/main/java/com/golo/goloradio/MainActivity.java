@@ -49,13 +49,9 @@ public class MainActivity extends AppCompatActivity {
     public static MarqueeText playingBar;
     public static TextView playStateBar;
     public static List playList;
-
     public static String currentMusicName = ""; // 用于activity 之间传递信息
-
     public static boolean isPhowPic = false; // 是否在展示图片页
-
     public static String[] reqCate = {"我的最爱","音乐电台","综合资讯","文化曲艺"};
-
 
     ExpandableListView expandableListView;
     ExpandableListAdapter expandableListAdapter;
@@ -198,21 +194,23 @@ public class MainActivity extends AppCompatActivity {
 
                         Log.e("metadata change", "onMediaMetadataChanged:  step 1");
                         currentMusicName = newtitle;
-
-                        if(currentMusicName.length()>2 && !isPhowPic){
-                            Log.e("metadata change", "onMediaMetadataChanged:  step 2 create activity");
-                            Intent intent = new Intent(MainActivity.this,
-                                    musicpic.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                            Bundle bundle = new Bundle();
-                            bundle.putString("title", currentMusicName);
-                            bundle.putString("stationName", playingStationName);
-                            intent.putExtra("data", bundle);
-                            //设置跳转到MianActivity2
-                            startActivity(intent);
-                            isPhowPic = true;
+                        if(!isPhowPic){
+                            if(currentMusicName.length()>2 ){
+                                isPhowPic = true;
+                                Log.e("metadata change", "onMediaMetadataChanged:  step 2 create activity");
+                                Intent intent = new Intent(MainActivity.this,
+                                        musicpic.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                                Bundle bundle = new Bundle();
+                                bundle.putString("title", currentMusicName);
+                                bundle.putString("stationName", playingStationName);
+                                intent.putExtra("data", bundle);
+                                //设置跳转到MianActivity2
+                                startActivity(intent);
+                            }
+                        } else {
+                            EventBus.getDefault().post(new MetaMessage(newtitle));
                         }
-                        EventBus.getDefault().post(new MetaMessage(newtitle));
                     }else {
                         playingBar.setText(mediaMetadata.title);
                     }
