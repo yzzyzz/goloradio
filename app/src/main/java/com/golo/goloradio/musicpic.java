@@ -189,6 +189,12 @@ public class musicpic extends AppCompatActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if(keyCode == 4){
             MainActivity.isPhowPic = false;
+        } else if (keyCode == 66) {
+            if(MainActivity.mediaPlayer.isPlaying()){
+                MainActivity.mediaPlayer.pause();
+            }else {
+                MainActivity.mediaPlayer.play();
+            }
         }
         return super.onKeyDown(keyCode, event);
     }
