@@ -3,6 +3,7 @@ package com.golo.goloradio;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
@@ -21,54 +22,59 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.UUID;
 
 
 
 public class musicpic extends AppCompatActivity {
-
     public static TextView stationNameView;
-    public static TextView titleNameView;
-
+    public static MarqueeText titleNameView;
+    public static String LoadingPicName = ""; //需要展示的图片
     public static ImageView  musicArtView;
+
+    public static boolean downloadLock = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_musicpic);
-
+        MainActivity.isPhowPic = true;
         Bundle data = getIntent().getBundleExtra("data");//从bundle中取出数据
         String stationName = data.getString("stationName");
         String musicTitle = data.getString("title");
+        //musicTitle = "苏芮 - 亲爱的小孩";
         stationNameView = findViewById(R.id.playerview_station_name);
         stationNameView.setText(stationName);
         musicArtView = findViewById(R.id.artist_pic);
         titleNameView = findViewById(R.id.playerview_titlename);
         titleNameView.setText(musicTitle);
         musicArtView.setImageResource(R.drawable.coverart);
+        Log.e("onCreate", "onCreate:  before task pic" );
 
-        //获取图片url（去掉'['和']'）
-        //String url = "https://ia601506.us.archive.org/27/items/mbid-eb42fdd9-e4c3-41e3-9ca9-42ee1c04b3d5/mbid-eb42fdd9-e4c3-41e3-9ca9-42ee1c04b3d5-32875917663.jpg";
-        //String url = "https://ia800704.us.archive.org/16/items/mbid-a2d12ee8-9aeb-4d91-bfab-5c21f7a577fc/mbid-a2d12ee8-9aeb-4d91-bfab-5c21f7a577fc-13359884885_thumb250.jpg";
-        String newPicUrl = getPicUrlByTitle(musicTitle.trim());
-        if(newPicUrl.length()>10) {
-            Glide.with(this).load(newPicUrl).into(musicArtView);
+        /*
+        if(LoadingPicName != musicTitle && !downloadLock){
+            PicLoadTask taskPic = new PicLoadTask();
+            taskPic.execute(musicTitle);
         }
+         */
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(MetaMessage event) {
         // Do something
         titleNameView.setText(event.message);
-        String newPicUrl = getPicUrlByTitle(event.message.trim());
-        if(newPicUrl.length()>10){
-            Glide.with(this).load(newPicUrl).into(musicArtView);
-        }else {
-            musicArtView.setImageResource(R.drawable.coverart);
+        Log.e("get message", "onMessageEvent: "+event.message);
+
+        if(LoadingPicName!= event.message) {
+            LoadingPicName = event.message;
+            PicLoadTask newt = new PicLoadTask();
+            newt.execute(event.message);
         }
     }
 
@@ -106,68 +112,130 @@ public class musicpic extends AppCompatActivity {
             try {
                 JSONObject jsono = new JSONObject(res);
                 JSONArray jarray = jsono.getJSONArray("recordings");
-                releaseid=jarray.getJSONObject(0).getJSONArray("releases").getJSONObject(0).getString("id");
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-        }
-        if(releaseid.length()>10){
-            String reUrl = "http://coverartarchive.org/release/"+releaseid+"?fmt=json";
-            Log.e("show url", "getPicUrlByTitle: "+queryUrl );
+                Log.e("get release array", "getPicUrlByTitle: "+jarray.toString() );
+                for(int i =0;i<jarray.length();i++){
+                    releaseid=jarray.getJSONObject(i).getJSONArray("releases").getJSONObject(0).getString("id");
+                    if(releaseid.length()>10){
+                        String reUrl = "http://coverartarchive.org/release/"+releaseid+"?fmt=json";
+                        Log.e("show url", "getPicUrlByTitle: "+reUrl );
+                        res = getStringFromurl(reUrl);
+                        Log.e("get data", "getStringFromurl done: "+res );
+                        if(res.length()>10){
+                            try {
+                                JSONObject jsono2 = new JSONObject(res);
+                                JSONArray jarray2 = jsono2.getJSONArray("images");
+                                returl=jarray2.getJSONObject(0).getJSONObject("thumbnails").getString("small");
+                                if(returl.length()>10){
+                                    Log.e("task", "getPicUrlByTitle: final url "+reUrl );
+                                    return returl;
+                                }
+                            }catch (Exception e){
+                                e.printStackTrace();
+                            }
+                        }
+                    }
 
-            res = getStringFromurl(reUrl);
-        }
-        if(res.length()>10){
-            try {
-                JSONObject jsono = new JSONObject(res);
-                JSONArray jarray = jsono.getJSONArray("images");
-                returl=jarray.getJSONObject(0).getJSONObject("thumbnails").getString("small");
+                }
             }catch (Exception e){
                 e.printStackTrace();
             }
         }
+        downloadLock = false;
         return returl;
     }
 
 
     public String getStringFromurl(String jsonURL){
-        String[] ret = {""};
+        String ret = "";
         try {
-            Thread thread1 = new Thread(new Runnable(){
-                public void run(){
-                    try {
 
-                        URL url = new URL(jsonURL);
-                        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-                        urlConnection.connect();
-                        InputStream inputStream = urlConnection.getInputStream();
+            URL url = new URL(jsonURL);
+            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setRequestMethod("GET");
+            urlConnection.setInstanceFollowRedirects(true);
+            urlConnection.setDoOutput(false);
+            urlConnection.connect();
 
-                        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+            if (urlConnection.getResponseCode() != 200){
+                Log.e("TASK", "getStringFromurl: rescode:"+urlConnection.getResponseCode());
+            }
+            InputStream inputStream = urlConnection.getInputStream();
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+            StringBuffer stringBuffer = new StringBuffer();
 
-                        StringBuffer stringBuffer = new StringBuffer();
+            String line;
 
-                        String line;
+            while ((line = bufferedReader.readLine()) != null)
+            {
+                stringBuffer.append(line).append("\n");
+            }
 
-                        while ((line = bufferedReader.readLine()) != null)
-                        {
-                            stringBuffer.append(line).append("\n");
-                        }
-
-                        if (stringBuffer.length() == 0)
-                        {
-                            return ;
-                        }
-                        ret[0] = stringBuffer.toString();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-            thread1.start();
-            thread1.join();
-        }catch (Exception e) {
+            if (stringBuffer.length() == 0)
+            {
+                return "" ;
+            }
+            ret= stringBuffer.toString();
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        return ret[0];
+        return ret;
+    }
+
+
+    @Override
+    protected void onPause() {
+        downloadLock = false;
+        MainActivity.isPhowPic = false;
+        super.onPause();
+    }
+    @Override
+    protected void onResume(){
+        downloadLock = false;
+        MainActivity.isPhowPic = true;
+        if(LoadingPicName!= MainActivity.currentMusicName) {
+            PicLoadTask newt = new PicLoadTask();
+            newt.execute(MainActivity.currentMusicName);
+        }
+        super.onResume();
+    }
+
+
+    private class PicLoadTask extends AsyncTask<String, Integer, String>
+    {
+        //onPreExecute方法在execute()后执行
+        @Override
+        protected void onPreExecute()
+        {
+            Log.i("PicUrlTask", "onPreExecute() enter");
+        }
+
+        //doInBackground方法内部执行后台任务,不能在里面更新UI，否则有异常。
+        @Override
+        protected String doInBackground(String... params)
+        {
+            Log.i("PicUrlTask", "doInBackground() enter");
+            if(downloadLock){
+                Log.e("PicUrlTask", "doInBackground no lock!!!!");
+                return "";
+            }
+            downloadLock = true;
+            Log.i("PicUrlTask", "doInBackground(String... params) enter");
+            LoadingPicName = params[0];
+            return getPicUrlByTitle(params[0]);
+        }
+        //onPostExecute用于doInBackground执行完后，更新界面UI。
+        //result是doInBackground返回的结果
+        @Override
+        protected void onPostExecute(String result)
+        {
+            downloadLock = false;
+            Log.i("onPostExecute", "onPostExecute(Result result) called");
+            //mShowLogTextView.setText("Down load finish result="+result);
+            //mNetImageView.setImageBitmap(mDownLoadBtBitmap);
+            if(result.length()>10){
+                Glide.with(musicpic.this).load(result).into(musicArtView);
+            }
+            downloadLock = false;
+        }
     }
 }

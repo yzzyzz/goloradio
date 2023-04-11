@@ -43,13 +43,16 @@ import org.greenrobot.eventbus.EventBus;
 
 
 public class MainActivity extends AppCompatActivity {
-
     public static ExoPlayer mediaPlayer;
     public static int intPlayingId = -1;
     public static String playingStationName;
     public static MarqueeText playingBar;
     public static TextView playStateBar;
     public static List playList;
+
+    public static String currentMusicName = ""; // 用于activity 之间传递信息
+
+    public static boolean isPhowPic = false; // 是否在展示图片页
 
     public static String[] reqCate = {"我的最爱","音乐电台","综合资讯","文化曲艺"};
 
@@ -160,6 +163,7 @@ public class MainActivity extends AppCompatActivity {
                     intPlayingId = -1;
                     mediaPlayer.stop();
                     playingStationName = "";
+                    isPhowPic = false;
                     return true;
                 }
 
@@ -190,33 +194,25 @@ public class MainActivity extends AppCompatActivity {
                 if (mediaMetadata.title != null && mediaMetadata.title.length()>2) {
                     if(playingStationName.length()>1){
                         playingBar.setText(playingStationName +" _ "+mediaMetadata.title);
+                        String newtitle = mediaMetadata.title.toString();
 
+                        Log.e("metadata change", "onMediaMetadataChanged:  step 1");
+                        currentMusicName = newtitle;
 
-                        //点击回调有什么意图呢？可以创建一个意图
-                        Bundle bundle = new Bundle();
-                        Intent intent = new Intent();
-
-                        //bundle.putString("artist", mediaMetadata.artist.toString());
-                        bundle.putString("title", mediaMetadata.title.toString());
-                        bundle.putString("stationName", playingStationName);
-                        intent.putExtra("data", bundle);
-                        //设置跳转到MianActivity2
-                        intent.setClass(MainActivity.this,musicpic.class);//特殊的写法
-                        //intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                        //intent.setClassName("com.golo.goloradio", "musicpic");
-                        startActivity(intent);
-                        /*
-                        if (getPackageManager().resolveActivity(intent, 0) == null) {
-                            // 说明系统中不存在这个activity
-
-                        }else {
+                        if(currentMusicName.length()>2 && !isPhowPic){
+                            Log.e("metadata change", "onMediaMetadataChanged:  step 2 create activity");
+                            Intent intent = new Intent(MainActivity.this,
+                                    musicpic.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                            Bundle bundle = new Bundle();
+                            bundle.putString("title", currentMusicName);
+                            bundle.putString("stationName", playingStationName);
+                            intent.putExtra("data", bundle);
+                            //设置跳转到MianActivity2
+                            startActivity(intent);
+                            isPhowPic = true;
                         }
-                        *
-                         */
-                        //执行意图
-
-                        EventBus.getDefault().post(new MetaMessage(mediaMetadata.title.toString()));
-
+                        EventBus.getDefault().post(new MetaMessage(newtitle));
                     }else {
                         playingBar.setText(mediaMetadata.title);
                     }
