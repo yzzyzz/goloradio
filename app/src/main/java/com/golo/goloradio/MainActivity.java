@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import java.lang.reflect.Field;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 
@@ -48,9 +49,12 @@ import org.greenrobot.eventbus.EventBus;
 public class MainActivity extends AppCompatActivity {
     public static ExoPlayer mediaPlayer;
 
-    public static PlayingInfo playingInfo;
+    public PlayingInfo playingInfo;
     private PlayerViewFragment playerViewFragment;
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
+
+    private static MainActivity activity;
+
     private static String[] PERMISSIONS_STORAGE = {
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -74,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         // 申请权限
         verifyStoragePermissions(this);
-
+        activity = this;
         if (Build.VERSION.SDK_INT >= 30){
             if (!Environment.isExternalStorageManager()){
                 Intent getpermission = new Intent();
@@ -86,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
         if(mediaPlayer == null){
             mediaPlayer = new ExoPlayer.Builder(this.getApplication()).build();
         }
-        playingInfo = new PlayingInfo();
+        playingInfo = (PlayingInfo) getApplication();
         if (savedInstanceState == null) {
             Bundle bundle = new Bundle();
             bundle.putInt("some_int", 0);
@@ -96,7 +100,6 @@ public class MainActivity extends AppCompatActivity {
                     .add(R.id.fragment_container_view, rootListFG)
                     .commit();
         }
-
 
         mediaPlayer.addListener(new Player.Listener() {
             public void onMediaMetadataChanged(MediaMetadata mediaMetadata){
@@ -122,31 +125,14 @@ public class MainActivity extends AppCompatActivity {
     //正确的做法,切换fragment
     private void switchFragment(Fragment targetFragment) {
         //已经显示就不切换
-        FragmentTransaction transaction = getSupportFragmentManager()
+        FragmentTransaction transaction = activity.getSupportFragmentManager()
                 .beginTransaction();
-
         transaction.replace(R.id.fragment_container_view,targetFragment);
         transaction.addToBackStack(null);
         transaction.commit();
     }
 
 
-    public class PlayingInfo{
-        public int playingId;
-        public String playingStationName;
-        public String playingMusictile;
-        public String ShowMQName;
-        public int playingStatus;
-        public boolean isShowingPic;
 
-        public void PlayingInfo(){
-            this.isShowingPic = false;
-            this.playingId = -1;
-            this.playingStationName = "";
-            this.playingMusictile = "";
-            this.ShowMQName = "";
-            this.playingStatus = 0;
-        }
-    }
 }
 

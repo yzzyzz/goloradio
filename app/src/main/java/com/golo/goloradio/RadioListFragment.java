@@ -40,6 +40,8 @@ public class RadioListFragment extends Fragment {
     public static MarqueeText playingBar;
     public static TextView playStateBar;
     private View root;
+
+    public PlayingInfo playingInfo;
     private static boolean isFirstLoad = true;
     ExpandableListView expandableListView;
     ExpandableListAdapter expandableListAdapter;
@@ -76,6 +78,8 @@ public class RadioListFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         ExoPlayer mediaPlayer = MainActivity.mediaPlayer;
+        playingInfo = (PlayingInfo) getActivity().getApplication();
+
 
         if(root == null){
             isFirstLoad = true;
@@ -83,8 +87,8 @@ public class RadioListFragment extends Fragment {
             playingBar =  root.findViewById(R.id.playing_info);
             playStateBar = root.findViewById(R.id.playing_state);
 
-            if(MainActivity.playingInfo.playingStationName!=null && MainActivity.playingInfo.playingStationName.length()>4){
-                playingBar.setText(MainActivity.playingInfo.playingStationName);
+            if(playingInfo.playingStationName!=null && playingInfo.playingStationName.length()>4){
+                playingBar.setText(playingInfo.playingStationName);
             }else {
                 playingBar.setText("无");
             }
@@ -127,6 +131,7 @@ public class RadioListFragment extends Fragment {
             }
             expandableListAdapter = new CustomExpandableListAdapter(getContext(), expandableListTitle, expandableListDetail);
             expandableListView.setAdapter(expandableListAdapter);
+
             expandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
                 @Override
                 public boolean onChildClick(ExpandableListView parent, View v,
@@ -138,18 +143,18 @@ public class RadioListFragment extends Fragment {
                             expandableListTitle.get(groupPosition)).get(
                             childPosition).name;
 
-                    if(intToPlayId == MainActivity.playingInfo.playingId){
+                    if(intToPlayId == playingInfo.playingId){
                         // 暂停播放
-                        MainActivity.playingInfo.playingId = -1;
+                        playingInfo.playingId = -1;
                         mediaPlayer.stop();
                         playStateBar.setText("停止播放 - ");
-                        MainActivity.playingInfo.isShowingPic = false;
+                        playingInfo.isShowingPic = false;
                         return true;
                     }
                     try {
-                        MainActivity.playingInfo.playingId =  intToPlayId;
-                        MainActivity.playingInfo.playingStationName = playingStationName;
-                        MainActivity.playingInfo.playingMusictile = "曲目";
+                        playingInfo.playingId =  intToPlayId;
+                        playingInfo.playingStationName = playingStationName;
+                        playingInfo.playingMusictile = "曲目";
                         mediaPlayer.stop();
                         if(!mediaPlayer.isPlaying()){
                             playStateBar.setText("正在加载 - ");
@@ -183,7 +188,7 @@ public class RadioListFragment extends Fragment {
                 setStateBar(event.play_state);
             case META_CHANGE:
                 if(event.message.length()>2){
-                    playingBar.setText(MainActivity.playingInfo.playingStationName+" _ "+event.message);
+                    playingBar.setText(playingInfo.playingStationName+" _ "+event.message);
                 }
         }
     }
@@ -217,11 +222,11 @@ public class RadioListFragment extends Fragment {
     @Override
     public void onResume() {
         if(MainActivity.mediaPlayer.isPlaying()){
-            setStateBar(MainActivity.playingInfo.playingStatus);
-            if(MainActivity.playingInfo.playingMusictile.length()>2){
-                playingBar.setText(MainActivity.playingInfo.playingStationName+"_"+MainActivity.playingInfo.playingMusictile);
+            setStateBar(playingInfo.playingStatus);
+            if(playingInfo.playingMusictile.length()>2){
+                playingBar.setText(playingInfo.playingStationName+"_"+playingInfo.playingMusictile);
             }else {
-                playingBar.setText(MainActivity.playingInfo.playingStationName);
+                playingBar.setText(playingInfo.playingStationName);
             }
         }
         super.onResume();

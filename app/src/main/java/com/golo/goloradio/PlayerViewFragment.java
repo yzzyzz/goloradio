@@ -35,6 +35,7 @@ public class PlayerViewFragment extends Fragment {
     public static String LoadingPicName = ""; //需要展示的图片
     public static ImageView musicArtView;
 
+    public PlayingInfo playingInfo;
     private boolean downloadLock = false;
 
     public PlayerViewFragment() {
@@ -67,10 +68,12 @@ public class PlayerViewFragment extends Fragment {
         if(playerPicView == null){
             playerPicView = inflater.inflate(R.layout.fragment_player_view, container, false);
         }
+        playingInfo = (PlayingInfo) getActivity().getApplication();
+
         stationTextView = playerPicView.findViewById(R.id.playerview_station_name);
-        stationTextView.setText(MainActivity.playingInfo.playingStationName);
+        stationTextView.setText(playingInfo.playingStationName);
         musicTitleTextView = playerPicView.findViewById(R.id.playerview_titlename);
-        musicTitleTextView.setText(MainActivity.playingInfo.playingMusictile);
+        musicTitleTextView.setText(playingInfo.playingMusictile);
         musicArtView = playerPicView.findViewById(R.id.artist_pic);
         musicArtView.setImageResource(R.drawable.coverart);
 
@@ -89,10 +92,10 @@ public class PlayerViewFragment extends Fragment {
                 if(MainActivity.mediaPlayer.isPlaying()){
                     MainActivity.mediaPlayer.pause();
                     //titleNameView.setText(MainActivity.currentMusicName+" ▶ ⏸");
-                    musicTitleTextView.setText(MainActivity.playingInfo.playingMusictile+" ▶");
+                    musicTitleTextView.setText(playingInfo.playingMusictile+" ▶");
                 }else {
                     MainActivity.mediaPlayer.play();
-                    musicTitleTextView.setText(MainActivity.playingInfo.playingMusictile);
+                    musicTitleTextView.setText(playingInfo.playingMusictile);
                 }
             }
         });
@@ -161,12 +164,12 @@ public class PlayerViewFragment extends Fragment {
     @Override
     public void onResume(){
         downloadLock = false;
-        MainActivity.playingInfo.isShowingPic = true;
-        Log.e("resume ", "onResume: 2 name  " + LoadingPicName +" current "+MainActivity.playingInfo.playingMusictile);
-        if(LoadingPicName != MainActivity.playingInfo.playingMusictile) {
-            musicTitleTextView.setText(MainActivity.playingInfo.playingMusictile);
+        playingInfo.isShowingPic = true;
+        Log.e("resume ", "onResume: 2 name  " + LoadingPicName +" current "+playingInfo.playingMusictile);
+        if(LoadingPicName != playingInfo.playingMusictile) {
+            musicTitleTextView.setText(playingInfo.playingMusictile);
             PicLoadTask newt = new PicLoadTask();
-            newt.execute(MainActivity.playingInfo.playingMusictile);
+            newt.execute(playingInfo.playingMusictile);
             //LoadingPicName = MainActivity.playingInfo.playingMusictile;
         }
         super.onResume();
