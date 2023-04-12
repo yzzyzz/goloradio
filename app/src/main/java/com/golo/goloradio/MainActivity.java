@@ -47,9 +47,8 @@ import org.greenrobot.eventbus.EventBus;
 
 public class MainActivity extends AppCompatActivity {
     public static ExoPlayer mediaPlayer;
-    public static String currentMusicName = ""; // 用于activity 之间传递信息
+
     public static PlayingInfo playingInfo;
-    private Fragment currentFragment;
     private PlayerViewFragment playerViewFragment;
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private static String[] PERMISSIONS_STORAGE = {
@@ -96,7 +95,6 @@ public class MainActivity extends AppCompatActivity {
                     .setReorderingAllowed(true)
                     .add(R.id.fragment_container_view, rootListFG)
                     .commit();
-            currentFragment = rootListFG;
         }
 
 
@@ -119,8 +117,6 @@ public class MainActivity extends AppCompatActivity {
                 EventBus.getDefault().post(new MetaMessage(MessageType.PLAYING_STATE_CHANGE,playbackState));
             }
         });
-
-
     }
 
     //正确的做法,切换fragment
@@ -132,27 +128,7 @@ public class MainActivity extends AppCompatActivity {
         transaction.replace(R.id.fragment_container_view,targetFragment);
         transaction.addToBackStack(null);
         transaction.commit();
-        /*
-        //没有添加则先完成添加再显示
-        if (!targetFragment.isAdded()) {
-            transaction
-                    .hide(currentFragment)
-                    .add(R.id.fragment_container_view, targetFragment)
-                    .commit();
-            Log.i("TAG", "第一次添加 ");
-
-        } else {//都添加了就直接隐藏当前fragment，显示目标fragment
-
-            transaction
-                    .hide(currentFragment)
-                    .show(targetFragment)
-                    .commit();
-            Log.i("TAG","完成切换");
-        }
-        currentFragment = targetFragment;
-         */
     }
-
 
 
     public class PlayingInfo{

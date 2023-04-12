@@ -1,5 +1,7 @@
 package com.golo.goloradio;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -161,11 +163,14 @@ public class PlayerViewFragment extends Fragment {
         protected void onPostExecute(String result)
         {
             Log.i("onPostExecute", "onPostExecute(Result result) called");
-            if(result.length()>5){
-                Glide.with(getContext()).load(result).into(musicArtView);
-            }else {
-                musicArtView.setImageResource(R.drawable.coverart);
+            if(PlayerViewFragment.this.isVisible() ){
+                if(result.length()>5){
+                    Glide.with(PlayerViewFragment.this.getContext()).load(result).into(musicArtView);
+                }else {
+                    musicArtView.setImageResource(R.drawable.coverart);
+                }
             }
+
             downloadLock = false;
         }
     }

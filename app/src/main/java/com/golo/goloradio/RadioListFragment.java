@@ -1,5 +1,7 @@
 package com.golo.goloradio;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -55,6 +57,9 @@ public class RadioListFragment extends Fragment {
     List<String> expandableListTitle;
     public static HashMap<String, List<RadioItem>> expandableListDetail;
 
+    public Activity mActivity;
+
+
     public RadioListFragment() {
         // Required empty public constructor
     }
@@ -77,6 +82,7 @@ public class RadioListFragment extends Fragment {
         return fragment;
     }
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,13 +102,12 @@ public class RadioListFragment extends Fragment {
             isFirstLoad = true;
             root = inflater.inflate(R.layout.fragment_radio_list, container, false);
             playingBar =  root.findViewById(R.id.playing_info);
-            playingBar.setText("无");
             playStateBar = root.findViewById(R.id.playing_state);
-            if(MainActivity.playingInfo.playingStationName!=null && playingStationName.length()>2){
-                playingBar.setText(playingStationName);
+
+            if(MainActivity.playingInfo.playingStationName!=null && MainActivity.playingInfo.playingStationName.length()>4){
+                playingBar.setText(MainActivity.playingInfo.playingStationName);
             }else {
                 playingBar.setText("无");
-                playingStationName = "";
             }
         }
 
@@ -145,7 +150,6 @@ public class RadioListFragment extends Fragment {
             expandableListView.setAdapter(expandableListAdapter);
             expandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
                 @Override
-
                 public boolean onChildClick(ExpandableListView parent, View v,
                                             int groupPosition, int childPosition, long id) {
                     int intToPlayId = expandableListDetail.get(
@@ -159,23 +163,23 @@ public class RadioListFragment extends Fragment {
                         // 暂停播放
                         MainActivity.playingInfo.playingId = -1;
                         mediaPlayer.stop();
-                        MainActivity.playingInfo.playingStationName = "";
+                        playStateBar.setText("停止播放 - ");
                         MainActivity.playingInfo.isShowingPic = false;
                         return true;
                     }
-
                     try {
                         MainActivity.playingInfo.playingId =  intToPlayId;
                         MainActivity.playingInfo.playingStationName = playingStationName;
                         MainActivity.playingInfo.playingMusictile = "曲目";
                         mediaPlayer.stop();
                         if(!mediaPlayer.isPlaying()){
+                            playStateBar.setText("正在加载 - ");
+                            playingBar.setText(playingStationName);
                             mediaPlayer.setMediaItem(MediaItem.fromUri(expandableListDetail.get(
                                     expandableListTitle.get(groupPosition)).get(
                                     childPosition).url));
                             mediaPlayer.prepare();
                             mediaPlayer.setPlayWhenReady(true);
-                            playingBar.setText(playingStationName);
                         }
                     } catch (Exception e) {
                         playingBar.setText("加载失败,请重试或更换！");
@@ -186,29 +190,22 @@ public class RadioListFragment extends Fragment {
             });
             isFirstLoad = false;
         }
+        if(mediaPlayer.isPlaying()){
+            playStateBar.setText("正在播放 - ");
+        }
         return root;
     }
 
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(MetaMessage event) {
-
         switch (event.type){
             case PLAYING_STATE_CHANGE:
-                switch(event.play_state){
-                    case Player.STATE_BUFFERING:
-                        playStateBar.setText("正在加载 - ");
-                        break;
-                    case Player.STATE_IDLE:
-                        // 尝试重新播放
-                        playStateBar.setText("停止播放 - ");
-                        break;
-                    default:
-                        playStateBar.setText("正在播放 - ");
-                        break;
-                }
+                setStateBar(event.play_state);
             case META_CHANGE:
-                playingBar.setText(event.message);
+                if(event.message.length()>2){
+                    playingBar.setText(MainActivity.playingInfo.playingStationName+" _ "+event.message);
+                }
         }
     }
 
@@ -224,4 +221,31 @@ public class RadioListFragment extends Fragment {
         EventBus.getDefault().unregister(this);
     }
 
+    private void setStateBar(int state){
+        switch(state){
+            case Player.STATE_BUFFERING:
+                playStateBar.setText("正在加载 - ");
+                break;
+            case Player.STATE_IDLE:
+                // 尝试重新播放
+                playStateBar.setText("停止播放 - ");
+                break;
+            default:
+                playStateBar.setText("正在播放 - ");
+                break;
+        }
+    }
+    @Override
+    public void onResume() {
+        if(MainActivity.mediaPlayer.isPlaying()){
+            //playStateBar.setText("正在播放 - ");
+            setStateBar(MainActivity.playingInfo.playingStatus);
+            if(MainActivity.playingInfo.playingMusictile.length()>2){
+                playingBar.setText(MainActivity.playingInfo.playingStationName+"_"+MainActivity.playingInfo.playingMusictile);
+            }else {
+                playingBar.setText(MainActivity.playingInfo.playingStationName);
+            }
+        }
+        super.onResume();
+    }
 }

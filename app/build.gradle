@@ -36,6 +36,10 @@ dependencies {
     implementation 'com.google.android.exoplayer:exoplayer:2.18.4'
     implementation 'com.google.android.exoplayer:extension-rtmp:2.18.4'
     implementation 'com.github.bumptech.glide:glide:4.15.1'
+    annotationProcessor "com.github.bumptech.glide:compiler:4.15.1"
+    implementation "com.github.bumptech.glide:okhttp3-integration:4.15.1"
+
+
     implementation 'org.greenrobot:eventbus:3.3.1'
 
 
@@ -50,6 +54,7 @@ dependencies {
 
     // Java language implementation
     implementation "androidx.fragment:fragment:$fragment_version"
+
     // Kotlin
     implementation "androidx.fragment:fragment-ktx:$fragment_version"
 
