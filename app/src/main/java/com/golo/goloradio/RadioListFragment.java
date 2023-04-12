@@ -35,29 +35,16 @@ import java.util.List;
  */
 public class RadioListFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
     public static String[] reqCate = {"我的最爱","音乐电台","综合资讯","文化曲艺"};
     public static String playingStationName;
     public static MarqueeText playingBar;
     public static TextView playStateBar;
     private View root;
-
     private static boolean isFirstLoad = true;
-
-
     ExpandableListView expandableListView;
     ExpandableListAdapter expandableListAdapter;
     List<String> expandableListTitle;
     public static HashMap<String, List<RadioItem>> expandableListDetail;
-
-    public Activity mActivity;
 
 
     public RadioListFragment() {
@@ -75,10 +62,6 @@ public class RadioListFragment extends Fragment {
     // TODO: Rename and change types and number of parameters
     public static RadioListFragment newInstance(String param1, String param2) {
         RadioListFragment fragment = new RadioListFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
     }
 
@@ -86,10 +69,6 @@ public class RadioListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -132,7 +111,7 @@ public class RadioListFragment extends Fragment {
             List<String> allListTitle = new ArrayList<String>(expandableListDetail.keySet());
 
             // 排个序列
-            List<String> expandableListTitle = new LinkedList<String>();
+            expandableListTitle = new LinkedList<String>();
             for(int i =0;i<reqCate.length;i++){
                 expandableListTitle.add(reqCate[i]);
                 if(!allListTitle.contains(reqCate[i])){
@@ -238,7 +217,6 @@ public class RadioListFragment extends Fragment {
     @Override
     public void onResume() {
         if(MainActivity.mediaPlayer.isPlaying()){
-            //playStateBar.setText("正在播放 - ");
             setStateBar(MainActivity.playingInfo.playingStatus);
             if(MainActivity.playingInfo.playingMusictile.length()>2){
                 playingBar.setText(MainActivity.playingInfo.playingStationName+"_"+MainActivity.playingInfo.playingMusictile);
