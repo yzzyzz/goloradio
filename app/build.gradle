@@ -2,6 +2,8 @@ plugins {
     id 'com.android.application'
 }
 
+def fragment_version = "1.5.6"
+
 android {
     namespace 'com.golo.goloradio'
     compileSdk 33
@@ -45,7 +47,16 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     //implementation 'io.aesy.musicbrainz:musicbrainz-api-jersey-client:1.0.0'
 
+
+    // Java language implementation
+    implementation "androidx.fragment:fragment:$fragment_version"
+    // Kotlin
+    implementation "androidx.fragment:fragment-ktx:$fragment_version"
+
+
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+
+
 }
