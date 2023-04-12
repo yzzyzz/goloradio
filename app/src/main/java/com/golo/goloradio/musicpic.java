@@ -163,6 +163,7 @@ public class musicpic extends AppCompatActivity {
         protected String doInBackground(String... params)
         {
             LoadingPicName = params[0];
+            if(LoadingPicName.contains("音乐")){return "";}
             if(downloadLock){
                 return "";
             }
@@ -174,7 +175,7 @@ public class musicpic extends AppCompatActivity {
         {
             downloadLock = false;
             Log.i("onPostExecute", "onPostExecute(Result result) called");
-            if(result.length()>10){
+            if(result.length()>5){
                 Glide.with(musicpic.this).load(result).into(musicArtView);
             }else {
                 musicArtView.setImageResource(R.drawable.coverart);
