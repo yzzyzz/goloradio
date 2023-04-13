@@ -38,8 +38,17 @@ public class PlayerViewFragment extends Fragment {
     public PlayingInfo playingInfo;
     private boolean downloadLock = false;
 
+    private static PlayerViewFragment instance = null;
+
     public PlayerViewFragment() {
         // Required empty public constructor
+    }
+
+    public static PlayerViewFragment getInstance(){
+        if (instance == null) {
+            instance = new PlayerViewFragment();
+        }
+        return instance;
     }
 
     /**
@@ -174,4 +183,5 @@ public class PlayerViewFragment extends Fragment {
         }
         super.onResume();
     }
+
 }

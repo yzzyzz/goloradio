@@ -9,6 +9,7 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Environment;
@@ -50,10 +51,14 @@ public class MainActivity extends AppCompatActivity {
     public static ExoPlayer mediaPlayer;
 
     public PlayingInfo playingInfo;
-    private PlayerViewFragment playerViewFragment;
+    private static PlayerViewFragment playerViewFragment;
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
 
+    private String playerFmTag = "playerfragtag";
     private static MainActivity activity;
+
+    private static final String BUNDLE_FRAGMENTS_KEY = "android:support:fragments";
+
 
     private static String[] PERMISSIONS_STORAGE = {
             Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -70,10 +75,10 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(activity, PERMISSIONS_STORAGE,
                     REQUEST_EXTERNAL_STORAGE);
         }
-
     }
 
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         // 申请权限
@@ -92,11 +97,9 @@ public class MainActivity extends AppCompatActivity {
         }
         playingInfo = (PlayingInfo) getApplication();
         if (savedInstanceState == null) {
-            Bundle bundle = new Bundle();
-            bundle.putInt("some_int", 0);
             RadioListFragment rootListFG = new RadioListFragment();
-            getSupportFragmentManager().beginTransaction()
-                    .setReorderingAllowed(true)
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.setReorderingAllowed(true)
                     .add(R.id.fragment_container_view, rootListFG)
                     .commit();
         }
@@ -107,11 +110,10 @@ public class MainActivity extends AppCompatActivity {
                     String newtitle = mediaMetadata.title.toString();
                     playingInfo.playingMusictile = newtitle;
                     if(playerViewFragment == null){
-                        Log.e("fragment is nukk need new", "onMediaMetadataChanged: " );
-                        playerViewFragment = new PlayerViewFragment();
+                        playerViewFragment = PlayerViewFragment.getInstance();
                     }
                     if(!playerViewFragment.isVisible()){
-                        switchFragment(playerViewFragment);
+                        switchFragment(playerViewFragment,playerFmTag);
                     }
                     EventBus.getDefault().post(new MetaMessage(MessageType.META_CHANGE,newtitle));
                 }
@@ -123,16 +125,37 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //正确的做法,切换fragment
-    private void switchFragment(Fragment targetFragment) {
+    private void switchFragment(Fragment targetFragment,String fmtag) {
         //已经显示就不切换
-        FragmentTransaction transaction = activity.getSupportFragmentManager()
-                .beginTransaction();
+
+        FragmentManager fm = activity.getSupportFragmentManager();
+        Log.e("get stack size", " before switchFragment: "+fm.getBackStackEntryCount());
+        //fm.clearBackStack(null);
+        //Log.e("get stack size", " afet clear switchFragment: "+fm.getBackStackEntryCount());
+        FragmentTransaction transaction = fm.beginTransaction();
         transaction.replace(R.id.fragment_container_view,targetFragment);
         transaction.addToBackStack(null);
         transaction.commit();
+        Log.e("get stack size", " after commit: "+fm.getBackStackEntryCount());
+
+    }
+
+    protected boolean clearFragmentsTag() {
+        return true;
+    }
+
+    @Override
+    protected void onResume() {
+        Log.e("Mainactivity", "onResume: " );
+        super.onResume();
     }
 
 
-
+    @Override
+    protected void onStop() {
+        Log.e("Mainactivity", "onStop: " );
+        //this.getClass().getPackageName();
+        super.onStop();
+    }
 }
 
