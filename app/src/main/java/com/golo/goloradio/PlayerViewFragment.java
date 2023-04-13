@@ -39,7 +39,7 @@ public class PlayerViewFragment extends Fragment {
     public static String LoadedUrl = "";
     public static ImageView musicArtView;
 
-    private static long pauseTimeMS;
+    private static long pauseTimeMS = 0;
 
     public PlayingInfo playingInfo;
     private boolean downloadLock = false;
@@ -77,6 +77,7 @@ public class PlayerViewFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        //Log.e(TAG, "onCreateView: ----------------- start ");
 
         if(playingInfo == null){
             playingInfo = (PlayingInfo) getActivity().getApplication();
@@ -84,13 +85,14 @@ public class PlayerViewFragment extends Fragment {
         if(playerPicView == null){
             playerPicView = inflater.inflate(R.layout.fragment_player_view, container, false);
             stationTextView = playerPicView.findViewById(R.id.playerview_station_name);
-            stationTextView.setText(playingInfo.playingStationName);
+            //stationTextView.setText(playingInfo.playingStationName);
             musicTitleTextView = playerPicView.findViewById(R.id.playerview_titlename);
             musicTitleTextView.setText(playingInfo.playingMusictile);
             musicArtView = playerPicView.findViewById(R.id.artist_pic);
             musicArtView.setImageResource(R.drawable.coverart);
         }
         return playerPicView;
+
     }
 
     @Override
@@ -128,11 +130,11 @@ public class PlayerViewFragment extends Fragment {
     public void onMessageEvent(MetaMessage event) {
         // Do something
         if(event.type == MessageType.META_CHANGE){
-            Log.e("播放界面", "onMessageEvent: 取得meta消息 "+ event.message );
+            //Log.e("播放界面", "onMessageEvent: 取得meta消息 "+ event.message );
             setMusicTitle();
             setPicimage(event.message);
         }else if(event.type == MessageType.PLAYING_STATE_CHANGE){
-            Log.e("播放界面", "onMessageEvent: 取得 status 消息 "+ event.play_state );
+            //Log.e("播放界面", "onMessageEvent: 取得 status 消息 "+ event.play_state );
             setStationInfo();
         }
     }
@@ -191,6 +193,7 @@ public class PlayerViewFragment extends Fragment {
     @Override
     public void onResume(){
         super.onResume();
+        //Log.e(TAG, "onResume: ----------------- start ");
 
         downloadLock = false;
         playingInfo.isShowingPic = true;
@@ -204,6 +207,7 @@ public class PlayerViewFragment extends Fragment {
         if(!LoadingPicName.equals(playingInfo.playingMusictile)) {
             setPicimage(playingInfo.playingMusictile);
         }
+        //Log.e(TAG, "onResume: ----------------- end ");
     }
 
     public void setStationInfo(){
@@ -212,7 +216,9 @@ public class PlayerViewFragment extends Fragment {
                 stationTextView.setText(playingInfo.playingStationName+" ...");
                 break;
             case Player.STATE_IDLE:
-                // 尝试重新播放
+                stationTextView.setText(playingInfo.playingStationName+" ▶");
+                break;
+            case Player.STATE_ENDED:
                 stationTextView.setText(playingInfo.playingStationName+" ▶");
                 break;
             default:

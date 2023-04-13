@@ -101,12 +101,12 @@ public class MainActivity extends AppCompatActivity {
                         String newtitle = mediaMetadata.title.toString().replaceAll("\\p{C}", "");;
                         playingInfo.playingMusictile = newtitle;
                         playingInfo.hasMeta = true;
-
                         Log.e("发送消息", "onMediaMetadataChanged: 准备发送 newtitle:"+newtitle );
                         EventBus.getDefault().post(new MetaMessage(MessageType.META_CHANGE,newtitle));
                     }
                 }
                 public void onPlaybackStateChanged( int playbackState) {
+                    //int tmpState = 1;
                     Log.e("发送消息", "onPlaybackStateChanged: 准备发送 playbackState:"+playbackState );
                     //状态变化
                     playingInfo.playingStatus = playbackState;
