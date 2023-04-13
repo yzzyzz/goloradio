@@ -11,6 +11,7 @@ public class PlayingInfo extends Application {
     public int playingStatus;
     public boolean hasMeta;
     public boolean isShowingPic;
+    public String playUrl;
 
     public void onCreate() {
 
@@ -22,6 +23,7 @@ public class PlayingInfo extends Application {
         this.ShowMQName = "";
         this.hasMeta = false;
         this.playingStatus = 0;
+        this.playUrl = "";
     }
 
     public void InitPlayingInfo(){
@@ -32,5 +34,6 @@ public class PlayingInfo extends Application {
         this.ShowMQName = "";
         this.hasMeta = false;
         this.playingStatus = 0;
+        this.playUrl = "";
     }
 }

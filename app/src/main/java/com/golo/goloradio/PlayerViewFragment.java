@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.Player;
 
 import org.greenrobot.eventbus.EventBus;
@@ -38,6 +39,8 @@ public class PlayerViewFragment extends Fragment {
     public static String LoadedUrl = "";
     public static ImageView musicArtView;
 
+    private static long pauseTimeMS;
+
     public PlayingInfo playingInfo;
     private boolean downloadLock = false;
     private static PlayerViewFragment instance = null;
@@ -52,7 +55,6 @@ public class PlayerViewFragment extends Fragment {
         }
         return instance;
     }
-
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -100,12 +102,22 @@ public class PlayerViewFragment extends Fragment {
                 //do your operation here
                 // this will be called whenever user click anywhere in Fragment
                 if(MainActivity.mediaPlayer.isPlaying()){
+                    pauseTimeMS = System.currentTimeMillis();
                     MainActivity.mediaPlayer.pause();
                     stationTextView.setText(playingInfo.playingStationName+" ▶");
                     //titleNameView.setText(MainActivity.currentMusicName+" ▶ ⏸");
                 }else {
-                    stationTextView.setText(playingInfo.playingStationName);
-                    MainActivity.mediaPlayer.play();
+                    if((System.currentTimeMillis() - pauseTimeMS)>20000){
+                        MainActivity.mediaPlayer.stop();
+                        MainActivity.mediaPlayer.setMediaItem(MediaItem.fromUri(playingInfo.playUrl));
+                        stationTextView.setText(playingInfo.playingStationName+" ...");
+                        MainActivity.mediaPlayer.prepare();
+                        MainActivity.mediaPlayer.setPlayWhenReady(true);
+
+                    }else {
+                        MainActivity.mediaPlayer.play();
+                        stationTextView.setText(playingInfo.playingStationName);
+                    }
                 }
             }
         });
@@ -164,7 +176,12 @@ public class PlayerViewFragment extends Fragment {
             //Log.e(TAG, "onPostExecute: LoadingPicName"+LoadingPicName );
             if(PlayerViewFragment.this.isVisible() ){
                 if(result.length()>5){
-                    Glide.with(PlayerViewFragment.this.getContext()).load(result).into(musicArtView);
+                    try {
+                        Glide.with(PlayerViewFragment.this.getContext()).load(result).into(musicArtView);
+                    }catch (Exception e){
+                        musicArtView.setImageResource(R.drawable.coverart);
+                        e.printStackTrace();
+                    }
                 }
             }
             downloadLock = false;
@@ -221,7 +238,11 @@ public class PlayerViewFragment extends Fragment {
         }
         if(newtitle.equals(LoadingPicName) && LoadedUrl.length()>5) { //已经加载过
             //Log.e(TAG, "图片已经加载 名称 " +newtitle );
-            Glide.with(PlayerViewFragment.this.getContext()).load(LoadedUrl).into(musicArtView);
+            try {
+                Glide.with(PlayerViewFragment.this.getContext()).load(LoadedUrl).into(musicArtView);
+            }catch (Exception e){
+                musicArtView.setImageResource(R.drawable.coverart);
+            }
             return;
         }
     }

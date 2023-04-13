@@ -163,12 +163,13 @@ public class RadioListFragment extends Fragment {
                         playingInfo.playingId =  intToPlayId;
                         playingInfo.playingStationName = playingStationName;
                         playingInfo.playingMusictile = "曲目";
+                        playingInfo.playUrl = expandableListDetail.get(
+                                expandableListTitle.get(groupPosition)).get(
+                                childPosition).url;
                         if(!mediaPlayer.isPlaying()){
                             playStateBar.setText("正在加载 - ");
                             playingBar.setText(playingStationName);
-                            mediaPlayer.setMediaItem(MediaItem.fromUri(expandableListDetail.get(
-                                    expandableListTitle.get(groupPosition)).get(
-                                    childPosition).url));
+                            mediaPlayer.setMediaItem(MediaItem.fromUri(playingInfo.playUrl));
                             mediaPlayer.prepare();
                             mediaPlayer.setPlayWhenReady(true);
                         }
