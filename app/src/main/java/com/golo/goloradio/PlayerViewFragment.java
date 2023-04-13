@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.exoplayer2.Player;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -28,16 +29,17 @@ import org.greenrobot.eventbus.ThreadMode;
  */
 public class PlayerViewFragment extends Fragment {
 
+    private static final String TAG = "播放图片界面";
     private View playerPicView;
 
     public TextView stationTextView;
     public static MarqueeText musicTitleTextView;
     public static String LoadingPicName = ""; //需要展示的图片
+    public static String LoadedUrl = "";
     public static ImageView musicArtView;
 
     public PlayingInfo playingInfo;
     private boolean downloadLock = false;
-
     private static PlayerViewFragment instance = null;
 
     public PlayerViewFragment() {
@@ -73,20 +75,19 @@ public class PlayerViewFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
+        if(playingInfo == null){
+            playingInfo = (PlayingInfo) getActivity().getApplication();
+        }
         if(playerPicView == null){
             playerPicView = inflater.inflate(R.layout.fragment_player_view, container, false);
+            stationTextView = playerPicView.findViewById(R.id.playerview_station_name);
+            stationTextView.setText(playingInfo.playingStationName);
+            musicTitleTextView = playerPicView.findViewById(R.id.playerview_titlename);
+            musicTitleTextView.setText(playingInfo.playingMusictile);
+            musicArtView = playerPicView.findViewById(R.id.artist_pic);
+            musicArtView.setImageResource(R.drawable.coverart);
         }
-        playingInfo = (PlayingInfo) getActivity().getApplication();
-
-        stationTextView = playerPicView.findViewById(R.id.playerview_station_name);
-        stationTextView.setText(playingInfo.playingStationName);
-        musicTitleTextView = playerPicView.findViewById(R.id.playerview_titlename);
-        musicTitleTextView.setText(playingInfo.playingMusictile);
-        musicArtView = playerPicView.findViewById(R.id.artist_pic);
-        musicArtView.setImageResource(R.drawable.coverart);
-
-
         return playerPicView;
     }
 
@@ -114,11 +115,12 @@ public class PlayerViewFragment extends Fragment {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(MetaMessage event) {
         // Do something
+        Log.e("播放界面", "onMessageEvent: 取得消息 "+ event.message );
+        Log.e("播放界面", "onMessageEvent: 取得消息 "+ event.play_state );
+        Log.e("播放界面", "onMessageEvent: 看看那状态"+playingInfo.playingStatus );
+        setTextPlayInfo();
         if(event.type == MessageType.META_CHANGE){
-            musicTitleTextView.setText(event.message);
-            LoadingPicName = event.message;
-            PicLoadTask newt = new PicLoadTask();
-            newt.execute(event.message);
+            setPicimage(event.message);
         }
     }
 
@@ -147,17 +149,18 @@ public class PlayerViewFragment extends Fragment {
         protected String doInBackground(String... params)
         {
             LoadingPicName = params[0];
-            if(LoadingPicName.contains("音乐") || LoadingPicName.contains("台标") || LoadingPicName.contains("Asia")){return "";}
             if(downloadLock){
                 return "";
             }
             downloadLock = true;
-            return Func.getPicUrlByTitle(params[0]);
+            LoadedUrl = Func.getPicUrlByTitle(params[0]);
+            return LoadedUrl;
         }
         @Override
         protected void onPostExecute(String result)
         {
-            Log.i("onPostExecute", "onPostExecute(Result result) called");
+            LoadedUrl = result;
+            Log.i("onPostExecute", "onPostExecute called result"+result);
             if(PlayerViewFragment.this.isVisible() ){
                 if(result.length()>5){
                     Glide.with(PlayerViewFragment.this.getContext()).load(result).into(musicArtView);
@@ -165,23 +168,56 @@ public class PlayerViewFragment extends Fragment {
                     musicArtView.setImageResource(R.drawable.coverart);
                 }
             }
-
             downloadLock = false;
         }
     }
 
     @Override
     public void onResume(){
+        super.onResume();
         downloadLock = false;
         playingInfo.isShowingPic = true;
-        Log.e("resume ", "onResume: 2 name  " + LoadingPicName +" current "+playingInfo.playingMusictile);
+        Log.e("resume ", "onResume: old name  " + LoadingPicName +" current "+playingInfo.playingMusictile);
+        setTextPlayInfo();
         if(LoadingPicName != playingInfo.playingMusictile) {
-            musicTitleTextView.setText(playingInfo.playingMusictile);
-            PicLoadTask newt = new PicLoadTask();
-            newt.execute(playingInfo.playingMusictile);
-            //LoadingPicName = MainActivity.playingInfo.playingMusictile;
+            setPicimage(playingInfo.playingMusictile);
         }
-        super.onResume();
+    }
+
+    public void setTextPlayInfo(){
+        switch(playingInfo.playingStatus){
+            case Player.STATE_BUFFERING:
+                stationTextView.setText(playingInfo.playingStationName+" ...");
+                break;
+            case Player.STATE_IDLE:
+                // 尝试重新播放
+                stationTextView.setText(playingInfo.playingStationName+" ▶");
+                break;
+            default:
+                stationTextView.setText(playingInfo.playingStationName);
+                break;
+        }
+        musicTitleTextView.setText(playingInfo.playingMusictile);
+    }
+
+    public void setPicimage(String  newtitle){
+
+        // 加载优先级判定
+        if(newtitle.contains("音乐")|| newtitle.contains("台标") || newtitle.contains("Asia")){
+            musicArtView.setImageResource(R.drawable.coverart);
+            return;
+        }
+        if(newtitle != LoadingPicName) {
+            PicLoadTask newt = new PicLoadTask();
+            newt.execute(newtitle);
+            return;
+        }
+        if(newtitle == LoadingPicName && LoadedUrl.length()>10) { //已经加载过
+            Log.e(TAG, "图片已经加载 名称 " +newtitle );
+            Glide.with(PlayerViewFragment.this.getContext()).load(LoadedUrl).into(musicArtView);
+            return;
+        }
+        musicArtView.setImageResource(R.drawable.coverart);
     }
 
 }

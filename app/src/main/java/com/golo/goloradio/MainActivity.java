@@ -55,9 +55,6 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
 
     private String playerFmTag = "playerfragtag";
-    private static MainActivity activity;
-
-    private static final String BUNDLE_FRAGMENTS_KEY = "android:support:fragments";
 
 
     private static String[] PERMISSIONS_STORAGE = {
@@ -83,7 +80,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         // 申请权限
         verifyStoragePermissions(this);
-        activity = this;
         if (Build.VERSION.SDK_INT >= 30){
             if (!Environment.isExternalStorageManager()){
                 Intent getpermission = new Intent();
@@ -92,10 +88,37 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+        playingInfo = (PlayingInfo) getApplication();
+
         if(mediaPlayer == null){
             mediaPlayer = new ExoPlayer.Builder(this.getApplication()).build();
+            mediaPlayer.addListener(new Player.Listener() {
+                public void onMediaMetadataChanged(MediaMetadata mediaMetadata){
+                    if (mediaMetadata.title != null && mediaMetadata.title.length()>2) {
+                        String newtitle = mediaMetadata.title.toString();
+                        Log.e("kankan onMediaMetadataChanged ", newtitle);
+                        playingInfo.playingMusictile = newtitle;
+                        if(playerViewFragment == null){
+                            playerViewFragment = PlayerViewFragment.getInstance();
+                        }
+                        Log.e("kankan PlayerViewFragment is visble", ""+ playerViewFragment.isVisible());
+                        if(!playerViewFragment.isVisible()){
+                            Log.e("PlayerViewFragment is not isVisible", "be fore : switchFragment" );
+                            switchFragment(playerViewFragment,playerFmTag);
+                        }
+                        Log.e("xiaoxi", "onMediaMetadataChanged: 准备发射 playbackState:"+newtitle );
+
+                        EventBus.getDefault().post(new MetaMessage(MessageType.META_CHANGE,newtitle));
+                    }
+                }
+                public void onPlaybackStateChanged( int playbackState) {
+                    Log.e("xiaoxi", "onPlaybackStateChanged: 准备发射 playbackState:"+playbackState );
+                    //状态变化
+                    playingInfo.playingStatus = playbackState;
+                    EventBus.getDefault().post(new MetaMessage(MessageType.PLAYING_STATE_CHANGE,playbackState));
+                }
+            });
         }
-        playingInfo = (PlayingInfo) getApplication();
         if (savedInstanceState == null) {
             RadioListFragment rootListFG = new RadioListFragment();
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -103,41 +126,16 @@ public class MainActivity extends AppCompatActivity {
                     .add(R.id.fragment_container_view, rootListFG)
                     .commit();
         }
-
-        mediaPlayer.addListener(new Player.Listener() {
-            public void onMediaMetadataChanged(MediaMetadata mediaMetadata){
-                if (mediaMetadata.title != null && mediaMetadata.title.length()>2) {
-                    String newtitle = mediaMetadata.title.toString();
-                    playingInfo.playingMusictile = newtitle;
-                    if(playerViewFragment == null){
-                        playerViewFragment = PlayerViewFragment.getInstance();
-                    }
-                    if(!playerViewFragment.isVisible()){
-                        switchFragment(playerViewFragment,playerFmTag);
-                    }
-                    EventBus.getDefault().post(new MetaMessage(MessageType.META_CHANGE,newtitle));
-                }
-            }
-            public void onPlaybackStateChanged( int playbackState) {
-                EventBus.getDefault().post(new MetaMessage(MessageType.PLAYING_STATE_CHANGE,playbackState));
-            }
-        });
     }
 
     //正确的做法,切换fragment
     private void switchFragment(Fragment targetFragment,String fmtag) {
         //已经显示就不切换
-
-        FragmentManager fm = activity.getSupportFragmentManager();
-        Log.e("get stack size", " before switchFragment: "+fm.getBackStackEntryCount());
-        //fm.clearBackStack(null);
-        //Log.e("get stack size", " afet clear switchFragment: "+fm.getBackStackEntryCount());
-        FragmentTransaction transaction = fm.beginTransaction();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.fragment_container_view,targetFragment);
         transaction.addToBackStack(null);
         transaction.commit();
-        Log.e("get stack size", " after commit: "+fm.getBackStackEntryCount());
-
+        //Log.e("get stack size", " after commit: "+fm.getBackStackEntryCount());
     }
 
     protected boolean clearFragmentsTag() {

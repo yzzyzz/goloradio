@@ -79,14 +79,11 @@ public class RadioListFragment extends Fragment {
         // Inflate the layout for this fragment
         ExoPlayer mediaPlayer = MainActivity.mediaPlayer;
         playingInfo = (PlayingInfo) getActivity().getApplication();
-
-
         if(root == null){
             isFirstLoad = true;
             root = inflater.inflate(R.layout.fragment_radio_list, container, false);
             playingBar =  root.findViewById(R.id.playing_info);
             playStateBar = root.findViewById(R.id.playing_state);
-
             if(playingInfo.playingStationName!=null && playingInfo.playingStationName.length()>4){
                 playingBar.setText(playingInfo.playingStationName);
             }else {
@@ -110,8 +107,6 @@ public class RadioListFragment extends Fragment {
             expandableListView = (ExpandableListView) root.findViewById(R.id.expandableListViewFragment);
             expandableListDetail = expStationList.getAllStationMap();
             expandableListView.setItemsCanFocus(true);
-
-
             List<String> allListTitle = new ArrayList<String>(expandableListDetail.keySet());
 
             // 排个序列
@@ -131,7 +126,6 @@ public class RadioListFragment extends Fragment {
             }
             expandableListAdapter = new CustomExpandableListAdapter(getContext(), expandableListTitle, expandableListDetail);
             expandableListView.setAdapter(expandableListAdapter);
-
             expandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
                 @Override
                 public boolean onChildClick(ExpandableListView parent, View v,
@@ -175,22 +169,13 @@ public class RadioListFragment extends Fragment {
             isFirstLoad = false;
         }
         if(mediaPlayer.isPlaying()){
-            playStateBar.setText("正在播放 - ");
+            setTitle();
         }
         return root;
     }
-
-
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(MetaMessage event) {
-        switch (event.type){
-            case PLAYING_STATE_CHANGE:
-                setStateBar(event.play_state);
-            case META_CHANGE:
-                if(event.message.length()>2){
-                    playingBar.setText(playingInfo.playingStationName+" _ "+event.message);
-                }
-        }
+        setTitle();
     }
 
     @Override
@@ -205,8 +190,16 @@ public class RadioListFragment extends Fragment {
         EventBus.getDefault().unregister(this);
     }
 
-    private void setStateBar(int state){
-        switch(state){
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(MainActivity.mediaPlayer.isPlaying()){
+            setTitle();
+        }
+    }
+
+    private void setTitle(){
+        switch(playingInfo.playingStatus){
             case Player.STATE_BUFFERING:
                 playStateBar.setText("正在加载 - ");
                 break;
@@ -218,17 +211,10 @@ public class RadioListFragment extends Fragment {
                 playStateBar.setText("正在播放 - ");
                 break;
         }
-    }
-    @Override
-    public void onResume() {
-        if(MainActivity.mediaPlayer.isPlaying()){
-            setStateBar(playingInfo.playingStatus);
-            if(playingInfo.playingMusictile.length()>2){
-                playingBar.setText(playingInfo.playingStationName+"_"+playingInfo.playingMusictile);
-            }else {
-                playingBar.setText(playingInfo.playingStationName);
-            }
+        if(playingInfo.playingMusictile.length()>2){
+            playingBar.setText(playingInfo.playingStationName+"_"+playingInfo.playingMusictile);
+        }else {
+            playingBar.setText(playingInfo.playingStationName);
         }
-        super.onResume();
     }
 }
