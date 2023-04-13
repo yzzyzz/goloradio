@@ -115,9 +115,9 @@ public class PlayerViewFragment extends Fragment {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(MetaMessage event) {
         // Do something
-        Log.e("播放界面", "onMessageEvent: 取得消息 "+ event.message );
-        Log.e("播放界面", "onMessageEvent: 取得消息 "+ event.play_state );
-        Log.e("播放界面", "onMessageEvent: 看看那状态"+playingInfo.playingStatus );
+        //Log.e("播放界面", "onMessageEvent: 取得消息 "+ event.message );
+        //Log.e("播放界面", "onMessageEvent: 取得消息 "+ event.play_state );
+        //Log.e("播放界面", "onMessageEvent: 看看那状态"+playingInfo.playingStatus );
         setTextPlayInfo();
         if(event.type == MessageType.META_CHANGE){
             setPicimage(event.message);
@@ -148,7 +148,7 @@ public class PlayerViewFragment extends Fragment {
         @Override
         protected String doInBackground(String... params)
         {
-            LoadingPicName = params[0];
+            LoadingPicName = params[0].replaceAll("\\p{C}", "");;
             if(downloadLock){
                 return "";
             }
@@ -160,7 +160,7 @@ public class PlayerViewFragment extends Fragment {
         protected void onPostExecute(String result)
         {
             LoadedUrl = result;
-            Log.i("onPostExecute", "onPostExecute called result"+result);
+            //Log.e(TAG, "onPostExecute: LoadingPicName"+LoadingPicName );
             if(PlayerViewFragment.this.isVisible() ){
                 if(result.length()>5){
                     Glide.with(PlayerViewFragment.this.getContext()).load(result).into(musicArtView);
@@ -177,9 +177,9 @@ public class PlayerViewFragment extends Fragment {
         super.onResume();
         downloadLock = false;
         playingInfo.isShowingPic = true;
-        Log.e("resume ", "onResume: old name  " + LoadingPicName +" current "+playingInfo.playingMusictile);
+        //Log.e("resume ", "onResume: old name  " + LoadingPicName +" current "+playingInfo.playingMusictile);
         setTextPlayInfo();
-        if(LoadingPicName != playingInfo.playingMusictile) {
+        if(!LoadingPicName.equals(playingInfo.playingMusictile)) {
             setPicimage(playingInfo.playingMusictile);
         }
     }
@@ -201,23 +201,22 @@ public class PlayerViewFragment extends Fragment {
     }
 
     public void setPicimage(String  newtitle){
-
+        //Log.e(TAG, "setPicimage:  旧名称 链接"+LoadingPicName + "   " +LoadedUrl + "新名称:" +  newtitle );
         // 加载优先级判定
         if(newtitle.contains("音乐")|| newtitle.contains("台标") || newtitle.contains("Asia")){
             musicArtView.setImageResource(R.drawable.coverart);
             return;
         }
-        if(newtitle != LoadingPicName) {
+        if(!newtitle.equals(LoadingPicName) ) {
             PicLoadTask newt = new PicLoadTask();
             newt.execute(newtitle);
             return;
         }
-        if(newtitle == LoadingPicName && LoadedUrl.length()>10) { //已经加载过
-            Log.e(TAG, "图片已经加载 名称 " +newtitle );
+        if(newtitle.equals(LoadingPicName) && LoadedUrl.length()>5) { //已经加载过
+            //Log.e(TAG, "图片已经加载 名称 " +newtitle );
             Glide.with(PlayerViewFragment.this.getContext()).load(LoadedUrl).into(musicArtView);
             return;
         }
         musicArtView.setImageResource(R.drawable.coverart);
     }
-
 }

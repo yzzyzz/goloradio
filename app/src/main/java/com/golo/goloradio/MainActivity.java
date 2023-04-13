@@ -57,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
     private String playerFmTag = "playerfragtag";
 
 
+
     private static String[] PERMISSIONS_STORAGE = {
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -95,24 +96,21 @@ public class MainActivity extends AppCompatActivity {
             mediaPlayer.addListener(new Player.Listener() {
                 public void onMediaMetadataChanged(MediaMetadata mediaMetadata){
                     if (mediaMetadata.title != null && mediaMetadata.title.length()>2) {
-                        String newtitle = mediaMetadata.title.toString();
-                        Log.e("kankan onMediaMetadataChanged ", newtitle);
+                        String newtitle = mediaMetadata.title.toString().replaceAll("\\p{C}", "");;
                         playingInfo.playingMusictile = newtitle;
                         if(playerViewFragment == null){
                             playerViewFragment = PlayerViewFragment.getInstance();
                         }
-                        Log.e("kankan PlayerViewFragment is visble", ""+ playerViewFragment.isVisible());
                         if(!playerViewFragment.isVisible()){
                             Log.e("PlayerViewFragment is not isVisible", "be fore : switchFragment" );
                             switchFragment(playerViewFragment,playerFmTag);
                         }
-                        Log.e("xiaoxi", "onMediaMetadataChanged: 准备发射 playbackState:"+newtitle );
-
+                        //Log.e("xiaoxi", "onMediaMetadataChanged: 准备发射 playbackState:"+newtitle );
                         EventBus.getDefault().post(new MetaMessage(MessageType.META_CHANGE,newtitle));
                     }
                 }
                 public void onPlaybackStateChanged( int playbackState) {
-                    Log.e("xiaoxi", "onPlaybackStateChanged: 准备发射 playbackState:"+playbackState );
+                    //Log.e("xiaoxi", "onPlaybackStateChanged: 准备发射 playbackState:"+playbackState );
                     //状态变化
                     playingInfo.playingStatus = playbackState;
                     EventBus.getDefault().post(new MetaMessage(MessageType.PLAYING_STATE_CHANGE,playbackState));
@@ -131,11 +129,14 @@ public class MainActivity extends AppCompatActivity {
     //正确的做法,切换fragment
     private void switchFragment(Fragment targetFragment,String fmtag) {
         //已经显示就不切换
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment_container_view,targetFragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
-        //Log.e("get stack size", " after commit: "+fm.getBackStackEntryCount());
+        try {
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.fragment_container_view,targetFragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     protected boolean clearFragmentsTag() {

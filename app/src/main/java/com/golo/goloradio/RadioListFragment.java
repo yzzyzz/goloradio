@@ -84,7 +84,7 @@ public class RadioListFragment extends Fragment {
             root = inflater.inflate(R.layout.fragment_radio_list, container, false);
             playingBar =  root.findViewById(R.id.playing_info);
             playStateBar = root.findViewById(R.id.playing_state);
-            if(playingInfo.playingStationName!=null && playingInfo.playingStationName.length()>4){
+            if(playingInfo.playingStationName.length()>1){
                 playingBar.setText(playingInfo.playingStationName);
             }else {
                 playingBar.setText("无");
