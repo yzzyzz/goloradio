@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -41,7 +42,9 @@ public class RadioListFragment extends Fragment {
     public static TextView playStateBar;
     private View root;
 
+    private ExoPlayer mediaPlayer;
     public PlayingInfo playingInfo;
+    private static String TAG = "列表界面";
     private static boolean isFirstLoad = true;
     ExpandableListView expandableListView;
     ExpandableListAdapter expandableListAdapter;
@@ -77,7 +80,9 @@ public class RadioListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        ExoPlayer mediaPlayer = MainActivity.mediaPlayer;
+        if(mediaPlayer ==null){
+            mediaPlayer = MainActivity.mediaPlayer;
+        }
         playingInfo = (PlayingInfo) getActivity().getApplication();
         if(root == null){
             isFirstLoad = true;
@@ -136,20 +141,28 @@ public class RadioListFragment extends Fragment {
                     playingStationName = expandableListDetail.get(
                             expandableListTitle.get(groupPosition)).get(
                             childPosition).name;
-
-                    if(intToPlayId == playingInfo.playingId && mediaPlayer.isPlaying()){
+                    if(intToPlayId == playingInfo.playingId && playingInfo.playingStatus!=Player.STATE_IDLE){
+                        if(playingInfo.hasMeta){ // 有meta信息
+                            try {
+                                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                                transaction.replace(R.id.fragment_container_view,PlayerViewFragment.getInstance());
+                                transaction.addToBackStack(null);
+                                transaction.commit();
+                            }catch (Exception e){
+                                e.printStackTrace();
+                                stopPlayStation();
+                            }
+                            return true;
+                        }
                         // 暂停播放
-                        playingInfo.playingId = -1;
-                        mediaPlayer.stop();
-                        playStateBar.setText("停止播放 - ");
-                        playingInfo.isShowingPic = false;
+                        stopPlayStation();
                         return true;
                     }
                     try {
+                        stopPlayStation();
                         playingInfo.playingId =  intToPlayId;
                         playingInfo.playingStationName = playingStationName;
                         playingInfo.playingMusictile = "曲目";
-                        mediaPlayer.stop();
                         if(!mediaPlayer.isPlaying()){
                             playStateBar.setText("正在加载 - ");
                             playingBar.setText(playingStationName);
@@ -193,12 +206,12 @@ public class RadioListFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if(MainActivity.mediaPlayer.isPlaying()){
-            setTitle();
-        }
+        Log.e(TAG, "onResume:  进入逻辑 status: "+playingInfo.playingStatus );
+        setTitle();
     }
 
     private void setTitle(){
+        Log.e(TAG, "setTitle: 设置title信息 status: "+playingInfo.playingStatus );
         switch(playingInfo.playingStatus){
             case Player.STATE_BUFFERING:
                 playStateBar.setText("正在加载 - ");
@@ -216,5 +229,11 @@ public class RadioListFragment extends Fragment {
         }else {
             playingBar.setText(playingInfo.playingStationName);
         }
+    }
+
+    private void stopPlayStation(){
+        mediaPlayer.stop();
+        playingInfo.InitPlayingInfo();
+        playStateBar.setText("停止播放 - ");
     }
 }

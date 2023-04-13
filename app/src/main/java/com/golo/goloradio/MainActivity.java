@@ -98,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
                     if (mediaMetadata.title != null && mediaMetadata.title.length()>2) {
                         String newtitle = mediaMetadata.title.toString().replaceAll("\\p{C}", "");;
                         playingInfo.playingMusictile = newtitle;
+                        playingInfo.hasMeta = true;
                         if(playerViewFragment == null){
                             playerViewFragment = PlayerViewFragment.getInstance();
                         }

@@ -144,6 +144,7 @@ public class PlayerViewFragment extends Fragment {
         protected void onPreExecute()
         {
             Log.i("PicUrlTask", "onPreExecute() enter");
+            musicArtView.setImageResource(R.drawable.coverart);
         }
 
         @Override
@@ -164,8 +165,6 @@ public class PlayerViewFragment extends Fragment {
             if(PlayerViewFragment.this.isVisible() ){
                 if(result.length()>5){
                     Glide.with(PlayerViewFragment.this.getContext()).load(result).into(musicArtView);
-                }else {
-                    musicArtView.setImageResource(R.drawable.coverart);
                 }
             }
             downloadLock = false;
@@ -175,10 +174,15 @@ public class PlayerViewFragment extends Fragment {
     @Override
     public void onResume(){
         super.onResume();
+
         downloadLock = false;
         playingInfo.isShowingPic = true;
         //Log.e("resume ", "onResume: old name  " + LoadingPicName +" current "+playingInfo.playingMusictile);
-        setStationInfo();
+        if(!MainActivity.mediaPlayer.isPlaying()){
+            stationTextView.setText(playingInfo.playingStationName+" ▶");
+        }else {
+            setStationInfo();
+        }
         setMusicTitle();
         if(!LoadingPicName.equals(playingInfo.playingMusictile)) {
             setPicimage(playingInfo.playingMusictile);
@@ -220,6 +224,5 @@ public class PlayerViewFragment extends Fragment {
             Glide.with(PlayerViewFragment.this.getContext()).load(LoadedUrl).into(musicArtView);
             return;
         }
-        musicArtView.setImageResource(R.drawable.coverart);
     }
 }
