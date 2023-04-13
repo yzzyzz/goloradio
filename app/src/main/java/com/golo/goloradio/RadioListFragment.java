@@ -181,9 +181,11 @@ public class RadioListFragment extends Fragment {
             });
             isFirstLoad = false;
         }
+        /*
         if(mediaPlayer.isPlaying()){
+            Log.e(TAG, "onCreateView: 设置title 因为create" );
             setTitle();
-        }
+        }*/
         return root;
     }
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -224,7 +226,7 @@ public class RadioListFragment extends Fragment {
                 playStateBar.setText("正在播放 - ");
                 break;
         }
-        if(playingInfo.playingMusictile.length()>2){
+        if(playingInfo.hasMeta){
             playingBar.setText(playingInfo.playingStationName+"_"+playingInfo.playingMusictile);
         }else {
             playingBar.setText(playingInfo.playingStationName);

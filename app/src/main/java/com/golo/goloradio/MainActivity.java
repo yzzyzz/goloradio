@@ -45,6 +45,8 @@ import android.widget.ExpandableListView;
 import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -99,13 +101,7 @@ public class MainActivity extends AppCompatActivity {
                         String newtitle = mediaMetadata.title.toString().replaceAll("\\p{C}", "");;
                         playingInfo.playingMusictile = newtitle;
                         playingInfo.hasMeta = true;
-                        if(playerViewFragment == null){
-                            playerViewFragment = PlayerViewFragment.getInstance();
-                        }
-                        if(!playerViewFragment.isVisible()){
-                            Log.e("PlayerViewFragment is not isVisible", "be fore : switchFragment" );
-                            switchFragment(playerViewFragment,playerFmTag);
-                        }
+
                         Log.e("发送消息", "onMediaMetadataChanged: 准备发送 newtitle:"+newtitle );
                         EventBus.getDefault().post(new MetaMessage(MessageType.META_CHANGE,newtitle));
                     }
@@ -140,6 +136,20 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(MetaMessage event) {
+        // Do something
+        if(event.type == MessageType.META_CHANGE){
+            if(playerViewFragment == null){
+                playerViewFragment = PlayerViewFragment.getInstance();
+            }
+            if(!playerViewFragment.isVisible()){
+                Log.e("PlayerViewFragment is not isVisible", "be fore : switchFragment" );
+                switchFragment(playerViewFragment,playerFmTag);
+            }
+        }
+    }
+
     protected boolean clearFragmentsTag() {
         return true;
     }
@@ -150,12 +160,18 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
     }
 
-
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
     @Override
     protected void onStop() {
         Log.e("Mainactivity", "onStop: " );
         //this.getClass().getPackageName();
         super.onStop();
+        EventBus.getDefault().unregister(this);
+
     }
 }
 
