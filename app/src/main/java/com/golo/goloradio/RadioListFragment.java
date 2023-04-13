@@ -137,7 +137,7 @@ public class RadioListFragment extends Fragment {
                             expandableListTitle.get(groupPosition)).get(
                             childPosition).name;
 
-                    if(intToPlayId == playingInfo.playingId){
+                    if(intToPlayId == playingInfo.playingId && mediaPlayer.isPlaying()){
                         // 暂停播放
                         playingInfo.playingId = -1;
                         mediaPlayer.stop();

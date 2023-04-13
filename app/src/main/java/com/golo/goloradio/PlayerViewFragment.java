@@ -101,11 +101,11 @@ public class PlayerViewFragment extends Fragment {
                 // this will be called whenever user click anywhere in Fragment
                 if(MainActivity.mediaPlayer.isPlaying()){
                     MainActivity.mediaPlayer.pause();
+                    stationTextView.setText(playingInfo.playingStationName+" ▶");
                     //titleNameView.setText(MainActivity.currentMusicName+" ▶ ⏸");
-                    musicTitleTextView.setText(playingInfo.playingMusictile+" ▶");
                 }else {
+                    stationTextView.setText(playingInfo.playingStationName);
                     MainActivity.mediaPlayer.play();
-                    musicTitleTextView.setText(playingInfo.playingMusictile);
                 }
             }
         });
@@ -115,12 +115,13 @@ public class PlayerViewFragment extends Fragment {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(MetaMessage event) {
         // Do something
-        //Log.e("播放界面", "onMessageEvent: 取得消息 "+ event.message );
-        //Log.e("播放界面", "onMessageEvent: 取得消息 "+ event.play_state );
-        //Log.e("播放界面", "onMessageEvent: 看看那状态"+playingInfo.playingStatus );
-        setTextPlayInfo();
         if(event.type == MessageType.META_CHANGE){
+            Log.e("播放界面", "onMessageEvent: 取得meta消息 "+ event.message );
+            setMusicTitle();
             setPicimage(event.message);
+        }else if(event.type == MessageType.PLAYING_STATE_CHANGE){
+            Log.e("播放界面", "onMessageEvent: 取得 status 消息 "+ event.play_state );
+            setStationInfo();
         }
     }
 
@@ -153,8 +154,7 @@ public class PlayerViewFragment extends Fragment {
                 return "";
             }
             downloadLock = true;
-            LoadedUrl = Func.getPicUrlByTitle(params[0]);
-            return LoadedUrl;
+            return Func.getPicUrlByTitle(params[0]);
         }
         @Override
         protected void onPostExecute(String result)
@@ -178,13 +178,14 @@ public class PlayerViewFragment extends Fragment {
         downloadLock = false;
         playingInfo.isShowingPic = true;
         //Log.e("resume ", "onResume: old name  " + LoadingPicName +" current "+playingInfo.playingMusictile);
-        setTextPlayInfo();
+        setStationInfo();
+        setMusicTitle();
         if(!LoadingPicName.equals(playingInfo.playingMusictile)) {
             setPicimage(playingInfo.playingMusictile);
         }
     }
 
-    public void setTextPlayInfo(){
+    public void setStationInfo(){
         switch(playingInfo.playingStatus){
             case Player.STATE_BUFFERING:
                 stationTextView.setText(playingInfo.playingStationName+" ...");
@@ -197,6 +198,8 @@ public class PlayerViewFragment extends Fragment {
                 stationTextView.setText(playingInfo.playingStationName);
                 break;
         }
+    }
+    public void setMusicTitle(){
         musicTitleTextView.setText(playingInfo.playingMusictile);
     }
 

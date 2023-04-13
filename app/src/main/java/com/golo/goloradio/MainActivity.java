@@ -105,12 +105,12 @@ public class MainActivity extends AppCompatActivity {
                             Log.e("PlayerViewFragment is not isVisible", "be fore : switchFragment" );
                             switchFragment(playerViewFragment,playerFmTag);
                         }
-                        //Log.e("xiaoxi", "onMediaMetadataChanged: 准备发射 playbackState:"+newtitle );
+                        Log.e("发送消息", "onMediaMetadataChanged: 准备发送 newtitle:"+newtitle );
                         EventBus.getDefault().post(new MetaMessage(MessageType.META_CHANGE,newtitle));
                     }
                 }
                 public void onPlaybackStateChanged( int playbackState) {
-                    //Log.e("xiaoxi", "onPlaybackStateChanged: 准备发射 playbackState:"+playbackState );
+                    Log.e("发送消息", "onPlaybackStateChanged: 准备发送 playbackState:"+playbackState );
                     //状态变化
                     playingInfo.playingStatus = playbackState;
                     EventBus.getDefault().post(new MetaMessage(MessageType.PLAYING_STATE_CHANGE,playbackState));
