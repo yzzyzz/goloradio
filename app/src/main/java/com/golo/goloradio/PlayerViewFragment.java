@@ -80,7 +80,6 @@ public class PlayerViewFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        //Log.e(TAG, "onCreateView: ----------------- start ");
 
         if(playingInfo == null){
             playingInfo = (PlayingInfo) getActivity().getApplication();
@@ -97,7 +96,6 @@ public class PlayerViewFragment extends Fragment {
                 para = musicArtView.getLayoutParams();
                 Log.d(TAG, "layout height0: " + para.height);
                 Log.d(TAG, "layout width0: " + para.width);
-
                 final float scale =this. getResources().getDisplayMetrics().density;
                 int px= (int) (320 * scale + 0.5f);
                 para.height = px;
@@ -112,7 +110,7 @@ public class PlayerViewFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        playerPicView.setOnClickListener(new View.OnClickListener() {
+        musicArtView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //do your operation here

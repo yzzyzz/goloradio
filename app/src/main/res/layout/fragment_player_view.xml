@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:focusable="true"
     tools:context=".PlayerViewFragment">
 
     <LinearLayout
@@ -23,6 +22,9 @@
 
         <ImageView
             android:id="@+id/artist_pic"
+            android:focusable="true"
+            android:focusedByDefault="true"
+            android:focusableInTouchMode="true"
             android:layout_width="match_parent"
             android:layout_height="237dp"
             android:layout_marginLeft="35dp"
