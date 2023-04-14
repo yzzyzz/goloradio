@@ -13,6 +13,9 @@ public class PlayingInfo extends Application {
     public boolean isShowingPic;
     public String playUrl;
 
+    public DeviceType deviceType;
+
+
     public void onCreate() {
 
         super.onCreate();

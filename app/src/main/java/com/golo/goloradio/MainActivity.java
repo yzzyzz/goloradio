@@ -13,8 +13,14 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Environment;
 import android.provider.Settings;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Window;
+import android.view.WindowManager;
 
+import com.golo.goloradio.model.DeviceType;
+import com.golo.goloradio.model.MessageType;
+import com.golo.goloradio.model.MetaMessage;
 import com.golo.goloradio.model.PlayingInfo;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaMetadata;
@@ -32,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private static PlayerViewFragment playerViewFragment;
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
 
+    private static String TAG = "主界面 MainActivity";
     private String playerFmTag = "playerfragtag";
 
 
@@ -56,6 +63,18 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+
+        playingInfo = (PlayingInfo) getApplication();
+
+        DisplayMetrics metric = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metric);
+        if(metric.widthPixels==240&&metric.heightPixels==240){
+            playingInfo.deviceType = DeviceType.GOLO; // golo
+            setFullscreen();
+        }else {
+            playingInfo.deviceType = DeviceType.MOBILE;
+        }
+
         setContentView(R.layout.activity_main);
         // 申请权限
         verifyStoragePermissions(this);
@@ -67,7 +86,10 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        playingInfo = (PlayingInfo) getApplication();
+
+
+        Log.e(TAG, "onCreate:  get width" );
+
 
         if(mediaPlayer == null){
             mediaPlayer = new ExoPlayer.Builder(this.getApplication()).build();
@@ -126,9 +148,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    protected boolean clearFragmentsTag() {
-        return true;
-    }
 
     @Override
     protected void onResume() {
@@ -148,6 +167,12 @@ public class MainActivity extends AppCompatActivity {
         super.onStop();
         EventBus.getDefault().unregister(this);
 
+    }
+
+    public void setFullscreen() {
+        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
 }
 

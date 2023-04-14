@@ -1,10 +1,5 @@
-package com.golo.goloradio;
+package com.golo.goloradio.model;
 
-
-enum MessageType
-{
-    META_CHANGE, PLAYING_STATE_CHANGE, BLUE;
-}
 
 public class MetaMessage {
     public final MessageType type;

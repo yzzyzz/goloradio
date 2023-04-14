@@ -14,6 +14,7 @@ import android.widget.ExpandableListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.golo.goloradio.model.MetaMessage;
 import com.golo.goloradio.model.PlayingInfo;
 import com.golo.goloradio.model.RadioItem;
 import com.golo.goloradio.utils.CustomExpandableListAdapter;
@@ -203,7 +204,6 @@ public class RadioListFragment extends Fragment {
         super.onStart();
         EventBus.getDefault().register(this);
     }
-
     @Override
     public void onStop() {
         super.onStop();

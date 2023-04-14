@@ -13,6 +13,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.golo.goloradio.model.DeviceType;
+import com.golo.goloradio.model.MessageType;
+import com.golo.goloradio.model.MetaMessage;
 import com.golo.goloradio.model.PlayingInfo;
 import com.golo.goloradio.utils.Func;
 import com.golo.goloradio.utils.MarqueeText;
@@ -89,6 +92,17 @@ public class PlayerViewFragment extends Fragment {
             musicTitleTextView = playerPicView.findViewById(R.id.playerview_titlename);
             musicTitleTextView.setText(playingInfo.playingMusictile);
             musicArtView = playerPicView.findViewById(R.id.artist_pic);
+            if(playingInfo.deviceType == DeviceType.MOBILE){
+                ViewGroup.LayoutParams para;
+                para = musicArtView.getLayoutParams();
+                Log.d(TAG, "layout height0: " + para.height);
+                Log.d(TAG, "layout width0: " + para.width);
+
+                final float scale =this. getResources().getDisplayMetrics().density;
+                int px= (int) (320 * scale + 0.5f);
+                para.height = px;
+                musicArtView.setLayoutParams(para);
+            }
             musicArtView.setImageResource(R.drawable.coverart);
         }
         return playerPicView;
