@@ -1,14 +1,11 @@
 package com.golo.goloradio;
 
-import android.app.Activity;
-import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +13,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.golo.goloradio.model.PlayingInfo;
+import com.golo.goloradio.utils.Func;
+import com.golo.goloradio.utils.MarqueeText;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.Player;
 

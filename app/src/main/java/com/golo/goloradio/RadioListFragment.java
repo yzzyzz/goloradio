@@ -1,7 +1,5 @@
 package com.golo.goloradio;
 
-import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -16,6 +14,12 @@ import android.widget.ExpandableListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.golo.goloradio.model.PlayingInfo;
+import com.golo.goloradio.model.RadioItem;
+import com.golo.goloradio.utils.CustomExpandableListAdapter;
+import com.golo.goloradio.utils.ExpandableListDataPump;
+import com.golo.goloradio.utils.Func;
+import com.golo.goloradio.utils.MarqueeText;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.Player;

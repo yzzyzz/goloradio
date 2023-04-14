@@ -1,8 +1,10 @@
-package com.golo.goloradio;
+package com.golo.goloradio.utils;
 
 import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
+
+import com.golo.goloradio.R;
 
 import org.json.JSONObject;
 

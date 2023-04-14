@@ -1,9 +1,8 @@
-package com.golo.goloradio;
+package com.golo.goloradio.utils;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.util.Log;
-import android.view.View;
+
+import com.golo.goloradio.model.RadioItem;
 
 import java.util.ArrayList;
 import java.util.HashMap;

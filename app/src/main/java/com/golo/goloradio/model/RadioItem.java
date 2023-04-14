@@ -1,4 +1,4 @@
-package com.golo.goloradio;
+package com.golo.goloradio.model;
 
 import android.content.Context;
 import android.widget.Button;

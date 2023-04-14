@@ -1,16 +1,17 @@
-package com.golo.goloradio;
+package com.golo.goloradio.utils;
 
 import java.util.HashMap;
 import java.util.List;
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.Typeface;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
+
+import com.golo.goloradio.R;
+import com.golo.goloradio.model.RadioItem;
 
 public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
 
