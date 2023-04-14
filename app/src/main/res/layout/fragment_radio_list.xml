@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".RadioListFragment"
+    >
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:showDividers="end"
+        android:background="@color/darkbg"
+        >
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:orientation="horizontal"
+        >
+        <TextView
+            android:id="@+id/playing_state"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="left"
+            android:text="正在播放 - "
+            android:textStyle="bold"
+            android:focusable="false"
+            android:textColor="@color/black"
+            android:textSize="28dp" />
+
+        <com.golo.goloradio.MarqueeText
+            android:id="@+id/playing_info"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="无"
+            android:textColor="@color/black"
+            android:textStyle="italic"
+            android:focusable="false"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"
+            android:singleLine="true"
+            android:textSize="28dp" />
+    </LinearLayout>
+
+
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:src="@android:color/black" />
+
+
+    <ExpandableListView
+        android:id="@+id/expandableListViewFragment"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:indicatorRight="37dp"
+        android:drawSelectorOnTop="false"
+        android:groupIndicator="@drawable/setting_selector"
+        android:listSelector="@color/selector"
+        android:dividerHeight="0.5dp" />
+    </LinearLayout>
+</FrameLayout>
