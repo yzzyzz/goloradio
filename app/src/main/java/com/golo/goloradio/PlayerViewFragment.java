@@ -94,17 +94,20 @@ public class PlayerViewFragment extends Fragment {
             musicTitleTextView = playerPicView.findViewById(R.id.playerview_titlename);
             musicTitleTextView.setText(playingInfo.playingMusictile);
             musicArtView = playerPicView.findViewById(R.id.artist_pic);
+            ViewGroup.LayoutParams para;
+            para = musicArtView.getLayoutParams();
+            DisplayMetrics dm = new DisplayMetrics();
+            getActivity().getWindowManager().getDefaultDisplay().getMetrics(dm);
+            int baseLenght = dm.heightPixels < dm.widthPixels ? dm.heightPixels:dm.widthPixels;
+
             if(playingInfo.deviceType == DeviceType.MOBILE){
-                ViewGroup.LayoutParams para;
-                para = musicArtView.getLayoutParams();
-                DisplayMetrics dm = new DisplayMetrics();
-                getActivity().getWindowManager().getDefaultDisplay().getMetrics(dm);
-                int baseLenght = dm.heightPixels < dm.widthPixels ? dm.heightPixels:dm.widthPixels;
-                int px= (int) Math.round(baseLenght*0.8);
-                para.height = px;
-                para.width = px;
-                musicArtView.setLayoutParams(para);
+                para.height = (int) Math.round(baseLenght*0.8);
+                para.width = para.height;
+            } else {
+                para.height = (int) Math.round(baseLenght*0.75);
+                para.width = (int) Math.round(baseLenght*0.84);
             }
+            musicArtView.setLayoutParams(para);
             musicArtView.setImageResource(R.drawable.coverart);
         }
         return playerPicView;
