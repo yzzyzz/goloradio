@@ -71,7 +71,10 @@ public class MainActivity extends AppCompatActivity {
         if(metric.widthPixels==240&&metric.heightPixels==240){
             playingInfo.deviceType = DeviceType.GOLO; // golo
             setFullscreen();
-        }else {
+        } else if (metric.widthPixels>metric.heightPixels) {
+            supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
+            playingInfo.deviceType = DeviceType.MOBILE;
+        } else {
             playingInfo.deviceType = DeviceType.MOBILE;
         }
 
@@ -122,8 +125,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //正确的做法,切换fragment
-    private void switchFragment(Fragment targetFragment,String fmtag) {
+    private void switchFragment(Fragment targetFragment) {
         //已经显示就不切换
+       // return;
         try {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.fragment_container_view,targetFragment);
@@ -143,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
             }
             if(!playerViewFragment.isVisible()){
                 Log.e("PlayerViewFragment is not isVisible", "be fore : switchFragment" );
-                switchFragment(playerViewFragment,playerFmTag);
+                switchFragment(playerViewFragment);
             }
         }
     }

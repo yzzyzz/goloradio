@@ -56,7 +56,7 @@ public class Func {
                                         BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
                                         String str = "";
                                         while (( str = in.readLine()) != null) {
-                                            String[] split = str.split(",");
+                                            String[] split = str.trim().split(",");
                                             if (  split.length >= 2) {
                                                 ret.add(split);
                                             }

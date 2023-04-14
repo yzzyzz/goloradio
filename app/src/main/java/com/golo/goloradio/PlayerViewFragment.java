@@ -1,10 +1,13 @@
 package com.golo.goloradio;
 
+import static java.lang.Math.round;
+
 import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -94,11 +97,12 @@ public class PlayerViewFragment extends Fragment {
             if(playingInfo.deviceType == DeviceType.MOBILE){
                 ViewGroup.LayoutParams para;
                 para = musicArtView.getLayoutParams();
-                Log.d(TAG, "layout height0: " + para.height);
-                Log.d(TAG, "layout width0: " + para.width);
-                final float scale =this. getResources().getDisplayMetrics().density;
-                int px= (int) (320 * scale + 0.5f);
+                DisplayMetrics dm = new DisplayMetrics();
+                getActivity().getWindowManager().getDefaultDisplay().getMetrics(dm);
+                int baseLenght = dm.heightPixels < dm.widthPixels ? dm.heightPixels:dm.widthPixels;
+                int px= (int) Math.round(baseLenght*0.8);
                 para.height = px;
+                para.width = px;
                 musicArtView.setLayoutParams(para);
             }
             musicArtView.setImageResource(R.drawable.coverart);

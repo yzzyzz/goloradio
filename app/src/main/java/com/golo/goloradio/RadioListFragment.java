@@ -14,6 +14,7 @@ import android.widget.ExpandableListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.golo.goloradio.model.DeviceType;
 import com.golo.goloradio.model.MetaMessage;
 import com.golo.goloradio.model.PlayingInfo;
 import com.golo.goloradio.model.RadioItem;
@@ -95,7 +96,7 @@ public class RadioListFragment extends Fragment {
             playingBar =  root.findViewById(R.id.playing_info);
             playStateBar = root.findViewById(R.id.playing_state);
             if(playingInfo.playingStationName.length()>1){
-                playingBar.setText(playingInfo.playingStationName);
+                playingBar.setText(playingInfo.playingStationName+" ");
             }else {
                 playingBar.setText("无");
             }
@@ -118,7 +119,6 @@ public class RadioListFragment extends Fragment {
             expandableListDetail = expStationList.getAllStationMap();
             expandableListView.setItemsCanFocus(true);
             List<String> allListTitle = new ArrayList<String>(expandableListDetail.keySet());
-
             // 排个序列
             expandableListTitle = new LinkedList<String>();
             for(int i =0;i<reqCate.length;i++){
@@ -148,15 +148,7 @@ public class RadioListFragment extends Fragment {
                             childPosition).name;
                     if(intToPlayId == playingInfo.playingId && playingInfo.playingStatus!=Player.STATE_IDLE){
                         if(playingInfo.hasMeta){ // 有meta信息
-                            try {
-                                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                                transaction.replace(R.id.fragment_container_view,PlayerViewFragment.getInstance());
-                                transaction.addToBackStack(null);
-                                transaction.commit();
-                            }catch (Exception e){
-                                e.printStackTrace();
-                                stopPlayStation();
-                            }
+                            switchFragment(PlayerViewFragment.getInstance());
                             return true;
                         }
                         // 暂停播放
@@ -168,12 +160,14 @@ public class RadioListFragment extends Fragment {
                         playingInfo.playingId =  intToPlayId;
                         playingInfo.playingStationName = playingStationName;
                         playingInfo.playingMusictile = "曲目";
-                        playingInfo.playUrl = expandableListDetail.get(
+                        playingInfo.playUrl =  expandableListDetail.get(
                                 expandableListTitle.get(groupPosition)).get(
                                 childPosition).url;
+
+                        Log.e(TAG, "onChildClick: begin play url " + playingInfo.playUrl );
                         if(!mediaPlayer.isPlaying()){
                             playStateBar.setText("正在加载 - ");
-                            playingBar.setText(playingStationName);
+                            playingBar.setText(playingStationName+" ");
                             mediaPlayer.setMediaItem(MediaItem.fromUri(playingInfo.playUrl));
                             mediaPlayer.prepare();
                             mediaPlayer.setPlayWhenReady(true);
@@ -185,6 +179,38 @@ public class RadioListFragment extends Fragment {
                     return false;
                 }
             });
+
+            //if(playingInfo.deviceType == DeviceType.MOBILE){
+            if(true){
+                playingBar.setFocusableInTouchMode(true);
+                playingBar.setFocusable(true);
+                playingBar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View viewIn) {
+                        try {
+                            if(playingInfo.hasMeta && mediaPlayer.isPlaying()){
+                                // 切换
+                                switchFragment(PlayerViewFragment.getInstance());
+                                return;
+                            }
+                            if(mediaPlayer.isPlaying()){
+                                mediaPlayer.stop();
+                                playStateBar.setText("暂停播放 - ");
+                            }else {
+                                if(playingInfo.playUrl.length()>5) {
+                                    playStateBar.setText("正在加载 - ");
+                                    playingBar.setText(playingInfo.playingStationName + " ");
+                                    mediaPlayer.setMediaItem(MediaItem.fromUri(playingInfo.playUrl));
+                                    mediaPlayer.prepare();
+                                    mediaPlayer.setPlayWhenReady(true);
+                                }
+                            }
+                        } catch (Exception except) {
+                            Log.e(TAG,"Ooops GMAIL account selection problem "+except.getMessage());
+                        }
+                    }
+                });
+            }
             isFirstLoad = false;
         }
         /*
@@ -232,9 +258,9 @@ public class RadioListFragment extends Fragment {
                 break;
         }
         if(playingInfo.hasMeta){
-            playingBar.setText(playingInfo.playingStationName+"_"+playingInfo.playingMusictile);
+            playingBar.setText(playingInfo.playingStationName+"_"+playingInfo.playingMusictile+" ");
         }else {
-            playingBar.setText(playingInfo.playingStationName);
+            playingBar.setText(playingInfo.playingStationName+" ");
         }
     }
 
@@ -243,4 +269,17 @@ public class RadioListFragment extends Fragment {
         playingInfo.InitPlayingInfo();
         playStateBar.setText("停止播放 - ");
     }
+    private void switchFragment(Fragment targetFragment) {
+        //已经显示就不切换
+        // return;
+        try {
+            FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.fragment_container_view,targetFragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
 }
