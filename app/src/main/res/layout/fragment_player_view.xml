@@ -27,9 +27,9 @@
             android:focusableInTouchMode="true"
             android:layout_width="match_parent"
             android:layout_height="237dp"
-            android:layout_marginLeft="35dp"
-            android:layout_marginRight="35dp"
+            android:layout_gravity="center"
             android:scaleType="centerCrop"
+            android:layout_centerVertical="true"
             ></ImageView>
 
         <com.golo.goloradio.utils.MarqueeText

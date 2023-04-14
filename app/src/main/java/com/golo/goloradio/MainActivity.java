@@ -39,7 +39,6 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
 
     private static String TAG = "主界面 MainActivity";
-    private String playerFmTag = "playerfragtag";
 
 
 
@@ -88,10 +87,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(getpermission);
             }
         }
-
-
-
-        Log.e(TAG, "onCreate:  get width" );
 
 
         if(mediaPlayer == null){
