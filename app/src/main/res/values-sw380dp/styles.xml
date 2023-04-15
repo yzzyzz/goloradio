@@ -26,18 +26,17 @@
 
     <style name="playing_status">
         <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">60dp</item>
+        <item name="android:layout_height">56dp</item>
         <item name="android:textSize">30dp</item>
-        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingTop">8dp</item>
     </style>
 
     <style name="playing_detail">
         <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">60dp</item>
+        <item name="android:layout_height">56dp</item>
         <item name="android:textSize">30dp</item>
-        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingTop">8dp</item>
     </style>
-
     <!-- 播放器界面 -->
 
     <style name="player_title">

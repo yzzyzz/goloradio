@@ -166,11 +166,7 @@ public class RadioListFragment extends Fragment {
 
                         Log.e(TAG, "onChildClick: begin play url " + playingInfo.playUrl );
                         if(!mediaPlayer.isPlaying()){
-                            playStateBar.setText("正在加载 - ");
-                            playingBar.setText(playingStationName+" ");
-                            mediaPlayer.setMediaItem(MediaItem.fromUri(playingInfo.playUrl));
-                            mediaPlayer.prepare();
-                            mediaPlayer.setPlayWhenReady(true);
+                            startPlayStation();
                         }
                     } catch (Exception e) {
                         playingBar.setText("加载失败,请重试或更换！");
@@ -180,10 +176,6 @@ public class RadioListFragment extends Fragment {
                 }
             });
 
-            //if(playingInfo.deviceType == DeviceType.MOBILE){
-            if(true){
-                playingBar.setFocusableInTouchMode(true);
-                playingBar.setFocusable(true);
                 playingBar.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View viewIn) {
@@ -198,11 +190,7 @@ public class RadioListFragment extends Fragment {
                                 playStateBar.setText("暂停播放 - ");
                             }else {
                                 if(playingInfo.playUrl.length()>5) {
-                                    playStateBar.setText("正在加载 - ");
-                                    playingBar.setText(playingInfo.playingStationName + " ");
-                                    mediaPlayer.setMediaItem(MediaItem.fromUri(playingInfo.playUrl));
-                                    mediaPlayer.prepare();
-                                    mediaPlayer.setPlayWhenReady(true);
+                                   startPlayStation();
                                 }
                             }
                         } catch (Exception except) {
@@ -210,7 +198,7 @@ public class RadioListFragment extends Fragment {
                         }
                     }
                 });
-            }
+
             isFirstLoad = false;
         }
         /*
@@ -269,6 +257,15 @@ public class RadioListFragment extends Fragment {
         playingInfo.InitPlayingInfo();
         playStateBar.setText("停止播放 - ");
     }
+
+    private void startPlayStation(){
+        playStateBar.setText("正在加载 - ");
+        playingBar.setText(playingInfo.playingStationName + " ");
+        mediaPlayer.setMediaItem(MediaItem.fromUri(playingInfo.playUrl));
+        mediaPlayer.prepare();
+        mediaPlayer.setPlayWhenReady(true);
+    }
+
     private void switchFragment(Fragment targetFragment) {
         //已经显示就不切换
         // return;
