@@ -3,6 +3,20 @@
 <!--小米手机 -->
 <resources>
 
+    <style name="playing_status">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">52dp</item>
+        <item name="android:textSize">30dp</item>
+        <item name="android:paddingTop">6dp</item>
+    </style>
+
+    <style name="playing_detail">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">52dp</item>
+        <item name="android:textSize">30dp</item>
+        <item name="android:paddingTop">6dp</item>
+    </style>
+
     <!-- list 部分 -->
     <style name="ExpandTotal">
         <item name="android:layout_width">match_parent</item>
@@ -24,19 +38,7 @@
         <item name="android:paddingTop">5dp</item>
     </style>
 
-    <style name="playing_status">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">56dp</item>
-        <item name="android:textSize">30dp</item>
-        <item name="android:paddingTop">8dp</item>
-    </style>
 
-    <style name="playing_detail">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">56dp</item>
-        <item name="android:textSize">30dp</item>
-        <item name="android:paddingTop">8dp</item>
-    </style>
     <!-- 播放器界面 -->
 
     <style name="player_title">
