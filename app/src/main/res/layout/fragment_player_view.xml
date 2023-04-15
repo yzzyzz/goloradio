@@ -12,9 +12,7 @@
 
         <TextView
             android:id="@+id/playerview_station_name"
-            android:layout_width="match_parent"
-            android:layout_height="38dp"
-            android:textSize="24dp"
+            style="@style/player_title"
             android:text="电台名称"
             android:textAlignment="center"
             >
@@ -25,8 +23,7 @@
             android:focusable="true"
             android:focusedByDefault="true"
             android:focusableInTouchMode="true"
-            android:layout_width="match_parent"
-            android:layout_height="237dp"
+            style="@style/player_picview"
             android:layout_gravity="center"
             android:scaleType="centerCrop"
             android:layout_centerVertical="true"
@@ -39,7 +36,6 @@
             android:layout_height="40dp"
             android:text="歌曲名称"
             android:textSize="25dp"
-
             android:textStyle="italic"
             android:focusable="false"
             android:ellipsize="marquee"

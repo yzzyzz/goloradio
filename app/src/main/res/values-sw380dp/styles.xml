@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--小米手机 -->
+<resources>
+
+    <!-- list 部分 -->
+    <style name="ExpandTotal">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:indicatorRight">44dp</item>
+    </style>
+
+    <style name="list_title">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:textSize">30dp</item>
+        <item name="android:paddingLeft">50dp</item>
+        <item name="android:paddingTop">4dp</item>
+    </style>
+    <style name="list_item">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:textSize">30dp</item>
+        <item name="android:paddingTop">5dp</item>
+    </style>
+
+    <style name="playing_status">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">60dp</item>
+        <item name="android:textSize">30dp</item>
+        <item name="android:paddingTop">10dp</item>
+    </style>
+
+    <style name="playing_detail">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">60dp</item>
+        <item name="android:textSize">30dp</item>
+        <item name="android:paddingTop">10dp</item>
+    </style>
+
+    <!-- 播放器界面 -->
+
+    <style name="player_title">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">38dp</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:textSize">24dp</item>
+    </style>
+
+    <style name="player_picview">
+        <item name="android:layout_width">330dp</item>
+        <item name="android:layout_height">340dp</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:layout_marginBottom">10dp</item>
+    </style>
+</resources>

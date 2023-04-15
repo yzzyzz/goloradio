@@ -5,9 +5,7 @@
     android:layout_height="wrap_content">
     <TextView
         android:id="@+id/expandedListItem"
-        android:layout_width="fill_parent"
-        android:layout_height="40dp"
-        android:textSize="27dp"
+        style="@style/list_item"
         android:singleLine="true"
         android:paddingLeft="?android:attr/expandableListPreferredChildPaddingLeft"
         android:ellipsize="marquee"

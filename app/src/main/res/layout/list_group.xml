@@ -5,10 +5,7 @@
     android:layout_height="match_parent">
     <TextView
         android:id="@+id/listTitle"
-        android:layout_width="fill_parent"
-        android:layout_height="41dp"
-        android:textSize="27dp"
-        android:paddingLeft="?android:attr/expandableListPreferredItemPaddingLeft"
+        style="@style/list_title"
         android:textColor="@color/black"
         />
 </LinearLayout>

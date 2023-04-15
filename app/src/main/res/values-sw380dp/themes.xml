@@ -7,6 +7,8 @@
         <item name="colorPrimaryDark">@color/purple_700</item>
         <item name="colorAccent">@color/teal_200</item>
         <item name="android:windowFullscreen">false</item>
+        <item name="android:textColor">@color/black</item>
+
         <!-- Customize your theme here. -->
     </style>
 </resources>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--golo -->
+<resources>
+
+    <!-- list 部分 -->
+
+    <style name="playing_status">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:textSize">28dp</item>
+    </style>
+
+    <style name="playing_detail">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:textSize">28dp</item>
+    </style>
+
+
+    <style name="ExpandTotal">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:indicatorRight">37dp</item>
+    </style>
+
+    <style name="list_title">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">41dp</item>
+        <item name="android:textSize">27dp</item>
+        <item name="android:paddingLeft">?android:attr/expandableListPreferredItemPaddingLeft</item>
+    </style>
+    <style name="list_item">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:textSize">27dp</item>
+    </style>
+
+    <!-- 播放器界面 -->
+
+
+    <style name="player_title">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">38dp</item>
+        <item name="android:textSize">24dp</item>
+    </style>
+
+
+    <style name="player_picview">
+        <item name="android:layout_width">244dp</item>
+        <item name="android:layout_height">237dp</item>
+    </style>
+
+</resources>

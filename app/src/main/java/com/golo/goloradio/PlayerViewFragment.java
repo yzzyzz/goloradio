@@ -90,28 +90,12 @@ public class PlayerViewFragment extends Fragment {
         if(playerPicView == null){
             playerPicView = inflater.inflate(R.layout.fragment_player_view, container, false);
             stationTextView = playerPicView.findViewById(R.id.playerview_station_name);
-            //stationTextView.setText(playingInfo.playingStationName);
             musicTitleTextView = playerPicView.findViewById(R.id.playerview_titlename);
             musicTitleTextView.setText(playingInfo.playingMusictile);
             musicArtView = playerPicView.findViewById(R.id.artist_pic);
-            ViewGroup.LayoutParams para;
-            para = musicArtView.getLayoutParams();
-            DisplayMetrics dm = new DisplayMetrics();
-            getActivity().getWindowManager().getDefaultDisplay().getMetrics(dm);
-            int baseLenght = dm.heightPixels < dm.widthPixels ? dm.heightPixels:dm.widthPixels;
-
-            if(playingInfo.deviceType == DeviceType.MOBILE){
-                para.height = (int) Math.round(baseLenght*0.8);
-                para.width = para.height;
-            } else {
-                para.height = (int) Math.round(baseLenght*0.75);
-                para.width = (int) Math.round(baseLenght*0.84);
-            }
-            musicArtView.setLayoutParams(para);
             musicArtView.setImageResource(R.drawable.coverart);
         }
         return playerPicView;
-
     }
 
     @Override

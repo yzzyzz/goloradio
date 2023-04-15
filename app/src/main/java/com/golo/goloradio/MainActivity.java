@@ -65,18 +65,6 @@ public class MainActivity extends AppCompatActivity {
 
         playingInfo = (PlayingInfo) getApplication();
 
-        DisplayMetrics metric = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(metric);
-        if(metric.widthPixels==240&&metric.heightPixels==240){
-            playingInfo.deviceType = DeviceType.GOLO; // golo
-            setFullscreen();
-        } else if (metric.widthPixels>metric.heightPixels) {
-            supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
-            playingInfo.deviceType = DeviceType.MOBILE;
-        } else {
-            playingInfo.deviceType = DeviceType.MOBILE;
-        }
-
         setContentView(R.layout.activity_main);
         // 申请权限
         verifyStoragePermissions(this);
@@ -166,12 +154,6 @@ public class MainActivity extends AppCompatActivity {
         super.onStop();
         EventBus.getDefault().unregister(this);
 
-    }
-
-    public void setFullscreen() {
-        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
 }
 
