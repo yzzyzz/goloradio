@@ -7,7 +7,7 @@
     <style name="ExpandTotal">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
-        <item name="android:indicatorRight">44dp</item>
+        <item name="android:indicatorRight">46dp</item>
     </style>
 
     <style name="list_title">

@@ -37,8 +37,6 @@
     </style>
 
     <!-- 播放器界面 -->
-
-
     <style name="player_title">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">38dp</item>
@@ -50,5 +48,4 @@
         <item name="android:layout_width">244dp</item>
         <item name="android:layout_height">237dp</item>
     </style>
-
 </resources>

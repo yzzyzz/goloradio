@@ -55,6 +55,7 @@
         android:drawSelectorOnTop="false"
         android:groupIndicator="@drawable/setting_selector"
         android:listSelector="@color/selector"
-        android:dividerHeight="0.5dp" />
+        android:dividerHeight="0.5dp"
+        />
     </LinearLayout>
 </FrameLayout>
