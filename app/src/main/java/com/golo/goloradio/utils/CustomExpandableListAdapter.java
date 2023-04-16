@@ -85,6 +85,7 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
             LayoutInflater layoutInflater = (LayoutInflater) this.context.
                     getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = layoutInflater.inflate(R.layout.list_group, null);
+
         }
         TextView listTitleTextView = (TextView) convertView
                 .findViewById(R.id.listTitle);
@@ -97,7 +98,6 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
     public boolean hasStableIds() {
         return true;
     }
-
     @Override
     public boolean isChildSelectable(int listPosition, int expandedListPosition) {
         return true;

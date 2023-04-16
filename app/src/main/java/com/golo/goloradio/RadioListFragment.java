@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,6 +53,9 @@ public class RadioListFragment extends Fragment {
     public PlayingInfo playingInfo;
     private static String TAG = "列表界面";
     private static boolean isFirstLoad = true;
+
+    LinearLayout playingbarView ;
+
     ExpandableListView expandableListView;
     ExpandableListAdapter expandableListAdapter;
     List<String> expandableListTitle;
@@ -93,6 +97,7 @@ public class RadioListFragment extends Fragment {
         if(root == null){
             isFirstLoad = true;
             root = inflater.inflate(R.layout.fragment_radio_list, container, false);
+            playingbarView = root.findViewById(R.id.playingbar);
             playingBar =  root.findViewById(R.id.playing_info);
             playStateBar = root.findViewById(R.id.playing_state);
             if(playingInfo.playingStationName.length()>1){
@@ -176,7 +181,7 @@ public class RadioListFragment extends Fragment {
                 }
             });
 
-                playingBar.setOnClickListener(new View.OnClickListener() {
+            playingbarView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View viewIn) {
                         try {

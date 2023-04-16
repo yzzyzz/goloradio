@@ -7,8 +7,6 @@
     android:textColor="@color/black"
 
     >
-
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -17,9 +15,12 @@
         android:background="@color/darkbg"
         >
     <LinearLayout
+        android:id="@+id/playingbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:focusable="true"
+        android:background="@drawable/playingbar_selector"
         >
         <TextView
             android:id="@+id/playing_state"
@@ -27,8 +28,6 @@
             android:gravity="left"
             android:text="正在播放 - "
             android:textStyle="bold"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
             android:textColor="@color/black"
             />
         <com.golo.goloradio.utils.MarqueeText
