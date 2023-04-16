@@ -8,6 +8,5 @@
         android:id="@+id/listTitle"
         style="@style/list_title"
         android:textColor="@color/black"
-        android:background="@drawable/listgroup_selector"
         />
 </LinearLayout>

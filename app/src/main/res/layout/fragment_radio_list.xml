@@ -5,22 +5,19 @@
     android:layout_height="match_parent"
     tools:context=".RadioListFragment"
     android:textColor="@color/black"
-
+    android:background="@color/darkbg"
     >
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:showDividers="end"
-        android:background="@color/darkbg"
         >
     <LinearLayout
         android:id="@+id/playingbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:focusable="true"
-        android:background="@drawable/playingbar_selector"
         >
         <TextView
             android:id="@+id/playing_state"
@@ -43,12 +40,10 @@
             />
     </LinearLayout>
 
-
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:src="@android:color/black" />
-
 
     <ExpandableListView
         android:id="@+id/expandableListViewFragment"
