@@ -1,7 +1,9 @@
 package com.golo.goloradio;
 
+import static com.bumptech.glide.request.RequestOptions.bitmapTransform;
 import static java.lang.Math.round;
 
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -16,6 +18,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.golo.goloradio.model.DeviceType;
 import com.golo.goloradio.model.MessageType;
 import com.golo.goloradio.model.MetaMessage;
@@ -28,6 +32,8 @@ import com.google.android.exoplayer2.Player;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import jp.wasabeef.glide.transformations.BlurTransformation;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -162,6 +168,7 @@ public class PlayerViewFragment extends Fragment {
         {
             Log.i("PicUrlTask", "onPreExecute() enter");
             musicArtView.setImageResource(R.drawable.coverart);
+            setDefaultBG();
         }
 
         @Override
@@ -183,8 +190,10 @@ public class PlayerViewFragment extends Fragment {
                 if(result.length()>5){
                     try {
                         Glide.with(PlayerViewFragment.this.getContext()).load(result).into(musicArtView);
+                        setUrlBG(result);
                     }catch (Exception e){
                         musicArtView.setImageResource(R.drawable.coverart);
+                        setDefaultBG();
                         e.printStackTrace();
                     }
                 }
@@ -238,6 +247,7 @@ public class PlayerViewFragment extends Fragment {
         // 加载优先级判定
         if(newtitle.contains("音乐")|| newtitle.contains("台标") || newtitle.contains("Asia")){
             musicArtView.setImageResource(R.drawable.coverart);
+            setDefaultBG();
             return;
         }
         if(!newtitle.equals(LoadingPicName) ) {
@@ -249,10 +259,32 @@ public class PlayerViewFragment extends Fragment {
             //Log.e(TAG, "图片已经加载 名称 " +newtitle );
             try {
                 Glide.with(PlayerViewFragment.this.getContext()).load(LoadedUrl).into(musicArtView);
+                setUrlBG(LoadedUrl);
             }catch (Exception e){
                 musicArtView.setImageResource(R.drawable.coverart);
+                setDefaultBG();
             }
             return;
         }
     }
+
+    private void setDefaultBG(){
+        Glide.with(PlayerViewFragment.this.getContext()).load(R.drawable.coverart)
+                .apply(bitmapTransform(new BlurTransformation(40))).into(new SimpleTarget<Drawable>() {
+                    @Override
+                    public void onResourceReady(Drawable resource, Transition<? super Drawable> transition) {
+                        playerPicView.setBackground(resource);
+                    }
+                });
+    }
+    private void setUrlBG(String picUrl){
+        Glide.with(PlayerViewFragment.this.getContext()).load(picUrl)
+                .apply(bitmapTransform(new BlurTransformation(40))).into(new SimpleTarget<Drawable>() {
+                    @Override
+                    public void onResourceReady(Drawable resource, Transition<? super Drawable> transition) {
+                        playerPicView.setBackground(resource);
+                    }
+                });
+    }
+
 }
