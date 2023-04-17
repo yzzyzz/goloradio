@@ -22,6 +22,7 @@ import com.golo.goloradio.model.DeviceType;
 import com.golo.goloradio.model.MessageType;
 import com.golo.goloradio.model.MetaMessage;
 import com.golo.goloradio.model.PlayingInfo;
+import com.golo.goloradio.utils.Func;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaMetadata;
 import com.google.android.exoplayer2.Player;
@@ -106,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
 //屏幕实际宽度（像素个数）
             int width = metrics.widthPixels;
             if(width>=720){
-                playingInfo.hiresPic = true;
+                Func.isBigScreen = true;
             }
 
             RadioListFragment rootListFG = new RadioListFragment();

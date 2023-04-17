@@ -1,5 +1,6 @@
 package com.golo.goloradio;
 
+import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
 import static com.bumptech.glide.request.RequestOptions.bitmapTransform;
 import static java.lang.Math.round;
 
@@ -100,7 +101,7 @@ public class PlayerViewFragment extends Fragment {
             musicTitleTextView.setText(playingInfo.playingMusictile);
             musicArtView = playerPicView.findViewById(R.id.artist_pic);
             musicArtView.setImageResource(R.drawable.coverart);
-
+            setDefaultBG();
 
         }
         return playerPicView;
@@ -167,8 +168,8 @@ public class PlayerViewFragment extends Fragment {
         @Override
         protected void onPreExecute() {
             Log.i("PicUrlTask", "onPreExecute() enter");
-            musicArtView.setImageResource(R.drawable.coverart);
-            setDefaultBG();
+            //musicArtView.setImageResource(R.drawable.coverart);
+            //setDefaultBG();
         }
 
         @Override
@@ -188,10 +189,11 @@ public class PlayerViewFragment extends Fragment {
             //Log.e(TAG, "onPostExecute: LoadingPicName"+LoadingPicName );
             if (PlayerViewFragment.this.isVisible()) {
                 if (result.length() > 5) {
+                    setUrlBG(result);
                     Glide.with(PlayerViewFragment.this.getContext()).load(result)
+                            .transition(withCrossFade(2000))
                             .error(R.drawable.coverart)
                             .into(musicArtView);
-                    setUrlBG(result);
                 }
                 downloadLock = false;
             }
@@ -224,8 +226,6 @@ public class PlayerViewFragment extends Fragment {
                 stationTextView.setText(playingInfo.playingStationName+" ...");
                 break;
             case Player.STATE_IDLE:
-                stationTextView.setText(playingInfo.playingStationName+" ▶");
-                break;
             case Player.STATE_ENDED:
                 stationTextView.setText(playingInfo.playingStationName+" ▶");
                 break;
@@ -253,8 +253,10 @@ public class PlayerViewFragment extends Fragment {
         }
         if(newtitle.equals(LoadingPicName) && LoadedUrl.length()>5) { //已经加载过
             //Log.e(TAG, "图片已经加载 名称 " +newtitle );
-            Glide.with(PlayerViewFragment.this.getContext()).load(LoadedUrl).error(R.drawable.coverart).into(musicArtView);
             setUrlBG(LoadedUrl);
+            Glide.with(PlayerViewFragment.this.getContext()).load(LoadedUrl).error(R.drawable.coverart)
+                    .transition(withCrossFade(2000))
+                    .into(musicArtView);
             return;
         }
     }

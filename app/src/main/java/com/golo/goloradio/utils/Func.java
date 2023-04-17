@@ -24,6 +24,7 @@ import java.util.List;
 
 public class Func {
 
+    public static boolean isBigScreen;
     public static List getUrlListFromRes(Context c){
 
         String rootParh =  Environment.getExternalStorageDirectory().getAbsolutePath();
@@ -128,8 +129,7 @@ public class Func {
         String returl = "";
         String newtt = java.net.URLEncoder.encode(tt);
         String queryUrl = "http://gz.999887.xyz/getmusicpic.php?title="+newtt;
-
-        if(MainActivity.playingInfo.hiresPic){
+        if(isBigScreen){
             queryUrl = "http://gz.999887.xyz/getmusicpic.php?title="+newtt+"&pictype=hires";
         }
         Log.e("show url", "getPicUrlByTitle: "+queryUrl );
