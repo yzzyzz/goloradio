@@ -34,7 +34,7 @@ import org.greenrobot.eventbus.ThreadMode;
 public class MainActivity extends AppCompatActivity {
     public static ExoPlayer mediaPlayer;
 
-    public PlayingInfo playingInfo;
+    public static PlayingInfo playingInfo;
     private static PlayerViewFragment playerViewFragment;
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
 
@@ -99,6 +99,16 @@ public class MainActivity extends AppCompatActivity {
             });
         }
         if (savedInstanceState == null) {
+
+            // 设置是否大屏
+            DisplayMetrics metrics = new DisplayMetrics();
+            getWindowManager().getDefaultDisplay().getMetrics(metrics);
+//屏幕实际宽度（像素个数）
+            int width = metrics.widthPixels;
+            if(width>=720){
+                playingInfo.hiresPic = true;
+            }
+
             RadioListFragment rootListFG = new RadioListFragment();
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.setReorderingAllowed(true)

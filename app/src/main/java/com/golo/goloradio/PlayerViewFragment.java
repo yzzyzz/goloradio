@@ -14,13 +14,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
-import com.golo.goloradio.model.DeviceType;
 import com.golo.goloradio.model.MessageType;
 import com.golo.goloradio.model.MetaMessage;
 import com.golo.goloradio.model.PlayingInfo;
@@ -100,6 +100,8 @@ public class PlayerViewFragment extends Fragment {
             musicTitleTextView.setText(playingInfo.playingMusictile);
             musicArtView = playerPicView.findViewById(R.id.artist_pic);
             musicArtView.setImageResource(R.drawable.coverart);
+
+
         }
         return playerPicView;
     }
@@ -160,45 +162,39 @@ public class PlayerViewFragment extends Fragment {
         EventBus.getDefault().unregister(this);
     }
 
-    private class PicLoadTask extends AsyncTask<String, Integer, String>
-    {
+    private class PicLoadTask extends AsyncTask<String, Integer, String> {
         //onPreExecute方法在execute()后执行
         @Override
-        protected void onPreExecute()
-        {
+        protected void onPreExecute() {
             Log.i("PicUrlTask", "onPreExecute() enter");
             musicArtView.setImageResource(R.drawable.coverart);
             setDefaultBG();
         }
 
         @Override
-        protected String doInBackground(String... params)
-        {
-            LoadingPicName = params[0].replaceAll("\\p{C}", "");;
-            if(downloadLock){
+        protected String doInBackground(String... params) {
+            LoadingPicName = params[0].replaceAll("\\p{C}", "");
+            ;
+            if (downloadLock) {
                 return "";
             }
             downloadLock = true;
             return Func.getPicUrlByTitle(params[0]);
         }
+
         @Override
-        protected void onPostExecute(String result)
-        {
+        protected void onPostExecute(String result) {
             LoadedUrl = result;
             //Log.e(TAG, "onPostExecute: LoadingPicName"+LoadingPicName );
-            if(PlayerViewFragment.this.isVisible() ){
-                if(result.length()>5){
-                    try {
-                        Glide.with(PlayerViewFragment.this.getContext()).load(result).into(musicArtView);
-                        setUrlBG(result);
-                    }catch (Exception e){
-                        musicArtView.setImageResource(R.drawable.coverart);
-                        setDefaultBG();
-                        e.printStackTrace();
-                    }
+            if (PlayerViewFragment.this.isVisible()) {
+                if (result.length() > 5) {
+                    Glide.with(PlayerViewFragment.this.getContext()).load(result)
+                            .error(R.drawable.coverart)
+                            .into(musicArtView);
+                    setUrlBG(result);
                 }
+                downloadLock = false;
             }
-            downloadLock = false;
         }
     }
 
@@ -257,13 +253,8 @@ public class PlayerViewFragment extends Fragment {
         }
         if(newtitle.equals(LoadingPicName) && LoadedUrl.length()>5) { //已经加载过
             //Log.e(TAG, "图片已经加载 名称 " +newtitle );
-            try {
-                Glide.with(PlayerViewFragment.this.getContext()).load(LoadedUrl).into(musicArtView);
-                setUrlBG(LoadedUrl);
-            }catch (Exception e){
-                musicArtView.setImageResource(R.drawable.coverart);
-                setDefaultBG();
-            }
+            Glide.with(PlayerViewFragment.this.getContext()).load(LoadedUrl).error(R.drawable.coverart).into(musicArtView);
+            setUrlBG(LoadedUrl);
             return;
         }
     }
@@ -279,6 +270,7 @@ public class PlayerViewFragment extends Fragment {
     }
     private void setUrlBG(String picUrl){
         Glide.with(PlayerViewFragment.this.getContext()).load(picUrl)
+                .error(R.drawable.coverart)
                 .apply(bitmapTransform(new BlurTransformation(40))).into(new SimpleTarget<Drawable>() {
                     @Override
                     public void onResourceReady(Drawable resource, Transition<? super Drawable> transition) {

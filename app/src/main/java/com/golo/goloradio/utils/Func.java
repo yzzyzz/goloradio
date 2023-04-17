@@ -4,7 +4,9 @@ import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
 
+import com.golo.goloradio.MainActivity;
 import com.golo.goloradio.R;
+import com.golo.goloradio.model.PlayingInfo;
 
 import org.json.JSONObject;
 
@@ -126,9 +128,12 @@ public class Func {
         String returl = "";
         String newtt = java.net.URLEncoder.encode(tt);
         String queryUrl = "http://gz.999887.xyz/getmusicpic.php?title="+newtt;
+
+        if(MainActivity.playingInfo.hiresPic){
+            queryUrl = "http://gz.999887.xyz/getmusicpic.php?title="+newtt+"&pictype=hires";
+        }
         Log.e("show url", "getPicUrlByTitle: "+queryUrl );
         String res = getStringFromurl(queryUrl);
-        String releaseid="";
         if(res.length()>10){
             try {
                 JSONObject jsono = new JSONObject(res);

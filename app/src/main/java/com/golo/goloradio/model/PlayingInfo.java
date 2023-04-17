@@ -13,7 +13,7 @@ public class PlayingInfo extends Application {
     public boolean isShowingPic;
     public String playUrl;
 
-    public DeviceType deviceType;
+    public boolean hiresPic;
 
 
     public void onCreate() {
@@ -27,6 +27,7 @@ public class PlayingInfo extends Application {
         this.hasMeta = false;
         this.playingStatus = 0;
         this.playUrl = "";
+        this.hiresPic = false;
     }
 
     public void InitPlayingInfo(){

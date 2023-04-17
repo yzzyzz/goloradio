@@ -15,6 +15,7 @@
             android:id="@+id/playerview_station_name"
             style="@style/player_title"
             android:text="电台名称"
+            android:textColor="#e6e6e6"
             android:textAlignment="center"
             >
         </TextView>
@@ -43,6 +44,8 @@
             android:marqueeRepeatLimit="marquee_forever"
             android:scrollHorizontally="true"
             android:singleLine="true"
+            android:textColor="#e6e6e6"
+
             />
 
     </LinearLayout>
