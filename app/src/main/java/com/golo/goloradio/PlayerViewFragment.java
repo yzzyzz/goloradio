@@ -194,6 +194,11 @@ public class PlayerViewFragment extends Fragment {
                             .transition(withCrossFade(2000))
                             .error(R.drawable.coverart)
                             .into(musicArtView);
+                }else {
+                    setDefaultBG();
+                    Glide.with(PlayerViewFragment.this.getContext()).load(R.drawable.coverart)
+                            .transition(withCrossFade(2000))
+                            .into(musicArtView);
                 }
                 downloadLock = false;
             }

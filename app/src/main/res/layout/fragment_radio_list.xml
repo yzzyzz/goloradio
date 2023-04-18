@@ -13,6 +13,10 @@
         android:orientation="vertical"
         android:showDividers="end"
         >
+        <ImageView
+            style="@style/title_fenge"
+
+            />
     <LinearLayout
         android:id="@+id/playingbar"
         android:layout_width="match_parent"

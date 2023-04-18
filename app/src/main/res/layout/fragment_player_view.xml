@@ -30,7 +30,6 @@
             android:scaleType="centerCrop"
             android:layout_centerVertical="true"
             ></ImageView>
-
         <com.golo.goloradio.utils.MarqueeText
             android:id="@+id/playerview_titlename"
             android:layout_width="match_parent"
