@@ -1,46 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<!--索尼手机 -->
+<!--小米手机 -->
 <resources>
     <style name="title_fenge">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">0dp</item>
-        <item name="android:layout_marginTop">22dp</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:layout_marginTop">42dp</item>
         <item name="android:src">@android:color/black</item>
     </style>
     <style name="playing_status">
         <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">47dp</item>
-        <item name="android:textSize">26dp</item>
-        <item name="android:paddingTop">7dp</item>
+        <item name="android:layout_height">52dp</item>
+        <item name="android:textSize">30dp</item>
+        <item name="android:paddingTop">6dp</item>
     </style>
 
     <style name="playing_detail">
         <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">47dp</item>
-        <item name="android:textSize">26dp</item>
-        <item name="android:paddingTop">7dp</item>
+        <item name="android:layout_height">52dp</item>
+        <item name="android:textSize">30dp</item>
+        <item name="android:paddingTop">6dp</item>
     </style>
 
     <!-- list 部分 -->
     <style name="ExpandTotal">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
-        <item name="android:indicatorRight">38dp</item>
+        <item name="android:indicatorRight">46dp</item>
     </style>
 
     <style name="list_title">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">46dp</item>
-        <item name="android:textSize">26dp</item>
-        <item name="android:paddingLeft">42dp</item>
-        <item name="android:paddingTop">5dp</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:textSize">30dp</item>
+        <item name="android:paddingLeft">50dp</item>
+        <item name="android:paddingTop">4dp</item>
     </style>
     <style name="list_item">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">45dp</item>
-        <item name="android:textSize">24dp</item>
-        <item name="android:paddingTop">6dp</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:textSize">30dp</item>
+        <item name="android:paddingTop">5dp</item>
     </style>
 
 
