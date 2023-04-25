@@ -43,7 +43,6 @@
         <item name="android:paddingTop">5dp</item>
     </style>
 
-
     <!-- 播放器界面 -->
 
     <style name="player_title">
