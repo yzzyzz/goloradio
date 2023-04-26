@@ -49,13 +49,13 @@
 
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">38dp</item>
-        <item name="android:layout_marginTop">58dp</item>
+        <item name="android:layout_marginTop">100dp</item>
         <item name="android:textSize">24dp</item>
         <item name="android:layout_marginBottom">20dp</item>
     </style>
     <style name="player_picview">
         <item name="android:layout_width">330dp</item>
-        <item name="android:layout_height">340dp</item>
+        <item name="android:layout_height">330dp</item>
         <item name="android:layout_marginTop">10dp</item>
         <item name="android:layout_marginBottom">40dp</item>
     </style>

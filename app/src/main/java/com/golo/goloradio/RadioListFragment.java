@@ -15,7 +15,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.golo.goloradio.model.DeviceType;
 import com.golo.goloradio.model.MetaMessage;
 import com.golo.goloradio.model.PlayingInfo;
 import com.golo.goloradio.model.RadioItem;
@@ -206,11 +205,6 @@ public class RadioListFragment extends Fragment {
 
             isFirstLoad = false;
         }
-        /*
-        if(mediaPlayer.isPlaying()){
-            Log.e(TAG, "onCreateView: 设置title 因为create" );
-            setTitle();
-        }*/
         return root;
     }
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -273,7 +267,6 @@ public class RadioListFragment extends Fragment {
 
     private void switchFragment(Fragment targetFragment) {
         //已经显示就不切换
-        // return;
         try {
             FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.fragment_container_view,targetFragment);
@@ -283,5 +276,4 @@ public class RadioListFragment extends Fragment {
             e.printStackTrace();
         }
     }
-
 }

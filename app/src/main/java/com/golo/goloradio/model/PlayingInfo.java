@@ -10,7 +10,6 @@ public class PlayingInfo extends Application {
     public String ShowMQName;
     public int playingStatus;
     public boolean hasMeta;
-    public boolean isShowingPic;
     public String playUrl;
 
     public boolean hiresPic;
@@ -19,7 +18,6 @@ public class PlayingInfo extends Application {
     public void onCreate() {
 
         super.onCreate();
-        this.isShowingPic = false;
         this.playingId = -1;
         this.playingStationName = "无";
         this.playingMusictile = "";
@@ -31,7 +29,6 @@ public class PlayingInfo extends Application {
     }
 
     public void InitPlayingInfo(){
-        this.isShowingPic = false;
         this.playingId = -1;
         this.playingStationName = "无";
         this.playingMusictile = "";

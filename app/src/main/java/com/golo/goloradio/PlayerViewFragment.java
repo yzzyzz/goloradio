@@ -2,7 +2,6 @@ package com.golo.goloradio;
 
 import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
 import static com.bumptech.glide.request.RequestOptions.bitmapTransform;
-import static java.lang.Math.round;
 
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -10,16 +9,17 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.golo.goloradio.model.MessageType;
@@ -46,6 +46,7 @@ public class PlayerViewFragment extends Fragment {
     private static final String TAG = "播放图片界面";
     private View playerPicView;
 
+    private static int intRoundingRadius = 0;
     public TextView stationTextView;
     public static MarqueeText musicTitleTextView;
     public static String LoadingPicName = ""; //需要展示的图片
@@ -100,9 +101,9 @@ public class PlayerViewFragment extends Fragment {
             musicTitleTextView = playerPicView.findViewById(R.id.playerview_titlename);
             musicTitleTextView.setText(playingInfo.playingMusictile);
             musicArtView = playerPicView.findViewById(R.id.artist_pic);
-            musicArtView.setImageResource(R.drawable.coverart);
+            intRoundingRadius = getResources().getInteger(R.integer.roundingradius) ;
+            setDefaultPic();
             setDefaultBG();
-
         }
         return playerPicView;
     }
@@ -127,7 +128,6 @@ public class PlayerViewFragment extends Fragment {
                         stationTextView.setText(playingInfo.playingStationName+" ...");
                         MainActivity.mediaPlayer.prepare();
                         MainActivity.mediaPlayer.setPlayWhenReady(true);
-
                     }else {
                         MainActivity.mediaPlayer.play();
                         stationTextView.setText(playingInfo.playingStationName);
@@ -146,7 +146,6 @@ public class PlayerViewFragment extends Fragment {
             setMusicTitle();
             setPicimage(event.message);
         }else if(event.type == MessageType.PLAYING_STATE_CHANGE){
-            //Log.e("播放界面", "onMessageEvent: 取得 status 消息 "+ event.play_state );
             setStationInfo();
         }
     }
@@ -168,8 +167,6 @@ public class PlayerViewFragment extends Fragment {
         @Override
         protected void onPreExecute() {
             Log.i("PicUrlTask", "onPreExecute() enter");
-            //musicArtView.setImageResource(R.drawable.coverart);
-            //setDefaultBG();
         }
 
         @Override
@@ -190,15 +187,10 @@ public class PlayerViewFragment extends Fragment {
             if (PlayerViewFragment.this.isVisible()) {
                 if (result.length() > 5) {
                     setUrlBG(result);
-                    Glide.with(PlayerViewFragment.this.getContext()).load(result)
-                            .transition(withCrossFade(2000))
-                            .error(R.drawable.coverart)
-                            .into(musicArtView);
+                    setUrlPic(result);
                 }else {
                     setDefaultBG();
-                    Glide.with(PlayerViewFragment.this.getContext()).load(R.drawable.coverart)
-                            .transition(withCrossFade(2000))
-                            .into(musicArtView);
+                    setDefaultPic();
                 }
                 downloadLock = false;
             }
@@ -208,11 +200,7 @@ public class PlayerViewFragment extends Fragment {
     @Override
     public void onResume(){
         super.onResume();
-        //Log.e(TAG, "onResume: ----------------- start ");
-
         downloadLock = false;
-        playingInfo.isShowingPic = true;
-        //Log.e("resume ", "onResume: old name  " + LoadingPicName +" current "+playingInfo.playingMusictile);
         if(!MainActivity.mediaPlayer.isPlaying()){
             stationTextView.setText(playingInfo.playingStationName+" ▶");
         }else {
@@ -222,7 +210,6 @@ public class PlayerViewFragment extends Fragment {
         if(!LoadingPicName.equals(playingInfo.playingMusictile)) {
             setPicimage(playingInfo.playingMusictile);
         }
-        //Log.e(TAG, "onResume: ----------------- end ");
     }
 
     public void setStationInfo(){
@@ -244,10 +231,10 @@ public class PlayerViewFragment extends Fragment {
     }
 
     public void setPicimage(String  newtitle){
-        //Log.e(TAG, "setPicimage:  旧名称 链接"+LoadingPicName + "   " +LoadedUrl + "新名称:" +  newtitle );
+        Log.e(TAG, "setPicimage: 圆角:"+intRoundingRadius );
         // 加载优先级判定
         if(newtitle.contains("音乐")|| newtitle.contains("台标") || newtitle.contains("Asia")){
-            musicArtView.setImageResource(R.drawable.coverart);
+            setDefaultPic();
             setDefaultBG();
             return;
         }
@@ -259,9 +246,7 @@ public class PlayerViewFragment extends Fragment {
         if(newtitle.equals(LoadingPicName) && LoadedUrl.length()>5) { //已经加载过
             //Log.e(TAG, "图片已经加载 名称 " +newtitle );
             setUrlBG(LoadedUrl);
-            Glide.with(PlayerViewFragment.this.getContext()).load(LoadedUrl).error(R.drawable.coverart)
-                    .transition(withCrossFade(2000))
-                    .into(musicArtView);
+            setUrlPic(LoadedUrl);
             return;
         }
     }
@@ -286,4 +271,33 @@ public class PlayerViewFragment extends Fragment {
                 });
     }
 
+    private void setUrlPic(String picUrl){
+        Log.e(TAG, "setUrlPic: intRoundingRadius"+intRoundingRadius );
+        if(intRoundingRadius>0){
+            Glide.with(PlayerViewFragment.this.getContext()).load(picUrl)
+                    .transform(new CenterCrop(), new RoundedCorners(intRoundingRadius))
+                    .transition(withCrossFade(2000))
+                    .error(R.drawable.coverart)
+                    .into(musicArtView);
+        }else {
+            Glide.with(PlayerViewFragment.this.getContext()).load(picUrl)
+                    .transition(withCrossFade(2000))
+                    .error(R.drawable.coverart)
+                    .into(musicArtView);
+        }
+    }
+
+    private void setDefaultPic(){
+        if(intRoundingRadius>0) {
+            Glide.with(PlayerViewFragment.this.getContext()).load(R.drawable.coverart)
+                    .transform(new RoundedCorners(intRoundingRadius))
+                    .transition(withCrossFade(2000))
+                    .error(R.drawable.coverart)
+                    .into(musicArtView);
+        }else {
+            Glide.with(PlayerViewFragment.this.getContext()).load(R.drawable.coverart)
+                    .transition(withCrossFade(2000))
+                    .into(musicArtView);
+        }
+    }
 }
