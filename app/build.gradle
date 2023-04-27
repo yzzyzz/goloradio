@@ -8,15 +8,12 @@ android {
     namespace 'com.golo.goloradio'
     compileSdk 33
 
-
-
     defaultConfig {
         applicationId "com.golo.goloradio"
         minSdk 23
         targetSdk 33
         versionCode 1
-        versionName "1.3.3"
-
+        versionName "1.3.5"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
