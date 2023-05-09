@@ -102,6 +102,11 @@ public class PlayerViewFragment extends Fragment {
             musicTitleTextView.setText(playingInfo.playingMusictile);
             musicArtView = playerPicView.findViewById(R.id.artist_pic);
             intRoundingRadius = getResources().getInteger(R.integer.roundingradius) ;
+
+            playerPicView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+
+
             setDefaultPic();
             setDefaultBG();
         }
