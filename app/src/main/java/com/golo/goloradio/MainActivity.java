@@ -15,17 +15,21 @@ import android.os.Environment;
 import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Window;
-import android.view.WindowManager;
 
-import com.golo.goloradio.model.DeviceType;
+
 import com.golo.goloradio.model.MessageType;
 import com.golo.goloradio.model.MetaMessage;
 import com.golo.goloradio.model.PlayingInfo;
 import com.golo.goloradio.utils.Func;
+import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.MediaMetadata;
+import com.google.android.exoplayer2.PlaybackException;
 import com.google.android.exoplayer2.Player;
+import com.google.android.exoplayer2.source.hls.HlsMediaSource;
+import com.google.android.exoplayer2.upstream.DataSource;
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -80,6 +84,13 @@ public class MainActivity extends AppCompatActivity {
 
         if(mediaPlayer == null){
             mediaPlayer = new ExoPlayer.Builder(this.getApplication()).build();
+
+            mediaPlayer.setTrackSelectionParameters(
+                    mediaPlayer.getTrackSelectionParameters()
+                            .buildUpon()
+                            .setTrackTypeDisabled(C.TRACK_TYPE_VIDEO, true)
+                            .build());
+
             mediaPlayer.addListener(new Player.Listener() {
                 public void onMediaMetadataChanged(MediaMetadata mediaMetadata){
                     if (mediaMetadata.title != null && mediaMetadata.title.length()>2) {
@@ -97,8 +108,23 @@ public class MainActivity extends AppCompatActivity {
                     playingInfo.playingStatus = playbackState;
                     EventBus.getDefault().post(new MetaMessage(MessageType.PLAYING_STATE_CHANGE,playbackState));
                 }
+
+                public void onPlayerError(PlaybackException error) {
+                    //Log.e(TAG, "onPlayerError: "+"player erro kankan ++++++++++++++++="+error.errorCode );
+                    if(error.errorCode == PlaybackException.ERROR_CODE_PARSING_CONTAINER_UNSUPPORTED ){
+                        DataSource.Factory dataSourceFactory = new DefaultHttpDataSource.Factory();
+                        HlsMediaSource hlsMediaSource =
+                                new HlsMediaSource.Factory(dataSourceFactory)
+                                        .createMediaSource(MediaItem.fromUri(playingInfo.playUrl));
+                        mediaPlayer.clearMediaItems();
+                        mediaPlayer.setMediaSource(hlsMediaSource);
+                        mediaPlayer.prepare();
+                        mediaPlayer.setPlayWhenReady(true);
+                    }
+                }
             });
         }
+
         if (savedInstanceState == null) {
 
             // 设置是否大屏
