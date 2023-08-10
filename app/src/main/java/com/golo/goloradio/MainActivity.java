@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -35,6 +36,9 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 
@@ -119,8 +123,7 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 public void onPlayerError(PlaybackException error) {
-                    Log.e(TAG, "onPlayerError: "+"player erro kankan ++++++++++++++++="+error.errorCode );
-
+                    //Log.e(TAG, "onPlayerError: "+"player erro kankan ++++++++++++++++="+error.errorCode );
                     //本地播放失败 跳过文件
                     if(playingInfo.listMode){
                         if(mediaPlayer.hasNextMediaItem()){
@@ -215,13 +218,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //播放音乐列表
-    public static void playMusicList(){
+    public static void playMusicList() {
         List musicUrlList = Func.getMusicDataList(playingInfo.playUrl);
         mediaPlayer.clearMediaItems();
         for (int i =0 ;i<musicUrlList.size();i++) {
             String musicItem = (String)musicUrlList.get(i);
-            //Log.e(TAG, "playMusicList: add url:"+musicItem );
-            mediaPlayer.addMediaItem(MediaItem.fromUri(musicItem));
+            try {
+                if(musicItem.contains("http")){
+                    //Log.e(TAG, "playMusicList: add  before encode url:"+musicItem );
+                    String uu = Uri.encode(musicItem, "-![.:/,%?&=]");
+                    //Log.e(TAG, "playMusicList: add url:"+uu );
+                    mediaPlayer.addMediaItem(MediaItem.fromUri(uu));
+                }else {
+                    mediaPlayer.addMediaItem(MediaItem.fromUri(musicItem));
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }
         mediaPlayer.prepare();
         mediaPlayer.setPlayWhenReady(true);
