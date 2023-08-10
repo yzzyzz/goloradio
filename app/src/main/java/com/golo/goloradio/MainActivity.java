@@ -220,7 +220,7 @@ public class MainActivity extends AppCompatActivity {
         mediaPlayer.clearMediaItems();
         for (int i =0 ;i<musicUrlList.size();i++) {
             String musicItem = (String)musicUrlList.get(i);
-            Log.e(TAG, "playMusicList: add url:"+musicItem );
+            //Log.e(TAG, "playMusicList: add url:"+musicItem );
             mediaPlayer.addMediaItem(MediaItem.fromUri(musicItem));
         }
         mediaPlayer.prepare();

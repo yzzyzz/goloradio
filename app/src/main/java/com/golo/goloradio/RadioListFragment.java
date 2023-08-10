@@ -176,7 +176,7 @@ public class RadioListFragment extends Fragment {
                         }else {
                             playingInfo.listMode = false;
                         }
-                        Log.e(TAG, "onChildClick: begin play url " + playingInfo.playUrl );
+                        //Log.e(TAG, "onChildClick: begin play url " + playingInfo.playUrl );
                         if(!mediaPlayer.isPlaying()){
                             startPlayStation();
                         }
