@@ -264,7 +264,24 @@ public class RadioListFragment extends Fragment {
     private void startPlayStation(){
         playStateBar.setText("正在加载 - ");
         playingBar.setText(playingInfo.playingStationName + " ");
-        mediaPlayer.setMediaItem(MediaItem.fromUri(playingInfo.playUrl));
+        String ppurl = playingInfo.playUrl;
+        if(ppurl.contains("mymusic.php")){
+            playMusicList();
+        }else {
+            mediaPlayer.setMediaItem(MediaItem.fromUri(playingInfo.playUrl));
+            mediaPlayer.prepare();
+            mediaPlayer.setPlayWhenReady(true);
+        }
+    }
+
+    //播放音乐列表
+    private void playMusicList(){
+        List musicUrlList = Func.getMusicListFromUrl(playingInfo.playUrl);
+        mediaPlayer.clearMediaItems();
+        for (int i =0 ;i<musicUrlList.size();i++) {
+            String[] musicItem = (String[])musicUrlList.get(i);
+            mediaPlayer.addMediaItem(MediaItem.fromUri(musicItem[1]));
+        }
         mediaPlayer.prepare();
         mediaPlayer.setPlayWhenReady(true);
     }

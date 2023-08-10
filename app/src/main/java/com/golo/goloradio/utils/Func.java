@@ -180,4 +180,42 @@ public class Func {
     }
 
 
+    public static List getMusicListFromUrl(String Surl){
+        List ret = new ArrayList();
+        // http开头代表网络文件处理
+        try {
+            // Create a URL for the desired page
+            URL url = new URL(Surl.trim());
+            Thread thread1 = new Thread(new Runnable(){
+                public void run(){
+                    try {
+                        // Create a URL for the desired page
+                        //First open the connection
+                        HttpURLConnection conn=(HttpURLConnection) url.openConnection();
+                        conn.setConnectTimeout(10000); // timing out in a minute
+                        BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                        String str = "";
+                        while (( str = in.readLine()) != null) {
+                            String[] split = str.trim().split(",");
+                            if (  split.length >= 2) {
+                                ret.add(split);
+                            }
+                        }
+                        in.close();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            thread1.start();
+            thread1.join();
+            return ret;
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ret;
+    }
+
 }
