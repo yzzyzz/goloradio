@@ -130,7 +130,7 @@ public class PlayerViewFragment extends Fragment {
                     if((System.currentTimeMillis() - pauseTimeMS)>20000){
                         MainActivity.mediaPlayer.stop();
                         stationTextView.setText(playingInfo.playingStationName + " ...");
-                        if(playingInfo.playUrl.contains("mymusic.php")){
+                        if(playingInfo.listMode){
                             MainActivity.playMusicList();
                         }else {
                             MainActivity.mediaPlayer.setMediaItem(MediaItem.fromUri(playingInfo.playUrl));

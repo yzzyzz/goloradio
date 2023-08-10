@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
                     playingInfo.playingStatus = playbackState;
                     EventBus.getDefault().post(new MetaMessage(MessageType.PLAYING_STATE_CHANGE, playbackState));
                     // 如果播放url是音乐，则继续播放
-                    if (playingInfo.playUrl.contains("mymusic.php")) {
+                    if(playingInfo.listMode){
                         if (playbackState == Player.STATE_ENDED) {
                             Log.e(TAG, "onMessageEvent: " + " 监测到结束播放 ");
                             playMusicList();
@@ -119,16 +119,29 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 public void onPlayerError(PlaybackException error) {
-                    //Log.e(TAG, "onPlayerError: "+"player erro kankan ++++++++++++++++="+error.errorCode );
-                    if(error.errorCode == PlaybackException.ERROR_CODE_PARSING_CONTAINER_UNSUPPORTED ){
-                        DataSource.Factory dataSourceFactory = new DefaultHttpDataSource.Factory();
-                        HlsMediaSource hlsMediaSource =
-                                new HlsMediaSource.Factory(dataSourceFactory)
-                                        .createMediaSource(MediaItem.fromUri(playingInfo.playUrl));
-                        mediaPlayer.clearMediaItems();
-                        mediaPlayer.setMediaSource(hlsMediaSource);
-                        mediaPlayer.prepare();
-                        mediaPlayer.setPlayWhenReady(true);
+                    Log.e(TAG, "onPlayerError: "+"player erro kankan ++++++++++++++++="+error.errorCode );
+
+                    //本地播放失败 跳过文件
+                    if(playingInfo.listMode){
+                        if(mediaPlayer.hasNextMediaItem()){
+                            mediaPlayer.seekToNext();
+                            mediaPlayer.prepare();
+                            mediaPlayer.setPlayWhenReady(true);
+                        }else {
+                            playMusicList();
+                        }
+                    }else {
+                        // 直播播放失败
+                        if (error.errorCode == PlaybackException.ERROR_CODE_PARSING_CONTAINER_UNSUPPORTED) {
+                            DataSource.Factory dataSourceFactory = new DefaultHttpDataSource.Factory();
+                            HlsMediaSource hlsMediaSource =
+                                    new HlsMediaSource.Factory(dataSourceFactory)
+                                            .createMediaSource(MediaItem.fromUri(playingInfo.playUrl));
+                            mediaPlayer.clearMediaItems();
+                            mediaPlayer.setMediaSource(hlsMediaSource);
+                            mediaPlayer.prepare();
+                            mediaPlayer.setPlayWhenReady(true);
+                        }
                     }
                 }
             });
@@ -199,17 +212,16 @@ public class MainActivity extends AppCompatActivity {
         //this.getClass().getPackageName();
         super.onStop();
         EventBus.getDefault().unregister(this);
-
     }
 
     //播放音乐列表
     public static void playMusicList(){
-        List musicUrlList = Func.getMusicListFromUrl(playingInfo.playUrl);
+        List musicUrlList = Func.getMusicDataList(playingInfo.playUrl);
         mediaPlayer.clearMediaItems();
         for (int i =0 ;i<musicUrlList.size();i++) {
-            String[] musicItem = (String[])musicUrlList.get(i);
-            Log.e(TAG, "playMusicList: add url:"+musicItem[1] );
-            mediaPlayer.addMediaItem(MediaItem.fromUri(musicItem[1]));
+            String musicItem = (String)musicUrlList.get(i);
+            Log.e(TAG, "playMusicList: add url:"+musicItem );
+            mediaPlayer.addMediaItem(MediaItem.fromUri(musicItem));
         }
         mediaPlayer.prepare();
         mediaPlayer.setPlayWhenReady(true);

@@ -171,7 +171,11 @@ public class RadioListFragment extends Fragment {
                         playingInfo.playUrl =  expandableListDetail.get(
                                 expandableListTitle.get(groupPosition)).get(
                                 childPosition).url;
-
+                        if(playingInfo.playUrl.contains(".list") || playingInfo.playUrl.contains("mymusic.php")){
+                            playingInfo.listMode = true;
+                        }else {
+                            playingInfo.listMode = false;
+                        }
                         Log.e(TAG, "onChildClick: begin play url " + playingInfo.playUrl );
                         if(!mediaPlayer.isPlaying()){
                             startPlayStation();
@@ -264,10 +268,10 @@ public class RadioListFragment extends Fragment {
     private void startPlayStation(){
         playStateBar.setText("正在加载 - ");
         playingBar.setText(playingInfo.playingStationName + " ");
-        String ppurl = playingInfo.playUrl;
-        if(ppurl.contains("mymusic.php")){
+        if(playingInfo.listMode){
             MainActivity.playMusicList();
         }else {
+            playingInfo.listMode = false;
             mediaPlayer.setMediaItem(MediaItem.fromUri(playingInfo.playUrl));
             mediaPlayer.prepare();
             mediaPlayer.setPlayWhenReady(true);

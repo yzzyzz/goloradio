@@ -14,6 +14,7 @@ public class PlayingInfo extends Application {
 
     public boolean hiresPic;
 
+    public boolean listMode;
 
     public void onCreate() {
 

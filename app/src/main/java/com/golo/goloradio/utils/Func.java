@@ -20,6 +20,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Func {
@@ -198,7 +199,7 @@ public class Func {
                         while (( str = in.readLine()) != null) {
                             String[] split = str.trim().split(",");
                             if (  split.length >= 2) {
-                                ret.add(split);
+                                ret.add(split[1]);
                             }
                         }
                         in.close();
@@ -218,4 +219,44 @@ public class Func {
         return ret;
     }
 
+    public static List getLocalListFromListFile(String listfname){
+        String rootParh =  Environment.getExternalStorageDirectory().getAbsolutePath();
+        String listFilePath=rootParh + "/data/"+listfname;
+        Log.e("main",listFilePath);
+        List ret = new ArrayList();
+        File file = new File(listFilePath);
+        if(file.exists()){
+            Log.i("file info", "find  local file:"+listFilePath);
+            try {
+                FileInputStream fis = new FileInputStream(file);
+                InputStreamReader isr = new InputStreamReader(fis, "UTF-8");
+                BufferedReader br = new BufferedReader(isr);
+                String str = "";
+                while (( str = br.readLine()) != null) {
+                    if (  str.length() >= 4) {
+                        ret.add(str);
+                    }
+                }
+                fis.close();
+            } catch (IOException e) {
+                // 读取文件异常
+                e.printStackTrace();
+            }
+        } else {
+            Log.i("file info", "no  local list file");
+        }
+        Collections.shuffle(ret);
+        return ret.size()>50?ret.subList(0,50):ret;
+    }
+
+    public static List getMusicDataList(String url){
+
+        if(url.contains("mymusic.php")){
+            return getMusicListFromUrl(url);
+        }
+        if(url.contains(".list")){
+            return getLocalListFromListFile(url);
+        }
+        return new ArrayList<>();
+    }
 }
