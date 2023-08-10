@@ -129,10 +129,14 @@ public class PlayerViewFragment extends Fragment {
                 }else {
                     if((System.currentTimeMillis() - pauseTimeMS)>20000){
                         MainActivity.mediaPlayer.stop();
-                        MainActivity.mediaPlayer.setMediaItem(MediaItem.fromUri(playingInfo.playUrl));
-                        stationTextView.setText(playingInfo.playingStationName+" ...");
-                        MainActivity.mediaPlayer.prepare();
-                        MainActivity.mediaPlayer.setPlayWhenReady(true);
+                        stationTextView.setText(playingInfo.playingStationName + " ...");
+                        if(playingInfo.playUrl.contains("mymusic.php")){
+                            MainActivity.playMusicList();
+                        }else {
+                            MainActivity.mediaPlayer.setMediaItem(MediaItem.fromUri(playingInfo.playUrl));
+                            MainActivity.mediaPlayer.prepare();
+                            MainActivity.mediaPlayer.setPlayWhenReady(true);
+                        }
                     }else {
                         MainActivity.mediaPlayer.play();
                         stationTextView.setText(playingInfo.playingStationName);
@@ -236,7 +240,6 @@ public class PlayerViewFragment extends Fragment {
     }
 
     public void setPicimage(String  newtitle){
-        Log.e(TAG, "setPicimage: 圆角:"+intRoundingRadius );
         // 加载优先级判定
         if(newtitle.contains("音乐")|| newtitle.contains("台标") || newtitle.contains("Asia")){
             setDefaultPic();
@@ -277,7 +280,6 @@ public class PlayerViewFragment extends Fragment {
     }
 
     private void setUrlPic(String picUrl){
-        Log.e(TAG, "setUrlPic: intRoundingRadius"+intRoundingRadius );
         if(intRoundingRadius>0){
             Glide.with(PlayerViewFragment.this.getContext()).load(picUrl)
                     .transform(new CenterCrop(), new RoundedCorners(intRoundingRadius))

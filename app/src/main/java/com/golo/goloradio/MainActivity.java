@@ -35,6 +35,8 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.List;
+
 
 public class MainActivity extends AppCompatActivity {
     public static ExoPlayer mediaPlayer;
@@ -103,10 +105,17 @@ public class MainActivity extends AppCompatActivity {
                 }
                 public void onPlaybackStateChanged( int playbackState) {
                     //int tmpState = 1;
-                    Log.e("发送消息", "onPlaybackStateChanged: 准备发送 playbackState:"+playbackState );
+                    Log.e("发送消息", "onPlaybackStateChanged: 准备发送 playbackState:" + playbackState);
                     //状态变化
                     playingInfo.playingStatus = playbackState;
-                    EventBus.getDefault().post(new MetaMessage(MessageType.PLAYING_STATE_CHANGE,playbackState));
+                    EventBus.getDefault().post(new MetaMessage(MessageType.PLAYING_STATE_CHANGE, playbackState));
+                    // 如果播放url是音乐，则继续播放
+                    if (playingInfo.playUrl.contains("mymusic.php")) {
+                        if (playbackState == Player.STATE_ENDED) {
+                            Log.e(TAG, "onMessageEvent: " + " 监测到结束播放 ");
+                            playMusicList();
+                        }
+                    }
                 }
 
                 public void onPlayerError(PlaybackException error) {
@@ -191,6 +200,19 @@ public class MainActivity extends AppCompatActivity {
         super.onStop();
         EventBus.getDefault().unregister(this);
 
+    }
+
+    //播放音乐列表
+    public static void playMusicList(){
+        List musicUrlList = Func.getMusicListFromUrl(playingInfo.playUrl);
+        mediaPlayer.clearMediaItems();
+        for (int i =0 ;i<musicUrlList.size();i++) {
+            String[] musicItem = (String[])musicUrlList.get(i);
+            Log.e(TAG, "playMusicList: add url:"+musicItem[1] );
+            mediaPlayer.addMediaItem(MediaItem.fromUri(musicItem[1]));
+        }
+        mediaPlayer.prepare();
+        mediaPlayer.setPlayWhenReady(true);
     }
 }
 
