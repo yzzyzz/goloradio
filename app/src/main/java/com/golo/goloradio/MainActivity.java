@@ -172,7 +172,6 @@ public class MainActivity extends AppCompatActivity {
     //正确的做法,切换fragment
     private void switchFragment(Fragment targetFragment) {
         //已经显示就不切换
-       // return;
         try {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.fragment_container_view,targetFragment);

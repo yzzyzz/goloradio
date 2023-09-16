@@ -155,7 +155,7 @@ public class RadioListFragment extends Fragment {
                             expandableListTitle.get(groupPosition)).get(
                             childPosition).name;
                     if(intToPlayId == playingInfo.playingId && playingInfo.playingStatus!=Player.STATE_IDLE){
-                        if(playingInfo.hasMeta){ // 有meta信息
+                        if(playingInfo.hasMeta || playingInfo.listMode){ // 有meta信息
                             switchFragment(PlayerViewFragment.getInstance());
                             return true;
                         }
@@ -192,7 +192,7 @@ public class RadioListFragment extends Fragment {
                     @Override
                     public void onClick(View viewIn) {
                         try {
-                            if(playingInfo.hasMeta && mediaPlayer.isPlaying()){
+                            if((playingInfo.hasMeta || playingInfo.listMode) && mediaPlayer.isPlaying()){
                                 // 切换
                                 switchFragment(PlayerViewFragment.getInstance());
                                 return;

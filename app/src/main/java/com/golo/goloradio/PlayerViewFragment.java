@@ -127,16 +127,12 @@ public class PlayerViewFragment extends Fragment {
                     stationTextView.setText(playingInfo.playingStationName+" ▶");
                     //titleNameView.setText(MainActivity.currentMusicName+" ▶ ⏸");
                 }else {
-                    if((System.currentTimeMillis() - pauseTimeMS)>20000){
+                    if((System.currentTimeMillis() - pauseTimeMS)>20000 && !playingInfo.listMode){
                         MainActivity.mediaPlayer.stop();
                         stationTextView.setText(playingInfo.playingStationName + " ...");
-                        if(playingInfo.listMode){
-                            MainActivity.playMusicList();
-                        }else {
-                            MainActivity.mediaPlayer.setMediaItem(MediaItem.fromUri(playingInfo.playUrl));
-                            MainActivity.mediaPlayer.prepare();
-                            MainActivity.mediaPlayer.setPlayWhenReady(true);
-                        }
+                        MainActivity.mediaPlayer.setMediaItem(MediaItem.fromUri(playingInfo.playUrl));
+                        MainActivity.mediaPlayer.prepare();
+                        MainActivity.mediaPlayer.setPlayWhenReady(true);
                     }else {
                         MainActivity.mediaPlayer.play();
                         stationTextView.setText(playingInfo.playingStationName);
